@@ -50,7 +50,7 @@ const dictionary = {
     hero: {
       tagline: "Exciting Tech Adventures!",
       title: "Explore Global Innovations with TechGo!",
-      description: "Discover state-of-the-art technologies from different countries via an interactive 3D globe! Test your knowledge with fun AI Gemini quizzes and collect skill badges!",
+      description: "Discover advanced technology from various countries through an interactive 3D earth! Test your knowledge with exciting quizzes powered by Gemini AI and collect your skill badges!",
       btnExplore: "Start Exploring",
       btnEnter: "Login Account",
       statsCountries: "30+ Countries Explored",

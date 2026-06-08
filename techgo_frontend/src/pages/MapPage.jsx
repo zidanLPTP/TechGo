@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Globe as GlobeIcon, LogOut, ArrowRight, BookOpen, AlertCircle } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 // Data fallback lokal untuk pengujian frontend jika API backend/database belum tersambung
 const FALLBACK_COUNTRIES = [
@@ -277,12 +278,7 @@ export default function MapPage() {
         
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-9 h-9 bg-brandBlue rounded-xl flex items-center justify-center text-white shadow-md">
-            <GlobeIcon size={20} className="animate-spin-slow" />
-          </div>
-          <span className="text-xl font-fredoka font-bold text-brandNavy">
-            Tech<span className="text-brandRose">Go</span>
-          </span>
+          <img src={logoImg} alt="TechGo Logo" className="h-9 w-auto hover:scale-105 transition-playful" />
         </div>
 
         {/* Info Pengguna & Toggle Bahasa */}

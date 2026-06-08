@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Globe, User, LogIn, ChevronRight } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 export default function LandingPage() {
   const { language, changeLanguage, t } = useLanguage();
@@ -18,14 +18,84 @@ export default function LandingPage() {
   const [email, setEmail] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Membuka modal dan mengatur tipe login default
+  // State untuk interaktivitas Bumi (eye-tracking & emotional reactions)
+  const [pupilOffset, setPupilOffset] = useState({ x: 0, y: 0 });
+  const [emotion, setEmotion] = useState('neutral'); // 'neutral', 'happy', 'angry'
+  const [clickCount, setClickCount] = useState(0);
+
+  const earthRef = useRef(null);
+  const emotionTimeoutRef = useRef(null);
+
+  // 1. Efek Eye-Tracking: Pupil mata bergerak halus mendeteksi koordinat kursor
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!earthRef.current) return;
+
+      const rect = earthRef.current.getBoundingClientRect();
+      // Pusat koordinat pembacaan arah mata berada di tengah-tengah bola Bumi bulat utuh
+      const earthCenterX = rect.left + rect.width * 0.5;
+      const earthCenterY = rect.top + rect.height * 0.5;
+
+      const dx = e.clientX - earthCenterX;
+      const dy = e.clientY - earthCenterY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance === 0) return;
+
+      // Batasi pergeseran pupil mata maksimum 6px agar tidak melompat keluar wadah
+      const maxOffset = 6;
+      const offsetX = (dx / distance) * Math.min(distance / 15, maxOffset);
+      const offsetY = (dy / distance) * Math.min(distance / 15, maxOffset);
+
+      setPupilOffset({ x: offsetX, y: offsetY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  // 2. Efek State Emosi Bumi saat diklik / spam klik
+  const handleEarthClick = () => {
+    // Bersihkan timeout emosi sebelumnya jika ada
+    if (emotionTimeoutRef.current) {
+      clearTimeout(emotionTimeoutRef.current);
+    }
+
+    const newClickCount = clickCount + 1;
+    setClickCount(newClickCount);
+
+    if (newClickCount > 3) {
+      setEmotion('angry'); // Spam klik > 3 kali memicu ekspresi marah
+    } else {
+      setEmotion('happy'); // Klik biasa memicu ekspresi bahagia
+    }
+
+    // Kembalikan ke emosi normal setelah 1,5 detik diam
+    emotionTimeoutRef.current = setTimeout(() => {
+      setEmotion('neutral');
+      setClickCount(0);
+    }, 1500);
+  };
+
+  // Bersihkan timeout saat komponen dilepas
+  useEffect(() => {
+    return () => {
+      if (emotionTimeoutRef.current) {
+        clearTimeout(emotionTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Menangani pembukaan modal login
   const openLoginModal = (mode) => {
     setLoginMode(mode);
     setErrorMsg('');
     setIsModalOpen(true);
   };
 
-  // Menangani submit login
+  // Menangani submit login pengguna
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     if (!nickname.trim()) {
@@ -34,43 +104,38 @@ export default function LandingPage() {
     }
 
     if (loginMode === 'google') {
-      // Simulasi login Google dengan input email sederhana
       const validEmail = email.trim() || `${nickname.toLowerCase().replace(/\s+/g, '')}@gmail.com`;
       loginWithGoogle(validEmail, nickname);
     } else {
-      // Login sebagai Guest
       loginAsGuest(nickname);
     }
 
-    // Tutup modal dan arahkan ke halaman MapPage
     setIsModalOpen(false);
     navigate('/map');
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-brandCream font-quicksand overflow-hidden relative selection:bg-brandRose selection:text-white">
+    // Menggunakan min-h-screen dan max-w-full agar scroll alami vertikal aktif jika layar laptop terlalu pendek (tanpa memicu double scrollbar)
+    <div className="min-h-screen max-w-full flex flex-col justify-between bg-brandCream font-quicksand relative selection:bg-brandRose selection:text-white select-none">
       
       {/* Ornamen Latar Belakang Playful */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brandRose/10 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-brandBlue/15 rounded-full blur-3xl pointer-events-none"></div>
 
-      {/* 1. NAVBAR ATAS */}
-      <header className="w-full px-6 py-4 md:px-12 flex justify-between items-center z-10 bg-white/60 backdrop-blur-md border-b-4 border-brandBlue/10">
+      {/* 1. NAVBAR ATAS (Logo di kiri yang disesuaikan, Toggle Bahasa di kanan) */}
+      <header className="w-full px-6 py-2 md:py-3 md:px-12 flex justify-between items-center z-10 bg-white/60 backdrop-blur-md border-b-4 border-brandBlue/10">
         
-        {/* Logo Platform */}
-        <div className="flex items-center gap-2 cursor-pointer group" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 bg-brandBlue rounded-2xl flex items-center justify-center text-white shadow-md group-hover:rotate-12 transition-playful">
-            <Globe size={24} className="animate-spin-slow" />
-          </div>
-          <span className="text-2xl font-fredoka font-bold text-brandNavy tracking-wide">
-            Tech<span className="text-brandRose">Go</span>
-          </span>
+        {/* Logo Gambar yang Disesuaikan Ukurannya */}
+        <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
+          <img 
+            src={logoImg} 
+            alt="TechGo Logo" 
+            className="w-14 h-14 md:w-16 md:h-16 object-contain hover:scale-105 transition-playful" 
+          />
         </div>
 
-        {/* Menu Navigasi Kanan */}
+        {/* Menu Navigasi Kanan (Hanya Toggle Bahasa) */}
         <div className="flex items-center gap-4">
-          
-          {/* Toggle Bahasa ID / EN */}
           <div className="bg-brandNavy/5 p-1 rounded-2xl flex gap-1 border-2 border-brandNavy/10">
             <button 
               onClick={() => changeLanguage('id')}
@@ -93,147 +158,174 @@ export default function LandingPage() {
               EN
             </button>
           </div>
-
-          {/* Tombol Masuk Akun Navbar */}
-          <button 
-            onClick={() => openLoginModal('google')}
-            className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-brandRose hover:bg-brandRose/90 text-white rounded-2xl font-fredoka text-base shadow-md hover:scale-105 transition-playful"
-          >
-            <LogIn size={18} />
-            {t('navbar.login')}
-          </button>
         </div>
       </header>
 
-      {/* 2. HERO SECTION */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-10 md:px-12 flex flex-col md:flex-row items-center justify-between gap-12 z-10">
+      {/* 2. HERO & EARTH SECTION (2-Column Grid on Desktop, Centered Flex on Mobile) */}
+      <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center z-10">
         
-        {/* Sisi Kiri: Teks & Aksi */}
-        <div className="flex-1 flex flex-col items-start text-left max-w-xl">
-          
-          {/* Tagline Kecil Playful */}
-          <div className="inline-block px-4 py-1.5 bg-brandRose/20 border-2 border-brandRose/40 text-brandRose rounded-full text-sm font-fredoka font-semibold tracking-wider uppercase mb-6 animate-bounce-slow">
-            ✨ {t('hero.tagline')}
-          </div>
-          
+        {/* Kolom Kiri: Deskripsi Teks & Tombol Aksi */}
+        <div className="flex flex-col items-center md:items-start text-center md:text-left justify-center">
           {/* Judul Utama */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl text-brandNavy font-fredoka leading-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl text-brandNavy font-fredoka leading-tight mb-6 max-w-xl">
             {t('hero.title')}
           </h1>
           
-          {/* Deskripsi Singkat */}
-          <p className="text-base sm:text-lg text-brandNavy/80 font-quicksand font-medium leading-relaxed mb-8">
+          {/* Teks Deskripsi Asli */}
+          <p className="text-lg md:text-xl text-brandNavy/80 font-quicksand leading-relaxed mb-8 max-w-lg">
             {t('hero.description')}
           </p>
 
-          {/* Tombol Pilihan Aksi */}
+          {/* Tombol Aksi Utama & Login Berdampingan */}
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            
-            {/* Tombol Utama: Mulai Menjelajah */}
+            {/* Tombol Kiri: Mulai Menjelajah (Sky Blue) */}
             <button 
               onClick={() => openLoginModal('guest')}
-              className="flex items-center justify-center gap-2 px-8 py-4 bg-brandBlue hover:bg-brandBlue/90 text-white rounded-3xl font-fredoka text-xl shadow-lg shadow-brandBlue/35 hover:scale-105 active:scale-95 transition-playful border-b-8 border-brandBlue/70"
+              className="py-4 px-8 bg-brandBlue hover:bg-brandBlue/90 text-white rounded-3xl font-fredoka text-xl shadow-lg shadow-brandBlue/25 hover:scale-105 active:scale-95 transition-playful border-b-8 border-brandBlue/70 text-center w-full sm:w-auto"
             >
-              <span>{t('hero.btnExplore')}</span>
-              <ChevronRight size={22} />
+              {t('hero.btnExplore')}
             </button>
 
-            {/* Tombol Sekunder: Masuk Akun */}
+            {/* Tombol Kanan: Masuk (Soft Pink) */}
             <button 
               onClick={() => openLoginModal('google')}
-              className="flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-slate-50 text-brandNavy rounded-3xl font-fredoka text-xl shadow-md border-4 border-brandBlue/30 hover:scale-105 active:scale-95 transition-playful"
+              className="py-4 px-8 bg-brandRose hover:bg-brandRose/90 text-white rounded-3xl font-fredoka text-xl shadow-lg shadow-brandRose/25 hover:scale-105 active:scale-95 transition-playful border-b-8 border-brandRose/70 text-center w-full sm:w-auto"
             >
-              <LogIn size={20} className="text-brandRose" />
-              <span>{t('hero.btnEnter')}</span>
+              {t('navbar.login')}
             </button>
-          </div>
-
-          {/* Statistik Menarik Ramah Anak */}
-          <div className="flex items-center gap-6 mt-12 pt-8 border-t-4 border-brandBlue/10 w-full">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🌍</span>
-              <span className="font-fredoka text-brandNavy font-bold text-sm sm:text-base">
-                {t('hero.statsCountries')}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🏆</span>
-              <span className="font-fredoka text-brandNavy font-bold text-sm sm:text-base">
-                {t('hero.statsLevel')}
-              </span>
-            </div>
           </div>
         </div>
 
-        {/* Sisi Kanan: Bumi Animasi Unyu (SVG) */}
-        <div className="flex-1 flex justify-center items-center relative w-full max-w-md animate-float">
-          
-          {/* Efek Cincin Orbit Bumi */}
-          <div className="absolute w-[110%] h-[30%] border-[6px] border-dashed border-brandBlue/30 rounded-full rotate-[-15deg] pointer-events-none"></div>
-          
-          {/* Shadow Halus di Bawah */}
-          <div className="absolute bottom-[-20px] w-[60%] h-6 bg-brandNavy/10 rounded-full blur-md"></div>
-
-          {/* SVG Bumi Lucu */}
-          <svg 
-            viewBox="0 0 400 400" 
-            className="w-72 h-72 sm:w-96 sm:h-96 z-10 drop-shadow-xl select-none"
+        {/* Kolom Kanan: Bola Bumi Bulat Utuh dengan Animasi Melayang */}
+        <div className="flex justify-center items-center">
+          <div 
+            ref={earthRef}
+            onClick={handleEarthClick}
+            className="w-72 h-72 md:w-96 md:h-96 rounded-full bg-[#5CC2F2] border-8 border-white shadow-2xl relative cursor-pointer select-none pointer-events-auto animate-float flex justify-center items-center overflow-hidden"
           >
-            {/* Laut (Base Globe) */}
-            <circle cx="200" cy="200" r="180" fill="#5CC2F2" />
-            
-            {/* Benua/Daratan Hijau (Bentuk abstrak ramah anak) */}
-            {/* Amerika Utara/Selatan */}
-            <path 
-              d="M 90,120 Q 120,130 130,160 T 90,240 T 110,310 Q 80,310 70,270 T 70,180 Z" 
-              fill="#2EC4B6" 
-            />
-            {/* Eurasia & Afrika */}
-            <path 
-              d="M 220,90 Q 280,100 310,130 T 330,220 Q 300,240 280,210 T 230,240 T 210,310 Q 180,320 180,270 T 210,150 Z" 
-              fill="#2EC4B6" 
-            />
-            {/* Australia */}
-            <path 
-              d="M 280,290 Q 310,280 320,310 T 270,330 Z" 
-              fill="#2EC4B6" 
-            />
+            {/* SVG Bumi Bulat Utuh */}
+            <svg 
+              viewBox="0 0 400 400" 
+              className="w-full h-full"
+            >
+              {/* Vektor Benua Sage Green (Eropa, Asia, Afrika) */}
+              {/* Afrika */}
+              <path 
+                d="M 50,230 C 80,180 140,160 170,220 C 160,280 120,330 80,310 Z" 
+                fill="#2EC4B6" 
+              />
+              {/* Eropa */}
+              <path 
+                d="M 120,150 C 140,90 190,70 230,110 C 210,160 170,170 130,170 Z" 
+                fill="#2EC4B6" 
+              />
+              {/* Asia */}
+              <path 
+                d="M 200,160 C 250,80 340,90 360,200 C 300,240 250,230 200,210 Z" 
+                fill="#2EC4B6" 
+              />
 
-            {/* Mata Kiri (Besar & Imut) */}
-            <circle cx="160" cy="180" r="14" fill="#1E3A5F" />
-            <circle cx="156" cy="174" r="5" fill="#FFFFFF" />
-            
-            {/* Mata Kanan (Bisa berkedip) */}
-            <circle cx="240" cy="180" r="14" fill="#1E3A5F" />
-            <circle cx="236" cy="174" r="5" fill="#FFFFFF" />
+              {/* PIPi MERONA MERAH MUDA (Blushing) */}
+              <ellipse cx="135" cy="235" rx="14" ry="8" fill="#FF6B9B" opacity="0.8" />
+              <ellipse cx="265" cy="235" rx="14" ry="8" fill="#FF6B9B" opacity="0.8" />
 
-            {/* Pipi Merona Merah Muda (Blushing) */}
-            <circle cx="135" cy="205" r="15" fill="#FF6B9B" opacity="0.6" />
-            <circle cx="265" cy="205" r="15" fill="#FF6B9B" opacity="0.6" />
+              {/* RENDERING WAJAH BERDASARKAN STATE EMOSI */}
+              
+              {/* A. EKSPRESI: NEUTRAL (Mata bulat mengikuti kursor, senyum kecil) */}
+              {emotion === 'neutral' && (
+                <>
+                  {/* Mata Kiri (Vertical Oval) + Pupil Bergerak */}
+                  <ellipse cx={160 + pupilOffset.x} cy={205 + pupilOffset.y} rx="8" ry="14" fill="#1E3A5F" />
+                  <circle cx={157 + pupilOffset.x} cy={200 + pupilOffset.y} r="2.5" fill="#FFFFFF" />
 
-            {/* Senyuman Bahagia */}
-            <path 
-              d="M 185,200 Q 200,220 215,200" 
-              fill="none" 
-              stroke="#1E3A5F" 
-              strokeWidth="6" 
-              strokeLinecap="round" 
-            />
+                  {/* Mata Kanan (Vertical Oval) + Pupil Bergerak */}
+                  <ellipse cx={240 + pupilOffset.x} cy={205 + pupilOffset.y} rx="8" ry="14" fill="#1E3A5F" />
+                  <circle cx={237 + pupilOffset.x} cy={200 + pupilOffset.y} r="2.5" fill="#FFFFFF" />
 
-            {/* Bintang-bintang Penghias di Sekitar */}
-            <path d="M 50,80 L 53,86 L 60,87 L 55,92 L 56,98 L 50,95 L 44,98 L 45,92 L 40,87 L 47,86 Z" fill="#FFB347" />
-            <path d="M 340,70 L 342,74 L 347,75 L 343,79 L 344,84 L 340,81 L 336,84 L 337,79 L 333,75 L 338,74 Z" fill="#FFB347" />
-            <path d="M 320,250 L 322,254 L 327,255 L 323,259 L 324,264 L 320,261 L 316,264 L 317,259 L 313,255 L 318,254 Z" fill="#FFB347" />
-          </svg>
+                  {/* Senyum Kecil Imut */}
+                  <path 
+                    d="M 185,225 Q 200,240 215,225" 
+                    fill="none" 
+                    stroke="#1E3A5F" 
+                    strokeWidth="5" 
+                    strokeLinecap="round" 
+                  />
+                </>
+              )}
+
+              {/* B. EKSPRESI: HAPPY (Mata melengkung tersenyum, mulut terbuka ceria) */}
+              {emotion === 'happy' && (
+                <>
+                  {/* Mata Squinting Kiri */}
+                  <path 
+                    d="M 148,210 Q 160,198 172,210" 
+                    fill="none" 
+                    stroke="#1E3A5F" 
+                    strokeWidth="6" 
+                    strokeLinecap="round" 
+                  />
+                  
+                  {/* Mata Squinting Kanan */}
+                  <path 
+                    d="M 228,210 Q 240,198 252,210" 
+                    fill="none" 
+                    stroke="#1E3A5F" 
+                    strokeWidth="6" 
+                    strokeLinecap="round" 
+                  />
+
+                  {/* Mulut Terbuka Lebar Sangat Gembira */}
+                  <path 
+                    d="M 185,222 Q 200,248 215,222 Z" 
+                    fill="#1E3A5F" 
+                  />
+                </>
+              )}
+
+              {/* C. EKSPRESI: ANGRY (Alis cemberut miring ke dalam, mulut melengkung ke bawah) */}
+              {emotion === 'angry' && (
+                <>
+                  {/* Mata Bulat Marah */}
+                  <circle cx="160" cy="195" r="11" fill="#1E3A5F" />
+                  <circle cx="240" cy="195" r="11" fill="#1E3A5F" />
+
+                  {/* Alis Marah Kiri (Miring ke dalam) */}
+                  <path 
+                    d="M 144,178 L 169,187" 
+                    fill="none" 
+                    stroke="#1E3A5F" 
+                    strokeWidth="5" 
+                    strokeLinecap="round" 
+                  />
+                  
+                  {/* Alis Marah Kanan (Miring ke dalam) */}
+                  <path 
+                    d="M 256,178 L 231,187" 
+                    fill="none" 
+                    stroke="#1E3A5F" 
+                    strokeWidth="5" 
+                    strokeLinecap="round" 
+                  />
+
+                  {/* Mulut Cemberut Ke Bawah */}
+                  <path 
+                    d="M 190,223 Q 200,208 210,223" 
+                    fill="none" 
+                    stroke="#1E3A5F" 
+                    strokeWidth="5" 
+                    strokeLinecap="round" 
+                  />
+                </>
+              )}
+            </svg>
+          </div>
         </div>
       </main>
 
-      {/* 3. FOOTER */}
-      <footer className="w-full text-center py-6 text-sm text-brandNavy/60 font-quicksand font-bold z-10 border-t-4 border-brandBlue/5 bg-white/30 backdrop-blur-sm">
-        {t('footer.copyright')}
-      </footer>
+      {/* Footer minimalis */}
+      <footer className="w-full py-4 z-10"></footer>
 
-      {/* 4. MODAL LOGIN (PLAYFUL POP-UP) */}
+      {/* 5. MODAL LOGIN (PLAYFUL POP-UP) */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           
