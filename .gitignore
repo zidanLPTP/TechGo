@@ -1,0 +1,37 @@
+# Dependency directories (Folder modul node.js)
+node_modules/
+techgo_backend/node_modules/
+techgo_frontend/node_modules/
+
+# Local environment configuration (Menghindari kebocoran file kredensial / API Key)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+techgo_backend/.env
+techgo_backend/.env.*
+
+# Build output (Hasil kompilasi frontend)
+techgo_frontend/dist/
+techgo_frontend/build/
+dist/
+build/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# IDE/OS files
+.DS_Store
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db

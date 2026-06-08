@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brandRose: #FF6B9B;
+  --color-brandBlue: #5CC2F2;
+  --color-brandCream: #FFFCE8;
+  --color-brandOrange: #FFB347;
+  --color-brandTeal: #2EC4B6;
+  --color-brandNavy: #1E3A5F;
+
+  --font-fredoka: "Fredoka", sans-serif;
+  --font-quicksand: "Quicksand", sans-serif;
+
+  --animate-bounce-slow: bounce 3s infinite;
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+}
+
+body {
+  @apply font-quicksand text-brandNavy bg-[#FFFCE8] min-h-screen overflow-x-hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-fredoka font-bold;
+}
+
+/* Kustomisasi scrollbar lucu untuk anak-anak */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFCE8;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFB347;
+  border-radius: 9999px;
+  border: 2px solid #FFFCE8;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF6B9B;
+}
+
+/* Efek transisi halus global */
+.transition-playful {
+  @apply transition-all duration-300 ease-in-out;
+}
