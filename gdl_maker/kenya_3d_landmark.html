@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model 3D Interaktif Sabana Kenya - TechGo</title>
+  <!-- Google Fonts: Fredoka & Quicksand -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  <style>
+    :root {
+      --color-bg-dark: #0f172a;
+      --color-glass-bg: rgba(30, 41, 59, 0.7);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
+      --color-text-main: #f8fafc;
+      --color-text-sub: #94a3b8;
+      --color-accent: #10b981; /* Hijau Emerald khas alam Kenya */
+      --color-accent-hover: #059669;
+      --font-title: 'Fredoka', sans-serif;
+      --font-body: 'Quicksand', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-bg-dark);
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Kontainer Utama Glassmorphism */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      max-width: 1100px;
+      height: 90vh;
+      max-height: 720px;
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 2.5rem;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        flex-direction: row;
+      }
+    }
+
+    /* Area Viewer 3D */
+    .viewer-area {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewer-instruction {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel Informasi Kanan */
+    .info-panel {
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--color-glass-border);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+      overflow-y: auto;
+    }
+
+    @media (min-width: 768px) {
+      .info-panel {
+        width: 320px;
+        border-top: none;
+        border-left: 1px solid var(--color-glass-border);
+      }
+    }
+
+    .info-header h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--color-accent);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+
+    .info-header p {
+      font-size: 0.8rem;
+      color: var(--color-text-sub);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .fact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .fact-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(16, 185, 129, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .fact-card h3 {
+      margin: 0 0 4px 0;
+      color: var(--color-accent);
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Tombol Unduh Mewah */
+    .download-btn {
+      margin-top: auto;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, #059669 100%);
+      color: #0f172a;
+      border: none;
+      border-radius: 1.25rem;
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+
+    .download-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+      filter: brightness(1.1);
+    }
+
+    .download-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .download-btn:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-text-sub);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Area Penampil 3D -->
+  <div class="viewer-area">
+    <canvas id="threeCanvas"></canvas>
+    <div class="viewer-instruction">
+      <i class="ti ti-rotate-3d"></i> Seret untuk memutar · Scroll untuk zoom
+    </div>
+  </div>
+
+  <!-- Panel Informasi Kanan -->
+  <div class="info-panel">
+    <div class="info-header">
+      <h1>Sabana Kenya</h1>
+      <p><i class="ti ti-map-pin"></i> Afrika Timur · Landmark 3D Eksklusif</p>
+    </div>
+
+    <div class="facts-list">
+      <div class="fact-card">
+        <h3><i class="ti ti-leaf"></i> Pohon Akasia</h3>
+        Pohon ikonik berbentuk payung datar. Struktur ini membantu akasia memaksimalkan penyerapan sinar matahari di padang sabana yang gersang.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-current-loop"></i> Jerapah Safari</h3>
+        Mamalia tertinggi di bumi. Leher panjangnya diadaptasi khusus untuk menjangkau dedaunan segar di pucuk pohon akasia yang tinggi.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-details"></i> Gajah Afrika</h3>
+        Hewan darat terbesar dengan telinga lebar untuk mendinginkan suhu tubuh dan belalai serbaguna untuk mengambil air dan makanan.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-globe"></i> Ekosistem Sabana</h3>
+        Merepresentasikan suaka margasatwa Maasai Mara yang terkenal di Kenya. Hewan-hewan ini hidup berdampingan secara harmonis.
+      </div>
+    </div>
+
+    <button id="dlBtn" class="download-btn">
+      <i class="ti ti-download"></i> Unduh kenya.glb
+    </button>
+  </div>
+</div>
+
+<!-- Memuat Three.js r128 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('threeCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  camera.position.set(15, 10, 18);
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // --- Sistem Pencahayaan Sabana Hangat ---
+  const ambient = new THREE.AmbientLight(0xfff5e6, 0.9); // Langit sabana kekuningan hangat
+  scene.add(ambient);
+
+  const sun = new THREE.DirectionalLight(0xffe0b2, 1.7); // Sinar matahari sabana terik
+  sun.position.set(15, 20, 10);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 1024;
+  sun.shadow.mapSize.height = 1024;
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 40;
+  const d = 12;
+  sun.shadow.camera.left = -d;
+  sun.shadow.camera.right = d;
+  sun.shadow.camera.top = d;
+  sun.shadow.camera.bottom = -d;
+  sun.shadow.bias = -0.0005;
+  scene.add(sun);
+
+  const skyLight = new THREE.DirectionalLight(0xa5d6a7, 0.2); // Pantulan tipis kehijauan dari rumput
+  skyLight.position.set(-15, 10, -15);
+  scene.add(skyLight);
+
+  // --- Material PBR Khas Sabana (Tanpa Alas) ---
+  const trunkMat      = new THREE.MeshStandardMaterial({color: 0x5a3e1b, roughness: 0.9, metalness: 0.05}); // Kayu Akasia
+  const acaciaLeafMat = new THREE.MeshStandardMaterial({color: 0x3d703b, roughness: 0.85, metalness: 0.05}); // Daun Akasia
+  const giraffeYellowMat = new THREE.MeshStandardMaterial({color: 0xe6b842, roughness: 0.7, metalness: 0.05}); // Badan Jerapah
+  const giraffeBrownMat  = new THREE.MeshStandardMaterial({color: 0x8c5b23, roughness: 0.75, metalness: 0.05}); // Bintik Jerapah
+  const elephantGreyMat  = new THREE.MeshStandardMaterial({color: 0x8a939e, roughness: 0.75, metalness: 0.05}); // Kulit Gajah
+  const elephantTuskMat  = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.2, metalness: 0.1});   // Gading Gajah
+  const darkEyeMat       = new THREE.MeshStandardMaterial({color: 0x111111, roughness: 0.5, metalness: 0.1});   // Mata Hewan
+
+  // --- Group Utama Landmark (Target Ekspor GLB - Murni Tanpa Alas Tanah) ---
+  const landmarkGroup = new THREE.Group();
+  landmarkGroup.name = 'KenyaLandmark';
+
+  // --- 1. Pembuat Pohon Akasia Sabana ---
+  function makeAcaciaTree(x, z, rotationY) {
+    const tree = new THREE.Group();
+    tree.name = 'AcaciaTree';
+
+    // Batang Utama
+    const trunkGeo = new THREE.CylinderGeometry(0.3, 0.45, 3.2, 8);
+    const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+    trunk.position.y = 1.6;
+    trunk.castShadow = true;
+    trunk.receiveShadow = true;
+    tree.add(trunk);
+
+    // Cabang Cabang Atas (Low-poly split)
+    const branch1Geo = new THREE.CylinderGeometry(0.2, 0.28, 1.8, 6);
+    const branch1 = new THREE.Mesh(branch1Geo, trunkMat);
+    branch1.position.set(0.4, 2.9, 0.4);
+    branch1.rotation.set(0.4, 0, -0.4);
+    branch1.castShadow = true;
+    tree.add(branch1);
+
+    const branch2Geo = new THREE.CylinderGeometry(0.18, 0.26, 1.8, 6);
+    const branch2 = new THREE.Mesh(branch2Geo, trunkMat);
+    branch2.position.set(-0.4, 2.9, -0.4);
+    branch2.rotation.set(-0.4, 0, 0.4);
+    branch2.castShadow = true;
+    tree.add(branch2);
+
+    // Daun Payung Akasia (Flat Umbrella Canopies)
+    // Payung Tengah Besar
+    const canopyCenter = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.35, 3.6), acaciaLeafMat);
+    canopyCenter.position.set(0, 3.8, 0);
+    canopyCenter.castShadow = true;
+    canopyCenter.receiveShadow = true;
+    tree.add(canopyCenter);
+
+    // Payung Kiri Samping
+    const canopyLeft = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.28, 2.2), acaciaLeafMat);
+    canopyLeft.position.set(1.0, 3.5, 0.8);
+    canopyLeft.castShadow = true;
+    tree.add(canopyLeft);
+
+    // Payung Kanan Samping
+    const canopyRight = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.28, 2.0), acaciaLeafMat);
+    canopyRight.position.set(-1.0, 3.5, -0.8);
+    canopyRight.castShadow = true;
+    tree.add(canopyRight);
+
+    tree.position.set(x, 0, z);
+    tree.rotation.y = rotationY;
+    landmarkGroup.add(tree);
+  }
+  makeAcaciaTree(-3.5, -0.5, 0.4);
+
+  // --- 2. Pembuat Jerapah Lucu ---
+  function makeGiraffe(x, z, rotationY) {
+    const giraffe = new THREE.Group();
+    giraffe.name = 'Giraffe';
+
+    // Badan
+    const body = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.3, 2.6), giraffeYellowMat);
+    body.name = 'Body';
+    body.position.y = 2.9;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    giraffe.add(body);
+
+    // Kaki (4 unit)
+    const legGeo = new THREE.BoxGeometry(0.25, 2.3, 0.25);
+    const legs = [
+      { lx: -0.5, lz: 0.95 },
+      { lx: 0.5, lz: 0.95 },
+      { lx: -0.5, lz: -0.95 },
+      { lx: 0.5, lz: -0.95 }
+    ];
+    legs.forEach((l, i) => {
+      const leg = new THREE.Mesh(legGeo, giraffeYellowMat);
+      leg.name = 'Leg_' + i;
+      leg.position.set(l.lx, 1.15, l.lz);
+      leg.castShadow = true;
+      leg.receiveShadow = true;
+      giraffe.add(leg);
+    });
+
+    // Leher (Panjang menjulang)
+    const neck = new THREE.Mesh(new THREE.BoxGeometry(0.45, 2.8, 0.5), giraffeYellowMat);
+    neck.name = 'Neck';
+    neck.position.set(0, 4.3, 0.95);
+    neck.rotation.x = -0.22; // Miring sedikit ke depan
+    neck.castShadow = true;
+    neck.receiveShadow = true;
+    giraffe.add(neck);
+
+    // Kepala
+    const head = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 1.0), giraffeYellowMat);
+    head.name = 'Head';
+    head.position.set(0, 5.65, 1.4);
+    head.castShadow = true;
+    giraffe.add(head);
+
+    // Telinga & Tanduk kecil (Ossicones)
+    const hornL = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.35, 0.08), giraffeBrownMat);
+    hornL.position.set(-0.16, 5.9, 1.25);
+    const hornR = new THREE.Mesh(hornL.geometry, giraffeBrownMat);
+    hornR.position.set(0.16, 5.9, 1.25);
+    giraffe.add(hornL);
+    giraffe.add(hornR);
+
+    // Bintik Bintik 3D (Spots)
+    const spots = [
+      { sx: 0.71, sy: 3.1, sz: 0.5, w: 0.1, h: 0.4, d: 0.4 },
+      { sx: 0.71, sy: 2.7, sz: -0.6, w: 0.1, h: 0.3, d: 0.3 },
+      { sx: -0.71, sy: 3.2, sz: -0.2, w: 0.1, h: 0.35, d: 0.35 },
+      { sx: -0.71, sy: 2.8, sz: 0.7, w: 0.1, h: 0.3, d: 0.3 },
+      // Bintik di leher
+      { sx: 0.24, sy: 4.8, sz: 1.15, w: 0.1, h: 0.3, d: 0.3 },
+      { sx: -0.24, sy: 4.2, sz: 1.0, w: 0.1, h: 0.25, d: 0.25 }
+    ];
+    spots.forEach((s, i) => {
+      const spot = new THREE.Mesh(new THREE.BoxGeometry(s.w, s.h, s.d), giraffeBrownMat);
+      spot.name = 'Spot_' + i;
+      spot.position.set(s.sx, s.sy, s.sz);
+      giraffe.add(spot);
+    });
+
+    // Mata Hitam Imut
+    const eyeGeo = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const eyeL = new THREE.Mesh(eyeGeo, darkEyeMat);
+    eyeL.position.set(-0.26, 5.7, 1.6);
+    const eyeR = new THREE.Mesh(eyeGeo, darkEyeMat);
+    eyeR.position.set(0.26, 5.7, 1.6);
+    giraffe.add(eyeL);
+    giraffe.add(eyeR);
+
+    giraffe.position.set(x, 0, z);
+    giraffe.rotation.y = rotationY;
+    landmarkGroup.add(giraffe);
+  }
+  makeGiraffe(1.8, 1.0, -0.6); // Jerapah berdiri di kanan menghadap akasia
+
+  // --- 3. Pembuat Gajah Afrika Imut ---
+  function makeElephant(x, z, rotationY) {
+    const elephant = new THREE.Group();
+    elephant.name = 'Elephant';
+
+    // Badan
+    const body = new THREE.Mesh(new THREE.BoxGeometry(2.0, 1.6, 2.8), elephantGreyMat);
+    body.name = 'Body';
+    body.position.y = 2.0;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    elephant.add(body);
+
+    // Kaki Gajah (Tebal kokoh - 4 unit)
+    const legGeo = new THREE.BoxGeometry(0.5, 1.2, 0.5);
+    const legs = [
+      { lx: -0.7, lz: 0.9 },
+      { lx: 0.7, lz: 0.9 },
+      { lx: -0.7, lz: -0.9 },
+      { lx: 0.7, lz: -0.9 }
+    ];
+    legs.forEach((l, i) => {
+      const leg = new THREE.Mesh(legGeo, elephantGreyMat);
+      leg.name = 'Leg_' + i;
+      leg.position.set(l.lx, 0.6, l.lz);
+      leg.castShadow = true;
+      leg.receiveShadow = true;
+      elephant.add(leg);
+    });
+
+    // Kepala Gajah
+    const head = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.3, 1.1), elephantGreyMat);
+    head.name = 'Head';
+    head.position.set(0, 2.5, 1.35);
+    head.castShadow = true;
+    elephant.add(head);
+
+    // Telinga Lebar (2 unit)
+    const earGeo = new THREE.BoxGeometry(0.12, 1.3, 1.0);
+    const earL = new THREE.Mesh(earGeo, elephantGreyMat);
+    earL.name = 'EarL';
+    earL.position.set(-0.7, 2.5, 1.2);
+    earL.rotation.y = 0.4;
+    earL.castShadow = true;
+    
+    const earR = new THREE.Mesh(earGeo, elephantGreyMat);
+    earR.name = 'EarR';
+    earR.position.set(0.7, 2.5, 1.2);
+    earR.rotation.y = -0.4;
+    earR.castShadow = true;
+    elephant.add(earL);
+    elephant.add(earR);
+
+    // Belalai (Trunk - melengkung imut)
+    const trunk1 = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.5, 0.7), elephantGreyMat);
+    trunk1.position.set(0, 2.1, 1.85);
+    trunk1.rotation.x = -0.3;
+    elephant.add(trunk1);
+
+    const trunk2 = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.8, 0.3), elephantGreyMat);
+    trunk2.position.set(0, 1.55, 2.15);
+    trunk2.rotation.x = 0.2;
+    trunk2.castShadow = true;
+    elephant.add(trunk2);
+
+    // Gading Putih (Tusks - 2 unit)
+    const tuskGeo = new THREE.CylinderGeometry(0.06, 0.1, 0.6, 6);
+    tuskGeo.rotateX(Math.PI/2 - 0.2);
+    const tuskL = new THREE.Mesh(tuskGeo, elephantTuskMat);
+    tuskL.position.set(-0.35, 1.9, 1.7);
+    const tuskR = new THREE.Mesh(tuskGeo, elephantTuskMat);
+    tuskR.position.set(0.35, 1.9, 1.7);
+    elephant.add(tuskL);
+    elephant.add(tuskR);
+
+    // Mata Gajah
+    const eyeGeo = new THREE.BoxGeometry(0.08, 0.08, 0.08);
+    const eyeL = new THREE.Mesh(eyeGeo, darkEyeMat);
+    eyeL.position.set(-0.66, 2.6, 1.7);
+    const eyeR = new THREE.Mesh(eyeGeo, darkEyeMat);
+    eyeR.position.set(0.66, 2.6, 1.7);
+    elephant.add(eyeL);
+    elephant.add(eyeR);
+
+    elephant.position.set(x, 0, z);
+    elephant.rotation.y = rotationY;
+    landmarkGroup.add(elephant);
+  }
+  makeElephant(-1.0, 3.2, 0.5); // Gajah berdiri di kiri depan menghadap kanan-depan
+
+  scene.add(landmarkGroup);
+
+  // --- Orbit Kontrol Manual ---
+  let isDragging=false, lastX=0, lastY=0;
+  let theta=0.8, phi=1.1, radius=26;
+
+  function updateCamera(){
+    camera.position.x = radius*Math.sin(phi)*Math.sin(theta);
+    camera.position.y = radius*Math.cos(phi);
+    camera.position.z = radius*Math.sin(phi)*Math.cos(theta);
+    camera.lookAt(0, 2.5, 0);
+  }
+  updateCamera();
+
+  canvas.addEventListener('mousedown', e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+  window.addEventListener('mouseup', ()=>isDragging=false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDragging)return;
+    theta -= (e.clientX-lastX)*0.007;
+    phi = Math.max(0.1, Math.min(Math.PI/2 - 0.05, phi+(e.clientY-lastY)*0.007));
+    lastX=e.clientX; lastY=e.clientY; updateCamera();
+  });
+  canvas.addEventListener('touchstart',e=>{isDragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',()=>isDragging=false);
+  window.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    theta-=(e.touches[0].clientX-lastX)*0.009;
+    phi=Math.max(0.1,Math.min(Math.PI/2 - 0.05,phi+(e.touches[0].clientY-lastY)*0.009));
+    lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;updateCamera();
+  },{passive:true});
+  canvas.addEventListener('wheel',e=>{
+    radius=Math.max(8,Math.min(50,radius+e.deltaY*0.035));
+    updateCamera(); e.preventDefault();
+  },{passive:false});
+
+  function animate(){ 
+    requestAnimationFrame(animate); 
+    renderer.render(scene,camera); 
+  }
+  animate();
+
+  // --- Sistem Eksportir GLB Kenya ---
+  document.getElementById('dlBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('dlBtn');
+    btn.innerHTML = '<i class="ti ti-loader animate-spin"></i> Mengekspor...';
+    btn.disabled = true;
+
+    try {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js';
+      document.head.appendChild(s);
+      await new Promise((res,rej)=>{s.onload=res;s.onerror=rej;});
+
+      const exporter = new THREE.GLTFExporter();
+      exporter.parse(landmarkGroup, function(glb){
+        if (glb instanceof ArrayBuffer) {
+          const blob = new Blob([glb], {type: 'model/gltf-binary'});
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href = url; 
+          a.download = 'kenya.glb'; 
+          a.click();
+          URL.revokeObjectURL(url);
+          btn.innerHTML = '<i class="ti ti-check"></i> Berhasil diunduh!';
+        } else {
+          console.error('Gagal mengekspor: Hasil bukan ArrayBuffer', glb);
+          alert('Kesalahan ekspor: Format keluaran salah.');
+          btn.innerHTML = '<i class="ti ti-alert-triangle"></i> Gagal';
+        }
+        setTimeout(()=>{
+          btn.innerHTML = '<i class="ti ti-download"></i> Unduh kenya.glb';
+          btn.disabled = false;
+        }, 3000);
+      }, { binary: true });
+
+    } catch(e){
+      btn.innerHTML = '<i class="ti ti-download"></i> Unduh kenya.glb';
+      btn.disabled = false;
+      alert('Ekspor gagal: ' + e.message);
+    }
+  });
+})();
+</script>
+</body>
+</html>

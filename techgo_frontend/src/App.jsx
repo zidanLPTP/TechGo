@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import LandingPage from './pages/LandingPage';
 import MapPage from './pages/MapPage';
 import QuizPage from './pages/QuizPage';
+import ProfilePage from './pages/ProfilePage';
 
 // Komponen Utama App yang mengintegrasikan Router dan Context Providers
 function App() {
@@ -24,6 +25,9 @@ function App() {
 
             {/* Rute ke Halaman Kuis Adaptif AI */}
             <Route path="/quiz" element={<QuizPage />} />
+
+            {/* Rute ke Halaman Profil Siswa */}
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </Router>
       </AuthProvider>

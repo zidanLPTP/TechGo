@@ -107,6 +107,10 @@ export default function QuizPage() {
 
   // 2. Kirim skor akhir kuis ke server saat kuis selesai
   const submitFinalScore = (finalScore) => {
+    // Simpan skor tertinggi di local storage untuk Guest/Offline
+    const currentMaxScore = Math.max(parseInt(localStorage.getItem(`techgo_score_${innovationId}`) || '0'), finalScore);
+    localStorage.setItem(`techgo_score_${innovationId}`, currentMaxScore.toString());
+
     fetch('http://localhost:5000/api/quiz/submit', {
       method: 'POST',
       headers: {
@@ -123,12 +127,38 @@ export default function QuizPage() {
       .then((res) => res.json())
       .then((json) => {
         if (json.status === 'success') {
-          setAdaptiveResult(json.data);
-          
-          // Perbarui tingkat keahlian lokal berdasarkan level yang baru
-          const newLevel = json.data.currentLevel;
-          setSkillLevel(newLevel);
-          localStorage.setItem(`techgo_skill_${innovationId}`, newLevel);
+          // Khusus untuk pengguna non-guest (Google), gunakan level dari server
+          if (user && !user.isGuest) {
+            setAdaptiveResult(json.data);
+            const newLevel = json.data.currentLevel;
+            setSkillLevel(newLevel);
+            localStorage.setItem(`techgo_skill_${innovationId}`, newLevel);
+            
+            const serverMaxScore = Math.max(currentMaxScore, json.data.highestScore || finalScore);
+            localStorage.setItem(`techgo_score_${innovationId}`, serverMaxScore.toString());
+          } else {
+            // Untuk Guest, jalankan simulasi adaptif lokal agar level tetap berprogres di browser
+            let nextLevel = skillLevel;
+            let promotion = 'none';
+            
+            if (finalScore >= 4) {
+              if (skillLevel === 'Beginner') { nextLevel = 'Intermediate'; promotion = 'up'; }
+              else if (skillLevel === 'Intermediate') { nextLevel = 'Expert'; promotion = 'up'; }
+            } else if (finalScore <= 2) {
+              if (skillLevel === 'Expert') { nextLevel = 'Intermediate'; promotion = 'down'; }
+              else if (skillLevel === 'Intermediate') { nextLevel = 'Beginner'; promotion = 'down'; }
+            }
+
+            const mockData = {
+              score: finalScore,
+              previousLevel: skillLevel,
+              currentLevel: nextLevel,
+              promotion
+            };
+            setAdaptiveResult(mockData);
+            setSkillLevel(nextLevel);
+            localStorage.setItem(`techgo_skill_${innovationId}`, nextLevel);
+          }
         }
       })
       .catch((err) => {
@@ -266,15 +296,15 @@ export default function QuizPage() {
       {/* 1. STATE LOADING (AI GERMINATING QUESTIONS) */}
       {loading && (
         <div className="flex-1 flex flex-col items-center justify-center p-6 text-center z-10">
-          <div className="bg-white p-8 rounded-5xl border-8 border-brandBlue max-w-md w-full shadow-2xl animate-float">
+          <div className="bg-white p-8 rounded-5xl border-8 border-brandBlue max-w-md w-full shadow-2xl transition-playful hover:scale-[1.01]">
             
             {/* Animasi Bintang Sparkle */}
-            <div className="w-20 h-20 bg-brandBlue/20 rounded-full flex items-center justify-center mx-auto mb-6 text-brandBlue animate-bounce-slow">
+            <div className="w-20 h-20 bg-brandBlue/20 rounded-full flex items-center justify-center mx-auto mb-6 text-brandBlue">
               <Sparkles size={40} className="animate-pulse" />
             </div>
 
             <h2 className="text-3xl text-brandNavy font-fredoka mb-2">
-              Merumuskan Kuis AI... 🤖
+              Merumuskan Kuis AI...
             </h2>
             
             <p className="text-brandNavy/70 text-sm sm:text-base font-semibold mb-6">
@@ -296,14 +326,14 @@ export default function QuizPage() {
       {/* 2. STATE ERROR (KID-FRIENDLY FALLBACK) */}
       {!loading && errorMsg && (
         <div className="flex-1 flex flex-col items-center justify-center p-6 text-center z-10">
-          <div className="bg-white p-8 rounded-5xl border-8 border-brandRose max-w-md w-full shadow-2xl animate-float">
+          <div className="bg-white p-8 rounded-5xl border-8 border-brandRose max-w-md w-full shadow-2xl transition-playful hover:scale-[1.01]">
             
             <div className="w-20 h-20 bg-brandRose/25 rounded-full flex items-center justify-center mx-auto mb-6 text-brandRose">
               <AlertCircle size={44} />
             </div>
 
             <h2 className="text-2xl text-brandNavy font-fredoka mb-2">
-              Aduh, Robot Kuis Kami Kebingungan! 🤖
+              Aduh, Robot Kuis Kami Kebingungan!
             </h2>
             
             <p className="text-brandNavy/80 text-sm leading-relaxed mb-6">
@@ -337,10 +367,10 @@ export default function QuizPage() {
             {/* Header Soal & Progres */}
             <div className="flex justify-between items-center mb-4">
               <span className="font-fredoka text-brandOrange text-sm sm:text-base uppercase tracking-wider">
-                📝 Soal {currentIdx + 1} dari {quizzes.length}
+                Soal {currentIdx + 1} dari {quizzes.length}
               </span>
               <span className="font-fredoka bg-brandBlue/10 border-2 border-brandBlue/30 text-brandBlue px-3 py-1 rounded-full text-xs sm:text-sm">
-                ⚙️ Level: {skillLevel}
+                Level: {skillLevel}
               </span>
             </div>
 
@@ -433,14 +463,14 @@ export default function QuizPage() {
             className="absolute inset-0 w-full h-full pointer-events-none z-15"
           />
 
-          <div className="bg-white rounded-5xl border-8 border-brandBlue p-6 sm:p-8 max-w-md w-full shadow-2xl text-center relative z-20 animate-float">
+          <div className="bg-white rounded-5xl border-8 border-brandBlue p-6 sm:p-8 max-w-md w-full shadow-2xl text-center relative z-20 transition-playful hover:scale-[1.01]">
             
             {/* Ikon Piala / Trofi Medali */}
-            <div className="w-24 h-24 bg-brandOrange/20 rounded-full flex items-center justify-center mx-auto mb-6 text-brandOrange animate-bounce-slow">
+            <div className="w-24 h-24 bg-brandOrange/20 rounded-full flex items-center justify-center mx-auto mb-6 text-brandOrange">
               <Award size={48} className="animate-pulse" />
             </div>
 
-            <h2 className="text-3xl text-brandNavy font-fredoka mb-2">Kuis Selesai! 🎉</h2>
+            <h2 className="text-3xl text-brandNavy font-fredoka mb-2">Kuis Selesai!</h2>
             <p className="text-brandNavy/60 text-sm font-semibold mb-6">Materi: "{innovationTitle}"</p>
 
             {/* Lingkaran Skor Kuis */}
@@ -454,22 +484,22 @@ export default function QuizPage() {
             {adaptiveResult && (
               <div className="bg-brandTeal/10 border-4 border-brandTeal/30 p-4 rounded-3xl mb-6">
                 <span className="text-xs uppercase font-fredoka font-bold text-brandTeal tracking-wide block mb-1">
-                  📊 Evaluasi Kuis Adaptif AI
+                  Evaluasi Kuis Adaptif AI
                 </span>
                 
                 {adaptiveResult.promotion === 'up' && (
                   <p className="text-brandNavy font-semibold text-sm sm:text-base">
-                    🚀 Luar biasa! Kamu naik level ke tingkat <span className="font-bold text-brandTeal">{adaptiveResult.currentLevel}</span>!
+                    Luar biasa! Kamu naik level ke tingkat <span className="font-bold text-brandTeal">{adaptiveResult.currentLevel}</span>!
                   </p>
                 )}
                 {adaptiveResult.promotion === 'down' && (
                   <p className="text-brandNavy font-semibold text-sm sm:text-base">
-                    🍀 Tidak apa-apa! Level belajarmu disesuaikan ke tingkat <span className="font-bold text-brandOrange">{adaptiveResult.currentLevel}</span> untuk pemahaman lebih baik.
+                    Tidak apa-apa! Level belajarmu disesuaikan ke tingkat <span className="font-bold text-brandOrange">{adaptiveResult.currentLevel}</span> untuk pemahaman lebih baik.
                   </p>
                 )}
                 {adaptiveResult.promotion === 'none' && (
                   <p className="text-brandNavy font-semibold text-sm sm:text-base">
-                    ⭐ Mantap! Kamu tetap berada di tingkat <span className="font-bold text-brandBlue">{adaptiveResult.currentLevel}</span>.
+                    Mantap! Kamu tetap berada di tingkat <span className="font-bold text-brandBlue">{adaptiveResult.currentLevel}</span>.
                   </p>
                 )}
               </div>
@@ -480,7 +510,7 @@ export default function QuizPage() {
               <div className="bg-brandOrange/15 border-2 border-brandOrange/30 text-brandNavy p-4 rounded-2xl mb-6 flex gap-2 items-start text-xs text-left font-bold">
                 <AlertCircle size={16} className="text-brandOrange shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-brandOrange font-fredoka block mb-0.5">Skor Tamu 📢</span>
+                  <span className="text-brandOrange font-fredoka block mb-0.5">Skor Tamu</span>
                   Karena kamu bermain sebagai Tamu, skor ini tidak disimpan di database. Progres belajarmu akan hilang saat browser ditutup.
                 </div>
               </div>

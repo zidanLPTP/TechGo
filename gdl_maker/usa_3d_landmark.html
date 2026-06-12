@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model 3D Interaktif Patung Liberty - TechGo</title>
+  <!-- Google Fonts: Fredoka & Quicksand -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  <style>
+    :root {
+      --color-bg-dark: #0f172a;
+      --color-glass-bg: rgba(30, 41, 59, 0.7);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
+      --color-text-main: #f8fafc;
+      --color-text-sub: #94a3b8;
+      --color-accent: #06b6d4; /* Hijau Toska / Cyan Liberty */
+      --color-accent-hover: #0891b2;
+      --font-title: 'Fredoka', sans-serif;
+      --font-body: 'Quicksand', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-bg-dark);
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Kontainer Utama Glassmorphism */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      max-width: 1100px;
+      height: 90vh;
+      max-height: 720px;
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 2.5rem;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        flex-direction: row;
+      }
+    }
+
+    /* Area Viewer 3D */
+    .viewer-area {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewer-instruction {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel Informasi Kanan */
+    .info-panel {
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--color-glass-border);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+      overflow-y: auto;
+    }
+
+    @media (min-width: 768px) {
+      .info-panel {
+        width: 320px;
+        border-top: none;
+        border-left: 1px solid var(--color-glass-border);
+      }
+    }
+
+    .info-header h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--color-accent);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+
+    .info-header p {
+      font-size: 0.8rem;
+      color: var(--color-text-sub);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .fact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .fact-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(6, 182, 212, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .fact-card h3 {
+      margin: 0 0 4px 0;
+      color: var(--color-accent);
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Tombol Unduh Mewah */
+    .download-btn {
+      margin-top: auto;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, #0891b2 100%);
+      color: #0f172a;
+      border: none;
+      border-radius: 1.25rem;
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);
+    }
+
+    .download-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45);
+      filter: brightness(1.1);
+    }
+
+    .download-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .download-btn:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-text-sub);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Area Penampil 3D -->
+  <div class="viewer-area">
+    <canvas id="threeCanvas"></canvas>
+    <div class="viewer-instruction">
+      <i class="ti ti-rotate-3d"></i> Seret untuk memutar · Scroll untuk zoom
+    </div>
+  </div>
+
+  <!-- Panel Informasi Kanan -->
+  <div class="info-panel">
+    <div class="info-header">
+      <h1>Patung Liberty</h1>
+      <p><i class="ti ti-map-pin"></i> New York, AS · Landmark 3D Eksklusif</p>
+    </div>
+
+    <div class="facts-list">
+      <div class="fact-card">
+        <h3><i class="ti ti-gift"></i> Hadiah Persahabatan</h3>
+        Patung kolosal setinggi 46 meter ini dirancang oleh Frédéric-Auguste Bartholdi sebagai hadiah dari rakyat Prancis untuk merayakan 100 tahun kemerdekaan Amerika Serikat.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-flame"></i> Obor Kemerdekaan</h3>
+        Tangan kanan mengangkat obor berlapis emas yang melambangkan cahaya kemajuan menerangi jalan menuju kebebasan dunia.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-palette"></i> Warna Hijau Toska</h3>
+        Terbuat dari lapisan tembaga tipis yang awalnya berwarna cokelat kemerahan. Oksidasi alami udara selama puluhan tahun menghasilkan patina hijau toska yang indah.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-crown"></i> 7 Duri Mahkota</h3>
+        Tujuh duri tajam pada mahkotanya melambangkan tujuh samudra dan tujuh benua di dunia, menyebarkan pesan kebebasan ke segala penjuru bumi.
+      </div>
+    </div>
+
+    <button id="dlBtn" class="download-btn">
+      <i class="ti ti-download"></i> Unduh united_states.glb
+    </button>
+  </div>
+</div>
+
+<!-- Memuat Three.js r128 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('threeCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  camera.position.set(0, 5, 15);
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // --- Sistem Pencahayaan ---
+  const ambient = new THREE.AmbientLight(0xfff8f0, 0.9);
+  scene.add(ambient);
+
+  const sun = new THREE.DirectionalLight(0xffebd2, 1.6);
+  sun.position.set(10, 20, 10);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 1024;
+  sun.shadow.mapSize.height = 1024;
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 35;
+  const d = 8;
+  sun.shadow.camera.left = -d;
+  sun.shadow.camera.right = d;
+  sun.shadow.camera.top = d;
+  sun.shadow.camera.bottom = -d;
+  sun.shadow.bias = -0.0005;
+  scene.add(sun);
+
+  // --- Material PBR Tembaga Teroksidasi (Liberty Green) ---
+  const copperMat = new THREE.MeshStandardMaterial({color: 0x82c3a6, roughness: 0.65, metalness: 0.1});
+  const goldMat   = new THREE.MeshStandardMaterial({color: 0xffd700, metalness: 0.9, roughness: 0.15}); // Obor Emas
+  const darkMat   = new THREE.MeshStandardMaterial({color: 0x111111, roughness: 0.5}); // Mata / Detil gelap
+
+  // --- Group Utama Landmark (Murni Tanpa Alas) ---
+  const landmarkGroup = new THREE.Group();
+  landmarkGroup.name = 'USALandmark';
+
+  // --- Pembuat Patung Liberty Low-Poly ---
+  function makeStatueOfLiberty() {
+    const liberty = new THREE.Group();
+    liberty.name = 'StatueOfLiberty';
+
+    // 1. Toga / Robe bagian bawah (Tapered Cylinder)
+    const lowerRobe = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 1.1, 4.0, 8), copperMat);
+    lowerRobe.name = 'LowerRobe';
+    lowerRobe.position.y = 2.0;
+    lowerRobe.castShadow = true;
+    lowerRobe.receiveShadow = true;
+    liberty.add(lowerRobe);
+
+    // 2. Dada / Tubuh bagian atas
+    const chest = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.6, 1.0), copperMat);
+    chest.name = 'Chest';
+    chest.position.set(0, 4.1, 0);
+    chest.castShadow = true;
+    liberty.add(chest);
+
+    // 3. Kepala
+    const head = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.85, 0.75), copperMat);
+    head.name = 'Head';
+    head.position.set(0, 5.2, 0);
+    head.castShadow = true;
+    liberty.add(head);
+
+    // Hidung
+    const nose = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.22, 0.15), copperMat);
+    nose.name = 'Nose';
+    nose.position.set(0, 5.2, 0.42);
+    liberty.add(nose);
+
+    // 4. Mahkota (Crown band & 7 duri tajam)
+    const crownBand = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.18, 0.85), copperMat);
+    crownBand.name = 'CrownBand';
+    crownBand.position.set(0, 5.65, 0);
+    liberty.add(crownBand);
+
+    // 7 Spikes Mahkota
+    const spikeGeo = new THREE.CylinderGeometry(0, 0.05, 0.45, 4);
+    spikeGeo.rotateX(Math.PI/2); // Menghadap horizontal sebelum dirotasi melingkar
+    
+    const spikeAngles = [-1.3, -0.9, -0.45, 0, 0.45, 0.9, 1.3];
+    spikeAngles.forEach((angle, idx) => {
+      const spike = new THREE.Mesh(spikeGeo, copperMat);
+      spike.name = 'CrownSpike_' + idx;
+      spike.position.set(
+        Math.sin(angle) * 0.45,
+        5.75 + Math.cos(angle) * 0.1,
+        Math.cos(angle) * 0.35
+      );
+      spike.rotation.set(-0.3, angle, 0);
+      liberty.add(spike);
+    });
+
+    // 5. Lengan Kanan Mengangkat Obor
+    const rightShoulder = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.4, 0.35), copperMat);
+    rightShoulder.name = 'RightShoulder';
+    rightShoulder.position.set(0.7, 4.4, 0);
+    rightShoulder.rotation.z = -0.5; // Keluar sedikit
+    liberty.add(rightShoulder);
+
+    const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.6, 0.3), copperMat);
+    rightArm.name = 'RightArmUp';
+    rightArm.position.set(0.95, 5.5, 0);
+    rightArm.castShadow = true;
+    liberty.add(rightArm);
+
+    // Gagang Obor (Torch Handle)
+    const torchHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.08, 0.7, 6), copperMat);
+    torchHandle.name = 'TorchHandle';
+    torchHandle.position.set(0.95, 6.45, 0.1);
+    torchHandle.rotation.x = 0.2;
+    liberty.add(torchHandle);
+
+    // Cawan Obor (Torch Cup)
+    const torchCup = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.18, 0.3, 8), copperMat);
+    torchCup.name = 'TorchCup';
+    torchCup.position.set(0.95, 6.85, 0.18);
+    liberty.add(torchCup);
+
+    // Api Obor Emas (Golden Flame)
+    const flameGroup = new THREE.Group();
+    flameGroup.name = 'TorchFlame';
+    flameGroup.position.set(0.95, 7.2, 0.25);
+
+    const flameCenter = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.5, 0.35), goldMat);
+    flameCenter.rotation.set(0.4, 0.4, 0);
+    flameCenter.castShadow = true;
+    flameGroup.add(flameCenter);
+
+    const flameTip = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.3, 0.2), goldMat);
+    flameTip.position.set(0.05, 0.3, -0.05);
+    flameTip.rotation.y = 0.7;
+    flameGroup.add(flameTip);
+    liberty.add(flameGroup);
+
+    // 6. Lengan Kiri Memegang Papan (Tablet)
+    const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.4, 0.3), copperMat);
+    leftArm.name = 'LeftArm';
+    leftArm.position.set(-0.7, 4.0, 0.2);
+    leftArm.rotation.set(0.3, 0.1, 0.5);
+    leftArm.castShadow = true;
+    liberty.add(leftArm);
+
+    // Papan Kemerdekaan (Tablet / Tabula Ansata)
+    const tablet = new THREE.Mesh(new THREE.BoxGeometry(0.14, 1.2, 0.8), copperMat);
+    tablet.name = 'Tablet';
+    tablet.position.set(-0.95, 4.0, 0.65);
+    tablet.rotation.set(0.5, 0.2, 0.4);
+    tablet.castShadow = true;
+    liberty.add(tablet);
+
+    return liberty;
+  }
+  landmarkGroup.add(makeStatueOfLiberty());
+
+  scene.add(landmarkGroup);
+
+  // --- Orbit Kontrol Manual ---
+  let isDragging=false, lastX=0, lastY=0;
+  let theta=0, phi=1.4, radius=16;
+
+  function updateCamera(){
+    camera.position.x = radius*Math.sin(phi)*Math.sin(theta);
+    camera.position.y = radius*Math.cos(phi) + 4; // Sedikit dinaikkan fokusnya
+    camera.position.z = radius*Math.sin(phi)*Math.cos(theta);
+    camera.lookAt(0, 4, 0);
+  }
+  updateCamera();
+
+  canvas.addEventListener('mousedown', e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+  window.addEventListener('mouseup', ()=>isDragging=false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDragging)return;
+    theta -= (e.clientX-lastX)*0.007;
+    phi = Math.max(0.1, Math.min(Math.PI/2 + 0.1, phi+(e.clientY-lastY)*0.007));
+    lastX=e.clientX; lastY=e.clientY; updateCamera();
+  });
+  canvas.addEventListener('touchstart',e=>{isDragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',()=>isDragging=false);
+  window.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    theta-=(e.touches[0].clientX-lastX)*0.009;
+    phi=Math.max(0.1,Math.min(Math.PI/2 + 0.1,phi+(e.touches[0].clientY-lastY)*0.009));
+    lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;updateCamera();
+  },{passive:true});
+  canvas.addEventListener('wheel',e=>{
+    radius=Math.max(6,Math.min(30,radius+e.deltaY*0.02));
+    updateCamera(); e.preventDefault();
+  },{passive:false});
+
+  function animate(){ 
+    requestAnimationFrame(animate); 
+    renderer.render(scene,camera); 
+  }
+  animate();
+
+  // --- Sistem Eksportir GLB AS ---
+  document.getElementById('dlBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('dlBtn');
+    btn.innerHTML = '<i class="ti ti-loader animate-spin"></i> Mengekspor...';
+    btn.disabled = true;
+
+    try {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js';
+      document.head.appendChild(s);
+      await new Promise((res,rej)=>{s.onload=res;s.onerror=rej;});
+
+      const exporter = new THREE.GLTFExporter();
+      exporter.parse(landmarkGroup, function(glb){
+        if (glb instanceof ArrayBuffer) {
+          const blob = new Blob([glb], {type: 'model/gltf-binary'});
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href = url; 
+          a.download = 'united_states.glb'; 
+          a.click();
+          URL.revokeObjectURL(url);
+          btn.innerHTML = '<i class="ti ti-check"></i> Berhasil diunduh!';
+        } else {
+          console.error('Gagal mengekspor: Hasil bukan ArrayBuffer', glb);
+          alert('Kesalahan ekspor: Format keluaran salah.');
+          btn.innerHTML = '<i class="ti ti-alert-triangle"></i> Gagal';
+        }
+        setTimeout(()=>{
+          btn.innerHTML = '<i class="ti ti-download"></i> Unduh united_states.glb';
+          btn.disabled = false;
+        }, 3000);
+      }, { binary: true });
+
+    } catch(e){
+      btn.innerHTML = '<i class="ti ti-download"></i> Unduh united_states.glb';
+      btn.disabled = false;
+      alert('Ekspor gagal: ' + e.message);
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -59,16 +59,16 @@ CREATE TABLE user_progress (
 
 -- Seed Data Negara
 INSERT INTO countries (id, country_code, country_name_id, country_name_en, continent, latitude, longitude) VALUES
-(1, 'IDN', 'Indonesia', 'Indonesia', 'Asia', -0.789275, 113.921327),
-(2, 'JPN', 'Jepang', 'Japan', 'Asia', 36.204824, 138.252924),
-(3, 'KOR', 'Korea Selatan', 'South Korea', 'Asia', 35.907757, 127.766922),
-(4, 'DEU', 'Jerman', 'Germany', 'Europe', 51.165691, 10.451526),
-(5, 'FRA', 'Prancis', 'France', 'Europe', 46.227638, 2.213749),
-(6, 'GBR', 'Inggris', 'United Kingdom', 'Europe', 55.378051, -3.435973),
-(7, 'USA', 'Amerika Serikat', 'United States', 'America', 37.090240, -95.712891),
-(8, 'BRA', 'Brasil', 'Brazil', 'America', -14.235004, -51.925280),
-(9, 'KEN', 'Kenya', 'Kenya', 'Africa', -1.292066, 36.821946),
-(10, 'EGY', 'Mesir', 'Egypt', 'Africa', 26.820553, 30.802498);
+(1, 'IDN', 'Indonesia', 'Indonesia', 'Asia', -7.052457, 108.256638),
+(2, 'JPN', 'Jepang', 'Japan', 'Asia', 36.001670, 138.576247),
+(3, 'KOR', 'Korea Selatan', 'South Korea', 'Asia', 36.067083, 127.906735),
+(4, 'DEU', 'Jerman', 'Germany', 'Europe', 51.668798, 9.733546),
+(5, 'FRA', 'Prancis', 'France', 'Europe', 45.848573, 2.280187),
+(6, 'GBR', 'Inggris', 'United Kingdom', 'Europe', 52.620117, -2.414026),
+(7, 'USA', 'Amerika Serikat', 'United States', 'America', 39.528976, -99.211269),
+(8, 'BRA', 'Brasil', 'Brazil', 'America', -10.447299, -52.401329),
+(9, 'KEN', 'Kenya', 'Kenya', 'Africa', -1.047682, 39.245191),
+(10, 'EGY', 'Mesir', 'Egypt', 'Africa', 27.491489, 29.296290);
 
 -- Seed Data Inovasi Teknologi (Satu negara memiliki inovasi teknologi canggih edukatif)
 INSERT INTO innovations (id, country_id, title_id, title_en, description_id, description_en, icon_name) VALUES

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model 3D Interaktif Piramida Agung Giza & Sphinx - TechGo</title>
+  <!-- Google Fonts: Fredoka untuk judul ceria, Quicksand untuk kenyamanan membaca -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  <style>
+    :root {
+      --color-bg-dark: #0f172a;
+      --color-glass-bg: rgba(30, 41, 59, 0.7);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
+      --color-text-main: #f8fafc;
+      --color-text-sub: #94a3b8;
+      --color-accent: #f59e0b;
+      --color-accent-hover: #d97706;
+      --font-title: 'Fredoka', sans-serif;
+      --font-body: 'Quicksand', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-bg-dark);
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Kontainer Utama Glassmorphism */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      max-width: 1100px;
+      height: 90vh;
+      max-height: 720px;
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 2.5rem;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        flex-direction: row;
+      }
+    }
+
+    /* Area Viewer 3D */
+    .viewer-area {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewer-instruction {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel Informasi Kanan */
+    .info-panel {
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--color-glass-border);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+      overflow-y: auto;
+    }
+
+    @media (min-width: 768px) {
+      .info-panel {
+        width: 320px;
+        border-top: none;
+        border-left: 1px solid var(--color-glass-border);
+      }
+    }
+
+    .info-header h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--color-accent);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+
+    .info-header p {
+      font-size: 0.8rem;
+      color: var(--color-text-sub);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .fact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .fact-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(245, 158, 11, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .fact-card h3 {
+      margin: 0 0 4px 0;
+      color: var(--color-accent);
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Tombol Unduh Mewah */
+    .download-btn {
+      margin-top: auto;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, #d97706 100%);
+      color: #0f172a;
+      border: none;
+      border-radius: 1.25rem;
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    }
+
+    .download-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+      filter: brightness(1.1);
+    }
+
+    .download-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .download-btn:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-text-sub);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Area Penampil 3D -->
+  <div class="viewer-area">
+    <canvas id="threeCanvas"></canvas>
+    <div class="viewer-instruction">
+      <i class="ti ti-rotate-3d"></i> Seret untuk memutar · Scroll untuk zoom
+    </div>
+  </div>
+
+  <!-- Panel Informasi Kanan -->
+  <div class="info-panel">
+    <div class="info-header">
+      <h1>Piramida & Sphinx</h1>
+      <p><i class="ti ti-map-pin"></i> Giza, Mesir · Landmark 3D Eksklusif</p>
+    </div>
+
+    <div class="facts-list">
+      <div class="fact-card">
+        <h3><i class="ti ti-history"></i> Sejarah Agung</h3>
+        Dibangun sekitar 4.500 tahun lalu untuk makam Firaun Khufu. Butuh waktu 20 tahun dan lebih dari 100.000 pekerja terampil!
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-cube"></i> Jutaan Blok Batu</h3>
+        Tersusun dari 2,3 juta blok batu kapur seberat 2 hingga 15 ton setiap bloknya. Disusun presisi tanpa semen modern!
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-chevrons-up"></i> Rekor Ketinggian</h3>
+        Tinggi awal mencapai 146 meter (setara gedung 40 lantai). Menjadi struktur tertinggi buatan manusia selama lebih dari 3.800 tahun!
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-shield"></i> Sang Sphinx Penjaga</h3>
+        Patung singa berkepala manusia dengan panjang 73 m & tinggi 20 m. Nemes bercorak biru-emas melambangkan keilahian firaun.
+      </div>
+    </div>
+
+    <button id="dlBtn" class="download-btn">
+      <i class="ti ti-download"></i> Unduh egypt.glb
+    </button>
+  </div>
+</div>
+
+<!-- Memuat Three.js r128 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('threeCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  camera.position.set(18, 12, 22);
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // --- Sistem Pencahayaan Sunset Estetis ---
+  const ambient = new THREE.AmbientLight(0xfff2e0, 0.85); // Ambient hangat
+  scene.add(ambient);
+
+  const sun = new THREE.DirectionalLight(0xffd8a8, 1.8); // Sinar matahari sore
+  sun.position.set(20, 25, 15);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 1024;
+  sun.shadow.mapSize.height = 1024;
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 50;
+  const d = 15;
+  sun.shadow.camera.left = -d;
+  sun.shadow.camera.right = d;
+  sun.shadow.camera.top = d;
+  sun.shadow.camera.bottom = -d;
+  sun.shadow.bias = -0.0005;
+  scene.add(sun);
+
+  const fillLight = new THREE.DirectionalLight(0x8bc34a, 0.25); // Cahaya pantul kehijauan tipis
+  fillLight.position.set(-20, 10, -20);
+  scene.add(fillLight);
+
+  // --- Material PBR Kualitas Premium (Tanpa Tekstur Gambar) ---
+  const stoneMat  = new THREE.MeshStandardMaterial({color: 0xdbb065, roughness: 0.8, metalness: 0.05});
+  const darkMat   = new THREE.MeshStandardMaterial({color: 0xb58943, roughness: 0.85, metalness: 0.05});
+  const bodyMat   = new THREE.MeshStandardMaterial({color: 0xd2a75c, roughness: 0.75, metalness: 0.05});
+  const baseMat   = new THREE.MeshStandardMaterial({color: 0x9f7938, roughness: 0.9, metalness: 0.05});
+  
+  // Material khusus aksen detail
+  const goldMat   = new THREE.MeshStandardMaterial({color: 0xffd700, metalness: 0.85, roughness: 0.15}); // Capstone Emas
+  const creamMat  = new THREE.MeshStandardMaterial({color: 0xf3eee2, roughness: 0.7, metalness: 0.05});  // Casing kapur Khafre
+  const blueMat   = new THREE.MeshStandardMaterial({color: 0x1e3f8a, roughness: 0.6, metalness: 0.1});   // Garis Nemes Biru
+  const redStoneMat = new THREE.MeshStandardMaterial({color: 0xa84a32, roughness: 0.75, metalness: 0.05}); // Prasasti Mimpi
+  const sandDuneMat = new THREE.MeshStandardMaterial({color: 0xe5ba73, roughness: 0.9, metalness: 0.02});  // Gundukan pasir
+  const trunkMat  = new THREE.MeshStandardMaterial({color: 0x765230, roughness: 0.9, metalness: 0.05});  // Batang palem
+  const greenMat  = new THREE.MeshStandardMaterial({color: 0x367c4b, roughness: 0.8, metalness: 0.05});  // Daun palem
+
+  // --- Group Utama Landmark (Target Ekspor GLB) ---
+  const landmarkGroup = new THREE.Group();
+  landmarkGroup.name = 'EgyptLandmark';
+
+  // --- Pembuat 3 Piramida Agung ---
+  function makePyramid(wx, wy, x, z, type) {
+    const pGroup = new THREE.Group();
+    pGroup.name = 'PyramidGroup_' + type;
+
+    // Tubuh utama piramida
+    const g = new THREE.CylinderGeometry(0, (wx/2)*Math.SQRT2, wy, 4, 1);
+    g.rotateY(Math.PI/4);
+    const mesh = new THREE.Mesh(g, stoneMat);
+    mesh.name = 'PyramidBody';
+    mesh.position.set(0, wy/2, 0);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    pGroup.add(mesh);
+
+    // Detail Puncak khas masing-masing piramida
+    if (type === 'khufu') {
+      // Capstone emas murni (Pyramidion)
+      const capH = wy * 0.15;
+      const capG = new THREE.CylinderGeometry(0, (wx/2)*Math.SQRT2*0.15, capH, 4, 1);
+      capG.rotateY(Math.PI/4);
+      const cap = new THREE.Mesh(capG, goldMat);
+      cap.name = 'PyramidionGold';
+      cap.position.set(0, wy - capH/2, 0);
+      cap.castShadow = true;
+      pGroup.add(cap);
+    } else if (type === 'khafre') {
+      // Sisa selubung batu kapur putih di puncak
+      const capH = wy * 0.32;
+      const capG = new THREE.CylinderGeometry(0, (wx/2)*Math.SQRT2*0.32, capH, 4, 1);
+      capG.rotateY(Math.PI/4);
+      const cap = new THREE.Mesh(capG, creamMat);
+      cap.name = 'LimestoneCasing';
+      cap.position.set(0, wy - capH/2, 0);
+      cap.castShadow = true;
+      pGroup.add(cap);
+    } else if (type === 'menkaure') {
+      // Capstone emas kecil
+      const capH = wy * 0.11;
+      const capG = new THREE.CylinderGeometry(0, (wx/2)*Math.SQRT2*0.11, capH, 4, 1);
+      capG.rotateY(Math.PI/4);
+      const cap = new THREE.Mesh(capG, goldMat);
+      cap.name = 'PyramidionGoldSmall';
+      cap.position.set(0, wy - capH/2, 0);
+      cap.castShadow = true;
+      pGroup.add(cap);
+    }
+
+    pGroup.position.set(x, 0, z);
+    landmarkGroup.add(pGroup);
+  }
+
+  // Khufu (Besar), Khafre (Sedang), Menkaure (Kecil)
+  makePyramid(7.2, 9.2,   0,   0, 'khufu');
+  makePyramid(5.6, 7.3,  -9,  -2.5, 'khafre');
+  makePyramid(4.5, 5.8,   9,  -3.5, 'menkaure');
+
+  // --- Patung Agung Sphinx ---
+  function makeSphinx(){
+    const g = new THREE.Group();
+    g.name = 'Sphinx';
+
+    // Badan utama
+    const body = new THREE.Mesh(new THREE.BoxGeometry(3.5, 1.7, 7.8), bodyMat);
+    body.name = 'SphinxBody';
+    body.position.set(0, 0.85, 0);
+    body.castShadow = true;
+    body.receiveShadow = true;
+    g.add(body);
+
+    // Leher
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.65, 1.0, 8), bodyMat);
+    neck.name = 'SphinxNeck';
+    neck.position.set(0, 2.1, 3.1);
+    neck.castShadow = true;
+    neck.receiveShadow = true;
+    g.add(neck);
+
+    // Kepala
+    const head = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.4, 1.3), bodyMat);
+    head.name = 'SphinxHead';
+    head.position.set(0, 2.9, 3.1);
+    head.castShadow = true;
+    head.receiveShadow = true;
+    g.add(head);
+
+    // Hidung
+    const nose = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 0.4), bodyMat);
+    nose.name = 'SphinxNose';
+    nose.position.set(0, 2.85, 3.75);
+    g.add(nose);
+
+    // Janggut Firaun (beard)
+    const beard = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.5, 0.15), darkMat);
+    beard.name = 'SphinxBeard';
+    beard.position.set(0, 2.1, 3.4);
+    beard.castShadow = true;
+    g.add(beard);
+
+    // Cakar kiri & kanan (paws)
+    const pawGeo = new THREE.BoxGeometry(0.9, 0.5, 2.2);
+    const pawL = new THREE.Mesh(pawGeo, bodyMat);
+    pawL.name = 'PawL';
+    pawL.position.set(-1.15, 0.25, 4.0);
+    pawL.castShadow = true;
+    pawL.receiveShadow = true;
+
+    const pawR = new THREE.Mesh(pawGeo, bodyMat);
+    pawR.name = 'PawR';
+    pawR.position.set(1.15, 0.25, 4.0);
+    pawR.castShadow = true;
+    pawR.receiveShadow = true;
+    g.add(pawL);
+    g.add(pawR);
+
+    // Ekor Melingkar di Sisi Kanan Belakang
+    const tailSeg1 = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.25, 2.2), bodyMat);
+    tailSeg1.name = 'SphinxTail1';
+    tailSeg1.position.set(1.7, 0.2, -2.6);
+    tailSeg1.castShadow = true;
+    g.add(tailSeg1);
+
+    const tailSeg2 = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.25, 1.4), bodyMat);
+    tailSeg2.name = 'SphinxTail2';
+    tailSeg2.position.set(1.4, 0.2, -3.6);
+    tailSeg2.rotation.y = 0.5;
+    tailSeg2.castShadow = true;
+    g.add(tailSeg2);
+
+    // Hiasan Kepala Nemes khas Firaun Mesir Kuno (Sayap & Kepala)
+    // Sayap Kiri
+    const nemesL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.7, 0.7), blueMat);
+    nemesL.name = 'NemesWingL';
+    nemesL.position.set(-0.75, 2.3, 3.1);
+    nemesL.rotation.z = 0.08;
+    nemesL.castShadow = true;
+    g.add(nemesL);
+
+    // Sayap Kanan
+    const nemesR = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.7, 0.7), blueMat);
+    nemesR.name = 'NemesWingR';
+    nemesR.position.set(0.75, 2.3, 3.1);
+    nemesR.rotation.z = -0.08;
+    nemesR.castShadow = true;
+    g.add(nemesR);
+
+    // Penutup atas kepala (emas)
+    const nemesTop = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.35, 1.4), goldMat);
+    nemesTop.name = 'NemesTop';
+    nemesTop.position.set(0, 3.65, 3.05);
+    nemesTop.castShadow = true;
+    g.add(nemesTop);
+
+    // Kuncir belakang Nemes
+    const nemesBack = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.8, 0.4), blueMat);
+    nemesBack.name = 'NemesBack';
+    nemesBack.position.set(0, 2.05, 2.2);
+    nemesBack.castShadow = true;
+    g.add(nemesBack);
+
+    // Prasasti Mimpi (Dream Stele) di antara cakar depan
+    const stele = new THREE.Mesh(new THREE.BoxGeometry(0.12, 1.1, 0.6), redStoneMat);
+    stele.name = 'DreamStele';
+    stele.position.set(0, 0.55, 4.4);
+    stele.castShadow = true;
+    stele.receiveShadow = true;
+    g.add(stele);
+
+    g.position.set(0, 0, 9.5);
+    return g;
+  }
+  landmarkGroup.add(makeSphinx());
+
+  // --- Pembuat Pohon Palem/Kurma Bergaya Low-Poly ---
+  function makePalmTree(x, z, rotationY) {
+    const palm = new THREE.Group();
+    palm.name = 'PalmTree';
+
+    const trunkGroup = new THREE.Group();
+    trunkGroup.name = 'Trunk';
+
+    // Membuat batang melengkung natural menggunakan 4 segmen
+    const segs = [
+      { r1: 0.25, r2: 0.28, h: 1.2, px: 0, py: 0.6, pz: 0, rz: 0 },
+      { r1: 0.21, r2: 0.25, h: 1.2, px: -0.06, py: 1.7, pz: 0.05, rz: 0.08 },
+      { r1: 0.17, r2: 0.21, h: 1.2, px: -0.18, py: 2.75, pz: 0.15, rz: 0.16 },
+      { r1: 0.14, r2: 0.17, h: 1.2, px: -0.38, py: 3.75, pz: 0.3, rz: 0.24 }
+    ];
+
+    segs.forEach(s => {
+      const g = new THREE.CylinderGeometry(s.r1, s.r2, s.h, 6);
+      const m = new THREE.Mesh(g, trunkMat);
+      m.position.set(s.px, s.py, s.pz);
+      m.rotation.z = s.rz;
+      m.castShadow = true;
+      m.receiveShadow = true;
+      trunkGroup.add(m);
+    });
+    palm.add(trunkGroup);
+
+    // Dedaunan Palem (5 daun mengelilingi puncak batang)
+    const leafGroup = new THREE.Group();
+    leafGroup.name = 'Leaves';
+    leafGroup.position.set(-0.58, 4.3, 0.45);
+
+    for (let i = 0; i < 5; i++) {
+      const pivot = new THREE.Group();
+      pivot.rotation.y = i * (Math.PI * 2 / 5);
+
+      const leafMesh = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.04, 1.8), greenMat);
+      leafMesh.position.set(0, -0.2, 0.8);
+      leafMesh.rotation.x = -0.3; // Daun melengkung ke bawah
+      leafMesh.castShadow = true;
+      pivot.add(leafMesh);
+      leafGroup.add(pivot);
+    }
+    palm.add(leafGroup);
+
+    palm.position.set(x, 0, z);
+    palm.rotation.y = rotationY;
+    landmarkGroup.add(palm);
+  }
+
+  // Tambahkan 2 pohon palem di sudut yang strategis
+  makePalmTree(11.5, 4.5, 0.5);
+  makePalmTree(-11.0, 5.5, -0.8);
+
+  scene.add(landmarkGroup);
+
+  // --- Orbit Kontrol Manual dengan mouse / sentuh ---
+  let isDragging=false, lastX=0, lastY=0;
+  let theta=0.8, phi=1.1, radius=32;
+
+  function updateCamera(){
+    camera.position.x = radius*Math.sin(phi)*Math.sin(theta);
+    camera.position.y = radius*Math.cos(phi);
+    camera.position.z = radius*Math.sin(phi)*Math.cos(theta);
+    camera.lookAt(0, 3, 0);
+  }
+  updateCamera();
+
+  canvas.addEventListener('mousedown', e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+  window.addEventListener('mouseup', ()=>isDragging=false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDragging)return;
+    theta -= (e.clientX-lastX)*0.007;
+    phi = Math.max(0.1, Math.min(Math.PI/2 - 0.05, phi+(e.clientY-lastY)*0.007));
+    lastX=e.clientX; lastY=e.clientY; updateCamera();
+  });
+  canvas.addEventListener('touchstart',e=>{isDragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',()=>isDragging=false);
+  window.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    theta-=(e.touches[0].clientX-lastX)*0.009;
+    phi=Math.max(0.1,Math.min(Math.PI/2 - 0.05,phi+(e.touches[0].clientY-lastY)*0.009));
+    lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;updateCamera();
+  },{passive:true});
+  canvas.addEventListener('wheel',e=>{
+    radius=Math.max(10,Math.min(60,radius+e.deltaY*0.04));
+    updateCamera(); e.preventDefault();
+  },{passive:false});
+
+  function animate(){ 
+    requestAnimationFrame(animate); 
+    renderer.render(scene,camera); 
+  }
+  animate();
+
+  // --- Perbaikan Eksportir GLB (Hanya 3 Parameter) ---
+  document.getElementById('dlBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('dlBtn');
+    btn.innerHTML = '<i class="ti ti-loader animate-spin"></i> Mengekspor...';
+    btn.disabled = true;
+
+    try {
+      // Memuat GLTFExporter secara dinamis
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js';
+      document.head.appendChild(s);
+      await new Promise((res,rej)=>{s.onload=res;s.onerror=rej;});
+
+      const exporter = new THREE.GLTFExporter();
+      // PENTING: Tiga parameter parse(input, callback, options) di r128 untuk binary GLB
+      exporter.parse(landmarkGroup, function(glb){
+        if (glb instanceof ArrayBuffer) {
+          const blob = new Blob([glb], {type: 'model/gltf-binary'});
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href = url; 
+          a.download = 'egypt.glb'; 
+          a.click();
+          URL.revokeObjectURL(url);
+          btn.innerHTML = '<i class="ti ti-check"></i> Berhasil diunduh!';
+        } else {
+          console.error('Gagal mengekspor: Hasil bukan ArrayBuffer', glb);
+          alert('Kesalahan ekspor: Format keluaran salah.');
+          btn.innerHTML = '<i class="ti ti-alert-triangle"></i> Gagal';
+        }
+        setTimeout(()=>{
+          btn.innerHTML = '<i class="ti ti-download"></i> Unduh egypt.glb';
+          btn.disabled = false;
+        }, 3000);
+      }, { binary: true }); // Mengirimkan options di parameter ke-3
+
+    } catch(e){
+      btn.innerHTML = '<i class="ti ti-download"></i> Unduh egypt.glb';
+      btn.disabled = false;
+      alert('Ekspor gagal: ' + e.message);
+    }
+  });
+})();
+</script>
+</body>
+</html>

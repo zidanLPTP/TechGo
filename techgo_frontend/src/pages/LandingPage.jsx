@@ -11,7 +11,7 @@ export default function LandingPage() {
 
   // State untuk modal login
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loginMode, setLoginMode] = useState('google'); // 'google' atau 'guest'
+  const [loginMode, setLoginMode] = useState('select'); // 'select' atau 'guest'
   
   // State untuk input formulir login
   const [nickname, setNickname] = useState('');
@@ -90,12 +90,18 @@ export default function LandingPage() {
 
   // Menangani pembukaan modal login
   const openLoginModal = (mode) => {
-    setLoginMode(mode);
+    if (mode === 'guest') {
+      setLoginMode('guest');
+    } else {
+      setLoginMode('select');
+    }
+    setNickname('');
+    setEmail('');
     setErrorMsg('');
     setIsModalOpen(true);
   };
 
-  // Menangani submit login pengguna
+  // Menangani submit login pengguna guest atau Google input kustom
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     if (!nickname.trim()) {
@@ -103,7 +109,7 @@ export default function LandingPage() {
       return;
     }
 
-    if (loginMode === 'google') {
+    if (loginMode === 'google_input') {
       const validEmail = email.trim() || `${nickname.toLowerCase().replace(/\s+/g, '')}@gmail.com`;
       loginWithGoogle(validEmail, nickname);
     } else {
@@ -123,14 +129,14 @@ export default function LandingPage() {
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-brandBlue/15 rounded-full blur-3xl pointer-events-none"></div>
 
       {/* 1. NAVBAR ATAS (Logo di kiri yang disesuaikan, Toggle Bahasa di kanan) */}
-      <header className="w-full px-6 py-2 md:py-3 md:px-12 flex justify-between items-center z-10 bg-white/60 backdrop-blur-md border-b-4 border-brandBlue/10">
+      <header className="w-full px-6 py-2 md:py-3 flex justify-between items-center z-10 bg-white/60 backdrop-blur-md border-b-4 border-brandBlue/10">
         
         {/* Logo Gambar yang Disesuaikan Ukurannya */}
         <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
           <img 
             src={logoImg} 
             alt="TechGo Logo" 
-            className="w-14 h-14 md:w-16 md:h-16 object-contain hover:scale-105 transition-playful" 
+            className="h-12 w-auto object-contain hover:scale-105 transition-playful" 
           />
         </div>
 
@@ -325,121 +331,262 @@ export default function LandingPage() {
       {/* Footer minimalis */}
       <footer className="w-full py-4 z-10"></footer>
 
-      {/* 5. MODAL LOGIN (PLAYFUL POP-UP) */}
+      {/* 5. MODAL LOGIN (PLAYFUL POP-UP REDESIGNED) */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           
           {/* Overlay Gelap Transparan Belakang */}
           <div 
-            className="absolute inset-0 bg-brandNavy/40 backdrop-blur-sm transition-opacity"
+            className="absolute inset-0 bg-brandNavy/45 backdrop-blur-md transition-opacity"
             onClick={() => setIsModalOpen(false)}
           ></div>
           
-          {/* Kotak Konten Modal */}
-          <div className="bg-white rounded-5xl border-8 border-brandBlue p-6 sm:p-8 max-w-md w-full z-20 shadow-2xl relative animate-float">
+          {/* Kotak Konten Modal (rounded-[2.5rem] dengan bayangan tebal shadow-2xl, bersih tanpa border tebal) */}
+          <div className="bg-white rounded-[2.5rem] p-8 max-w-md w-full z-20 shadow-2xl relative animate-float">
             
-            {/* Header Modal */}
-            <div className="text-center mb-6">
-              <h2 className="text-3xl text-brandNavy font-fredoka mb-2">{t('modal.title')}</h2>
-              <p className="text-brandNavy/70 text-sm sm:text-base font-semibold">{t('modal.subtitle')}</p>
+            {/* Header Modal (Tanpa emoji waving hand & tanpa subjudul) */}
+            <div className="text-center mb-8">
+              <h2 className="text-3xl text-brandNavy font-fredoka">
+                Halo Sahabat TechGo!
+              </h2>
             </div>
 
-            {/* Toggle Switch Mode Login di Dalam Modal */}
-            <div className="bg-brandNavy/5 p-1 rounded-2xl flex gap-1 mb-6 border-2 border-brandNavy/10">
-              <button 
-                type="button"
-                onClick={() => { setLoginMode('google'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 rounded-xl font-fredoka text-sm transition-playful flex items-center justify-center gap-2 ${
-                  loginMode === 'google' 
-                    ? 'bg-brandBlue text-white shadow-md' 
-                    : 'text-brandNavy hover:bg-brandNavy/10'
-                }`}
-              >
-                Google
-              </button>
-              <button 
-                type="button"
-                onClick={() => { setLoginMode('guest'); setErrorMsg(''); }}
-                className={`flex-1 py-2.5 rounded-xl font-fredoka text-sm transition-playful flex items-center justify-center gap-2 ${
-                  loginMode === 'guest' 
-                    ? 'bg-brandBlue text-white shadow-md' 
-                    : 'text-brandNavy hover:bg-brandNavy/10'
-                }`}
-              >
-                Guest (Tamu)
-              </button>
-            </div>
+            {loginMode === 'select' && (
+              /* Mode Pemilihan: Menyediakan dua pilihan aksi mandiri yang bersih */
+              <div className="flex flex-col gap-4">
+                
+                {/* Tombol 1: Google Login (Official OAuth Style) */}
+                <button 
+                  type="button"
+                  onClick={() => setLoginMode('google_select')}
+                  className="flex items-center justify-center w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3.5 px-4 rounded-2xl shadow-sm transition-all duration-200 cursor-pointer"
+                >
+                  <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <span>{language === 'en' ? 'Sign in with Google' : 'Masuk dengan Google'}</span>
+                </button>
 
-            {/* Peringatan Imut Khusus Tamu */}
-            {loginMode === 'guest' && (
-              <div className="bg-brandOrange/25 border-4 border-brandOrange/40 text-brandNavy p-4 rounded-3xl mb-6 text-xs sm:text-sm font-quicksand font-bold leading-relaxed">
-                <p className="text-brandOrange font-fredoka text-base mb-1">📢 {t('modal.warningTitle')}</p>
-                {t('modal.guestWarning')}
+                {/* Tombol 2: Guest Login (Warna Soft Pink #FF6B9B, Playful & Bersih) */}
+                <button 
+                  type="button"
+                  onClick={() => setLoginMode('guest')}
+                  className="w-full py-3.5 bg-brandRose hover:bg-brandRose/90 text-white rounded-2xl font-fredoka text-lg transition-playful shadow-md border-b-4 border-brandRose/70 text-center cursor-pointer"
+                >
+                  {language === 'en' ? 'Sign in as Guest' : 'Masuk sebagai Tamu'}
+                </button>
+
+                {/* Tombol Batal */}
+                <button 
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="mt-3 text-sm text-brandNavy/60 hover:text-brandNavy font-semibold text-center cursor-pointer"
+                >
+                  {language === 'en' ? 'Cancel' : 'Batal'}
+                </button>
               </div>
             )}
 
-            {/* Formulir Pengisian Data */}
-            <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
-              
-              {/* Kolom Nama Panggilan (Wajib) */}
-              <div>
-                <label className="block text-brandNavy font-fredoka text-base mb-2">
-                  Nama Panggilanmu 👤
-                </label>
-                <input 
-                  type="text" 
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                  placeholder={t('modal.usernamePlaceholder')}
-                  className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40"
-                  maxLength={15}
-                />
-              </div>
+            {loginMode === 'google_select' && (
+              /* Tampilan Simulasi Pemilih Akun Google (High-fidelity Google Account Chooser) */
+              <div className="flex flex-col gap-4">
+                {/* Header Akun Google */}
+                <div className="text-center mb-2">
+                  <div className="flex justify-center mb-2">
+                    <svg className="w-8 h-8" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    {language === 'en' ? 'Choose an account' : 'Pilih akun'}
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {language === 'en' ? 'to continue to TechGo' : 'untuk melanjutkan ke TechGo'}
+                  </p>
+                </div>
 
-              {/* Kolom Email Google (Hanya jika memilih mode Google) */}
-              {loginMode === 'google' && (
-                <div>
-                  <label className="block text-brandNavy font-fredoka text-base mb-2">
-                    Email Google ✉️
-                  </label>
+                {/* Daftar Pilihan Akun Google Mock */}
+                <div className="flex flex-col border border-gray-200 rounded-2xl overflow-hidden divide-y divide-gray-100">
+                  {/* Akun 1: Zidan TechGo */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      loginWithGoogle("zidan@gmail.com", "Zidan TechGo");
+                      setIsModalOpen(false);
+                      navigate('/map');
+                    }}
+                    className="flex items-center w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-brandBlue text-white font-fredoka flex items-center justify-center font-bold text-lg mr-3">
+                      Z
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold text-gray-700">Zidan TechGo</div>
+                      <div className="text-xs text-gray-400">zidan@gmail.com</div>
+                    </div>
+                  </button>
+
+                  {/* Akun 2: Sahabat TechGo */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      loginWithGoogle("sahabat@gmail.com", "Sahabat TechGo");
+                      setIsModalOpen(false);
+                      navigate('/map');
+                    }}
+                    className="flex items-center w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-brandRose text-white font-fredoka flex items-center justify-center font-bold text-lg mr-3">
+                      S
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold text-gray-700">Sahabat TechGo</div>
+                      <div className="text-xs text-gray-400">sahabat@gmail.com</div>
+                    </div>
+                  </button>
+
+                  {/* Akun 3: Gunakan akun lain */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNickname('');
+                      setEmail('');
+                      setLoginMode('google_input');
+                    }}
+                    className="flex items-center w-full px-4 py-3.5 text-left hover:bg-gray-50 transition-colors duration-150 cursor-pointer text-gray-600 font-semibold text-sm"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center mr-3">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                      </svg>
+                    </div>
+                    <span>{language === 'en' ? 'Use another account' : 'Gunakan akun lain'}</span>
+                  </button>
+                </div>
+
+                {/* Disclaimer Text */}
+                <p className="text-[10px] text-gray-400 leading-relaxed text-center px-2 mt-2">
+                  {language === 'en'
+                    ? 'To continue, Google will share your name, email address, language preference, and profile picture with TechGo.'
+                    : 'Untuk melanjutkan, Google akan membagikan nama, alamat email, preferensi bahasa, dan foto profil Anda dengan TechGo.'}
+                </p>
+
+                {/* Kembali ke Pilihan Login Mode */}
+                <button
+                  type="button"
+                  onClick={() => setLoginMode('select')}
+                  className="mt-2 text-sm text-brandNavy/60 hover:text-brandNavy font-semibold text-center cursor-pointer"
+                >
+                  {language === 'en' ? 'Back' : 'Kembali'}
+                </button>
+              </div>
+            )}
+
+            {loginMode === 'google_input' && (
+              /* Mode Google Input: Form untuk memasukkan detail akun Google kustom */
+              <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
+                <div className="text-center mb-2">
+                  <h3 className="text-lg font-bold text-brandNavy">
+                    {language === 'en' ? 'Add Google Account' : 'Tambah Akun Google'}
+                  </h3>
+                </div>
+                
+                <div className="flex flex-col gap-3">
+                  <input 
+                    type="text" 
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value)}
+                    placeholder={language === 'en' ? 'Enter nickname...' : 'Tulis nama panggilanmu...'}
+                    className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40"
+                    maxLength={15}
+                  />
+
                   <input 
                     type="email" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t('modal.googlePlaceholder')}
+                    placeholder={language === 'en' ? 'Enter Google email...' : 'Masukkan email Google...'}
                     className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40"
                   />
                 </div>
-              )}
 
-              {/* Pesan Kesalahan Validasi */}
-              {errorMsg && (
-                <p className="text-brandRose font-fredoka text-sm text-center">
-                  ⚠️ {errorMsg}
+                {errorMsg && (
+                  <p className="text-brandRose font-fredoka text-sm text-center">
+                    {errorMsg}
+                  </p>
+                )}
+
+                <div className="flex gap-4 mt-2">
+                  <button 
+                    type="button"
+                    onClick={() => { setLoginMode('google_select'); setErrorMsg(''); }}
+                    className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-brandNavy rounded-2xl font-fredoka text-base transition-playful border-b-4 border-slate-300 cursor-pointer"
+                  >
+                    {language === 'en' ? 'Back' : 'Kembali'}
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 py-3 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-2xl font-fredoka text-base transition-playful border-b-4 border-brandTeal/70 shadow-md cursor-pointer"
+                  >
+                    {language === 'en' ? "Let's Go!" : 'Ayo Mulai!'}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {loginMode === 'guest' && (
+              /* Mode Guest Form: Hanya menyediakan kolom nama panggilan dan peringatan sebaris di bawah */
+              <form onSubmit={handleLoginSubmit} className="flex flex-col gap-5">
+                <div>
+                  <input 
+                    type="text" 
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value)}
+                    placeholder={language === 'en' ? 'Enter your nickname...' : 'Tulis nama panggilanmu...'}
+                    className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40"
+                    maxLength={15}
+                  />
+                </div>
+
+                {errorMsg && (
+                  <p className="text-brandRose font-fredoka text-sm text-center">
+                    {errorMsg}
+                  </p>
+                )}
+
+                <div className="flex gap-4 mt-2">
+                  {/* Tombol Kembali */}
+                  <button 
+                    type="button"
+                    onClick={() => { setLoginMode('select'); setNickname(''); setErrorMsg(''); }}
+                    className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-brandNavy rounded-2xl font-fredoka text-base transition-playful border-b-4 border-slate-300 cursor-pointer"
+                  >
+                    {language === 'en' ? 'Back' : 'Kembali'}
+                  </button>
+
+                  {/* Tombol Submit Guest */}
+                  <button 
+                    type="submit"
+                    className="flex-1 py-3 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-2xl font-fredoka text-base transition-playful border-b-4 border-brandTeal/70 shadow-md cursor-pointer"
+                  >
+                    {language === 'en' ? "Let's Go!" : 'Ayo Mulai!'}
+                  </button>
+                </div>
+
+                {/* Peringatan Konsekuensi Tamu Sebaris Kecil Elegan */}
+                <p className="text-[11px] text-brandNavy/60 text-center leading-normal mt-2 font-semibold">
+                  {language === 'en' 
+                    ? '* Note: Learning progress and quiz scores will not be saved permanently.' 
+                    : '* Info: Progres belajar dan hasil kuis tidak disimpan permanen.'}
                 </p>
-              )}
-
-              {/* Aksi Tombol Form */}
-              <div className="flex gap-4 mt-4">
-                
-                {/* Tombol Cancel */}
-                <button 
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-brandNavy rounded-3xl font-fredoka text-base transition-playful border-b-4 border-slate-300"
-                >
-                  {t('modal.cancelAction')}
-                </button>
-
-                {/* Tombol Submit Login */}
-                <button 
-                  type="submit"
-                  className="flex-1 py-3.5 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-3xl font-fredoka text-base transition-playful border-b-4 border-brandTeal/70 shadow-md"
-                >
-                  {t('modal.loginAction')}
-                </button>
-              </div>
-            </form>
+              </form>
+            )}
           </div>
         </div>
       )}

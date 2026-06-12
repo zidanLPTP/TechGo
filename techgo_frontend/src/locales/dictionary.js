@@ -36,6 +36,25 @@ const dictionary = {
     },
     footer: {
       copyright: "© 2026 TechGo - Platform Pembelajaran Edukatif Interaktif Anak."
+    },
+    profilePage: {
+      title: "Profil Petualangku 👤",
+      subtitle: "Lihat pencapaian dan lencana teknologi yang telah kamu kumpulkan!",
+      guestUser: "Petualang Tamu",
+      googleUser: "Akun Google Terhubung",
+      statsTitle: "Statistik Petualang",
+      statCountries: "Negara Dijelajahi",
+      statAvgScore: "Rata-rata Skor",
+      statLevel: "Pangkat Petualang",
+      badgesTitle: "Koleksi Lencana Teknologi",
+      lockedBadge: "Terkunci",
+      unlockHint: "Kerjakan kuis kuncinya untuk membuka lencana!",
+      highestScore: "Skor Tertinggi:",
+      levelLabel: "Level:",
+      btnBack: "Kembali ke Peta",
+      levelBeginner: "Pemula",
+      levelIntermediate: "Madya",
+      levelExpert: "Ahli"
     }
   },
   en: {
@@ -71,6 +90,25 @@ const dictionary = {
     },
     footer: {
       copyright: "© 2026 TechGo - Interactive Playful EdTech Learning Platform."
+    },
+    profilePage: {
+      title: "My Explorer Profile 👤",
+      subtitle: "See the achievements and technology badges you've collected!",
+      guestUser: "Guest Explorer",
+      googleUser: "Connected Google Account",
+      statsTitle: "Explorer Statistics",
+      statCountries: "Countries Explored",
+      statAvgScore: "Average Score",
+      statLevel: "Explorer Rank",
+      badgesTitle: "Technology Badge Collection",
+      lockedBadge: "Locked",
+      unlockHint: "Complete the quiz to unlock this badge!",
+      highestScore: "Highest Score:",
+      levelLabel: "Level:",
+      btnBack: "Back to Map",
+      levelBeginner: "Beginner",
+      levelIntermediate: "Intermediate",
+      levelExpert: "Expert"
     }
   }
 };

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model 3D Interaktif Big Ben - TechGo</title>
+  <!-- Google Fonts: Fredoka & Quicksand -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  <style>
+    :root {
+      --color-bg-dark: #0f172a;
+      --color-glass-bg: rgba(30, 41, 59, 0.7);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
+      --color-text-main: #f8fafc;
+      --color-text-sub: #94a3b8;
+      --color-accent: #fbbf24; /* Emas Klasik Big Ben */
+      --color-accent-hover: #f59e0b;
+      --font-title: 'Fredoka', sans-serif;
+      --font-body: 'Quicksand', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-bg-dark);
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Kontainer Utama Glassmorphism */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      max-width: 1100px;
+      height: 90vh;
+      max-height: 720px;
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 2.5rem;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        flex-direction: row;
+      }
+    }
+
+    /* Area Viewer 3D */
+    .viewer-area {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewer-instruction {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel Informasi Kanan */
+    .info-panel {
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--color-glass-border);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+      overflow-y: auto;
+    }
+
+    @media (min-width: 768px) {
+      .info-panel {
+        width: 320px;
+        border-top: none;
+        border-left: 1px solid var(--color-glass-border);
+      }
+    }
+
+    .info-header h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--color-accent);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+
+    .info-header p {
+      font-size: 0.8rem;
+      color: var(--color-text-sub);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .fact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .fact-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(251, 191, 36, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .fact-card h3 {
+      margin: 0 0 4px 0;
+      color: var(--color-accent);
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Tombol Unduh Mewah */
+    .download-btn {
+      margin-top: auto;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, #d97706 100%);
+      color: #0f172a;
+      border: none;
+      border-radius: 1.25rem;
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(251, 191, 36, 0.3);
+    }
+
+    .download-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.45);
+      filter: brightness(1.1);
+    }
+
+    .download-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .download-btn:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-text-sub);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Area Penampil 3D -->
+  <div class="viewer-area">
+    <canvas id="threeCanvas"></canvas>
+    <div class="viewer-instruction">
+      <i class="ti ti-rotate-3d"></i> Seret untuk memutar · Scroll untuk zoom
+    </div>
+  </div>
+
+  <!-- Panel Informasi Kanan -->
+  <div class="info-panel">
+    <div class="info-header">
+      <h1>Menara Jam Big Ben</h1>
+      <p><i class="ti ti-map-pin"></i> London, Inggris · Landmark 3D Eksklusif</p>
+    </div>
+
+    <div class="facts-list">
+      <div class="fact-card">
+        <h3><i class="ti ti-clock"></i> Nama Asli Menara</h3>
+        Sering dikenal sebagai Big Ben, nama asli menara setinggi 96 meter ini adalah **Elizabeth Tower**, diubah pada tahun 2012 untuk menghormati Ratu Elizabeth II.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-bell"></i> Lonceng Raksasa</h3>
+        Nama "Big Ben" sebenarnya merupakan julukan untuk lonceng raksasa seberat 13,7 ton di dalam menara yang berdentang setiap jam.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-building"></i> Arsitektur Gotik</h3>
+        Dirancang oleh Augustus Pugin dengan gaya Neo-Gotik klasik Inggris yang menampilkan detail ornamen batu beige, spira tinggi tajam, dan hiasan emas berkilau.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-device-analogue"></i> Keakuratan Mekanis</h3>
+        Jam ini terkenal sangat akurat. Bahkan di zaman modern, tumpukan koin satu sen Inggris lama diletakkan di atas pendulumnya untuk mengkalibrasi waktu secara mekanis.
+      </div>
+    </div>
+
+    <button id="dlBtn" class="download-btn">
+      <i class="ti ti-download"></i> Unduh united_kingdom.glb
+    </button>
+  </div>
+</div>
+
+<!-- Memuat Three.js r128 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('threeCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  camera.position.set(0, 7, 18);
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // --- Sistem Pencahayaan ---
+  const ambient = new THREE.AmbientLight(0xfff8f0, 0.85);
+  scene.add(ambient);
+
+  const sun = new THREE.DirectionalLight(0xffebd2, 1.5);
+  sun.position.set(12, 22, 12);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 1024;
+  sun.shadow.mapSize.height = 1024;
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 40;
+  const d = 10;
+  sun.shadow.camera.left = -d;
+  sun.shadow.camera.right = d;
+  sun.shadow.camera.top = d;
+  sun.shadow.camera.bottom = -d;
+  sun.shadow.bias = -0.0005;
+  scene.add(sun);
+
+  // --- Material PBR Khas Big Ben ---
+  const brickMat    = new THREE.MeshStandardMaterial({color: 0xdfcfb7, roughness: 0.75, metalness: 0.05}); // Batu tan/krem pasir
+  const darkMat     = new THREE.MeshStandardMaterial({color: 0x334155, roughness: 0.5, metalness: 0.2}); // Logam gelap/atap slate
+  const clockFaceMat= new THREE.MeshStandardMaterial({color: 0xfaf8f5, roughness: 0.85}); // Kaca putih jam
+  const goldMat     = new THREE.MeshStandardMaterial({color: 0xffd700, metalness: 0.85, roughness: 0.2}); // Detail emas/obor/spira
+  const handsMat    = new THREE.MeshBasicMaterial({color: 0x111111}); // Jarum jam hitam
+
+  // --- Group Utama Landmark (Murni Tanpa Alas) ---
+  const landmarkGroup = new THREE.Group();
+  landmarkGroup.name = 'UKLandmark';
+
+  // --- Pembuat Menara Big Ben Low-Poly ---
+  function makeBigBen() {
+    const tower = new THREE.Group();
+    tower.name = 'BigBen';
+
+    // 1. Badan Menara Utama
+    const bodyHeight = 7.0;
+    const bodyGeo = new THREE.BoxGeometry(1.6, bodyHeight, 1.6);
+    const bodyMesh = new THREE.Mesh(bodyGeo, brickMat);
+    bodyMesh.position.y = bodyHeight / 2; // Bottom di y=0
+    bodyMesh.castShadow = true;
+    bodyMesh.receiveShadow = true;
+    tower.add(bodyMesh);
+
+    // 2. Pilar Sudut / Corner Buttresses (Gothic Ribbed Style)
+    const buttressGeo = new THREE.BoxGeometry(0.14, bodyHeight, 0.14);
+    const offset = 0.8;
+    const corners = [
+      {x: -offset, z: -offset},
+      {x: offset, z: -offset},
+      {x: -offset, z: offset},
+      {x: offset, z: offset}
+    ];
+    corners.forEach((c, idx) => {
+      const buttress = new THREE.Mesh(buttressGeo, brickMat);
+      buttress.name = 'Buttress_' + idx;
+      buttress.position.set(c.x, bodyHeight / 2, c.z);
+      buttress.castShadow = true;
+      buttress.receiveShadow = true;
+      tower.add(buttress);
+    });
+
+    // 3. Ornamen Horizontal Sabuk Menara (Molding Belt)
+    const beltGeo = new THREE.BoxGeometry(1.72, 0.15, 1.72);
+    const beltHeights = [2.0, 4.5, 6.2];
+    beltHeights.forEach((h, idx) => {
+      const belt = new THREE.Mesh(beltGeo, brickMat);
+      belt.name = 'Belt_' + idx;
+      belt.position.set(0, h, 0);
+      belt.castShadow = true;
+      tower.add(belt);
+    });
+
+    // 4. Balkon Dasar Jam (Corbel/Balcony Base)
+    const baseJam = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.25, 1.9), brickMat);
+    baseJam.name = 'ClockBalconyBase';
+    baseJam.position.set(0, 7.125, 0);
+    baseJam.castShadow = true;
+    tower.add(baseJam);
+
+    // 5. Ruang Kamar Jam (Clock Chamber)
+    const clockChamberHeight = 1.6;
+    const clockChamber = new THREE.Mesh(new THREE.BoxGeometry(1.75, clockChamberHeight, 1.75), brickMat);
+    clockChamber.name = 'ClockChamber';
+    clockChamber.position.set(0, 7.0 + 0.25/2 + clockChamberHeight/2, 0); // y = 7.125 + 0.8 = 8.05
+    clockChamber.castShadow = true;
+    clockChamber.receiveShadow = true;
+    tower.add(clockChamber);
+
+    // 6. Piringan Jam di 4 Sisi (Clock Faces)
+    const dialRadius = 0.52;
+    const dialGeo = new THREE.CylinderGeometry(dialRadius, dialRadius, 0.05, 16);
+    dialGeo.rotateX(Math.PI / 2); // Menghadap ke depan/belakang
+
+    const clockFacesData = [
+      { name: 'FaceNorth', x: 0, y: 8.05, z: 0.88, rotY: 0 },
+      { name: 'FaceSouth', x: 0, y: 8.05, z: -0.88, rotY: Math.PI },
+      { name: 'FaceEast', x: 0.88, y: 8.05, z: 0, rotY: Math.PI / 2 },
+      { name: 'FaceWest', x: -0.88, y: 8.05, z: 0, rotY: -Math.PI / 2 }
+    ];
+
+    clockFacesData.forEach((data) => {
+      const faceGroup = new THREE.Group();
+      faceGroup.name = data.name + 'Group';
+      faceGroup.position.set(data.x, data.y, data.z);
+      faceGroup.rotation.y = data.rotY;
+
+      // Piringan Putih Jam
+      const dial = new THREE.Mesh(dialGeo, clockFaceMat);
+      dial.name = data.name;
+      dial.castShadow = true;
+      faceGroup.add(dial);
+
+      // Bingkai Jam Emas
+      const ringGeo = new THREE.CylinderGeometry(dialRadius + 0.06, dialRadius + 0.04, 0.06, 16, 1, true);
+      ringGeo.rotateX(Math.PI / 2);
+      const ring = new THREE.Mesh(ringGeo, goldMat);
+      ring.name = data.name + 'Ring';
+      faceGroup.add(ring);
+
+      // Jarum Jam (Menunjukkan jam 3:00)
+      // Jarum Pendek (Jam)
+      const hourHand = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.04, 0.02), handsMat);
+      hourHand.name = data.name + 'HourHand';
+      hourHand.position.set(0.125, 0, 0.04);
+      faceGroup.add(hourHand);
+
+      // Jarum Panjang (Menit)
+      const minuteHand = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.38, 0.02), handsMat);
+      minuteHand.name = data.name + 'MinHand';
+      minuteHand.position.set(0, 0.19, 0.04);
+      faceGroup.add(minuteHand);
+
+      tower.add(faceGroup);
+    });
+
+    // 7. Balkon Atas Jam (Upper Balcony)
+    const upperBalcony = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.15, 1.8), brickMat);
+    upperBalcony.name = 'UpperBalcony';
+    upperBalcony.position.set(0, 8.925, 0); // 8.05 + 0.8 + 0.075
+    upperBalcony.castShadow = true;
+    tower.add(upperBalcony);
+
+    // 8. Ruang Lonceng (Belfry / Bell Chamber)
+    const belfryGroup = new THREE.Group();
+    belfryGroup.name = 'Belfry';
+    belfryGroup.position.set(0, 9.6, 0); // 8.925 + 0.075 + 0.6 = 9.6
+
+    // Tengah
+    const belfryCore = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.2, 0.9), darkMat);
+    belfryCore.name = 'BelfryCore';
+    belfryCore.castShadow = true;
+    belfryGroup.add(belfryCore);
+
+    // Pilar sudut belfry
+    const colGeo = new THREE.BoxGeometry(0.2, 1.2, 0.2);
+    const colOffset = 0.6;
+    const colCoords = [
+      {x: -colOffset, z: -colOffset},
+      {x: colOffset, z: -colOffset},
+      {x: -colOffset, z: colOffset},
+      {x: colOffset, z: colOffset}
+    ];
+    colCoords.forEach((c, idx) => {
+      const col = new THREE.Mesh(colGeo, brickMat);
+      col.name = 'BelfryColumn_' + idx;
+      col.position.set(c.x, 0, c.z);
+      col.castShadow = true;
+      belfryGroup.add(col);
+    });
+    tower.add(belfryGroup);
+
+    // 9. Atap Piramida Utama (Spire Roof)
+    const spireHeight = 2.5;
+    // Cone dengan 4 sisi menghasilkan piramida
+    const spireGeo = new THREE.ConeGeometry(1.08, spireHeight, 4);
+    spireGeo.rotateY(Math.PI / 4); // Sejajarkan sisi piramida dengan sisi menara persegi
+    const spire = new THREE.Mesh(spireGeo, darkMat);
+    spire.name = 'MainSpire';
+    spire.position.set(0, 10.2 + 1.2/2 + spireHeight/2, 0); // 9.6 + 0.6 + 1.25 = 11.45
+    spire.castShadow = true;
+    tower.add(spire);
+
+    // 10. 4 Spira Sudut Kecil (Pinnacles)
+    const pinHeight = 0.9;
+    const pinGeo = new THREE.ConeGeometry(0.15, pinHeight, 4);
+    pinGeo.rotateY(Math.PI / 4);
+    const pinOffset = 0.6;
+    const pinCoords = [
+      {x: -pinOffset, z: -pinOffset},
+      {x: pinOffset, z: -pinOffset},
+      {x: -pinOffset, z: pinOffset},
+      {x: pinOffset, z: pinOffset}
+    ];
+    pinCoords.forEach((c, idx) => {
+      const pin = new THREE.Mesh(pinGeo, brickMat);
+      pin.name = 'Pinnacle_' + idx;
+      pin.position.set(c.x, 10.2 + pinHeight/2, c.z); // Di atas atap belfry
+      pin.castShadow = true;
+      tower.add(pin);
+    });
+
+    // 11. Ujung Tiang Penunjuk Arah Mata Angin Emas (Finial)
+    const finialGroup = new THREE.Group();
+    finialGroup.name = 'Finial';
+    finialGroup.position.set(0, 11.45 + spireHeight/2, 0); // y = 12.7
+
+    // Tiang logam
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.8, 6), goldMat);
+    pole.name = 'FinialPole';
+    pole.position.y = 0.4;
+    pole.castShadow = true;
+    finialGroup.add(pole);
+
+    // Bola Emas
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.12, 6, 6), goldMat);
+    ball.name = 'FinialBall';
+    ball.position.y = 0.8;
+    ball.castShadow = true;
+    finialGroup.add(ball);
+
+    tower.add(finialGroup);
+
+    return tower;
+  }
+  landmarkGroup.add(makeBigBen());
+
+  scene.add(landmarkGroup);
+
+  // --- Orbit Kontrol Manual ---
+  let isDragging=false, lastX=0, lastY=0;
+  let theta=0, phi=1.3, radius=18;
+
+  function updateCamera(){
+    camera.position.x = radius*Math.sin(phi)*Math.sin(theta);
+    camera.position.y = radius*Math.cos(phi) + 5; // Sedikit dinaikkan fokusnya
+    camera.position.z = radius*Math.sin(phi)*Math.cos(theta);
+    camera.lookAt(0, 6, 0);
+  }
+  updateCamera();
+
+  canvas.addEventListener('mousedown', e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+  window.addEventListener('mouseup', ()=>isDragging=false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDragging)return;
+    theta -= (e.clientX-lastX)*0.007;
+    phi = Math.max(0.1, Math.min(Math.PI/2 + 0.1, phi+(e.clientY-lastY)*0.007));
+    lastX=e.clientX; lastY=e.clientY; updateCamera();
+  });
+  canvas.addEventListener('touchstart',e=>{isDragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',()=>isDragging=false);
+  window.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    theta-=(e.touches[0].clientX-lastX)*0.009;
+    phi=Math.max(0.1,Math.min(Math.PI/2 + 0.1,phi+(e.touches[0].clientY-lastY)*0.009));
+    lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;updateCamera();
+  },{passive:true});
+  canvas.addEventListener('wheel',e=>{
+    radius=Math.max(8,Math.min(40,radius+e.deltaY*0.02));
+    updateCamera(); e.preventDefault();
+  },{passive:false});
+
+  function animate(){ 
+    requestAnimationFrame(animate); 
+    renderer.render(scene,camera); 
+  }
+  animate();
+
+  // --- Sistem Eksportir GLB UK ---
+  document.getElementById('dlBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('dlBtn');
+    btn.innerHTML = '<i class="ti ti-loader animate-spin"></i> Mengekspor...';
+    btn.disabled = true;
+
+    try {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js';
+      document.head.appendChild(s);
+      await new Promise((res,rej)=>{s.onload=res;s.onerror=rej;});
+
+      const exporter = new THREE.GLTFExporter();
+      exporter.parse(landmarkGroup, function(glb){
+        if (glb instanceof ArrayBuffer) {
+          const blob = new Blob([glb], {type: 'model/gltf-binary'});
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href = url; 
+          a.download = 'united_kingdom.glb'; 
+          a.click();
+          URL.revokeObjectURL(url);
+          btn.innerHTML = '<i class="ti ti-check"></i> Berhasil diunduh!';
+        } else {
+          console.error('Gagal mengekspor: Hasil bukan ArrayBuffer', glb);
+          alert('Kesalahan ekspor: Format keluaran salah.');
+          btn.innerHTML = '<i class="ti ti-alert-triangle"></i> Gagal';
+        }
+        setTimeout(()=>{
+          btn.innerHTML = '<i class="ti ti-download"></i> Unduh united_kingdom.glb';
+          btn.disabled = false;
+        }, 3000);
+      }, { binary: true });
+
+    } catch(e){
+      btn.innerHTML = '<i class="ti ti-download"></i> Unduh united_kingdom.glb';
+      btn.disabled = false;
+      alert('Ekspor gagal: ' + e.message);
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model 3D Interaktif Menara Eiffel - TechGo</title>
+  <!-- Google Fonts: Fredoka & Quicksand -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  <style>
+    :root {
+      --color-bg-dark: #0f172a;
+      --color-glass-bg: rgba(30, 41, 59, 0.7);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
+      --color-text-main: #f8fafc;
+      --color-text-sub: #94a3b8;
+      --color-accent: #38bdf8; /* Biru Langit Cerah / Prancis */
+      --color-accent-hover: #0ea5e9;
+      --font-title: 'Fredoka', sans-serif;
+      --font-body: 'Quicksand', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-bg-dark);
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Kontainer Utama Glassmorphism */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      max-width: 1100px;
+      height: 90vh;
+      max-height: 720px;
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 2.5rem;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        flex-direction: row;
+      }
+    }
+
+    /* Area Viewer 3D */
+    .viewer-area {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewer-instruction {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel Informasi Kanan */
+    .info-panel {
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--color-glass-border);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+      overflow-y: auto;
+    }
+
+    @media (min-width: 768px) {
+      .info-panel {
+        width: 320px;
+        border-top: none;
+        border-left: 1px solid var(--color-glass-border);
+      }
+    }
+
+    .info-header h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--color-accent);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+
+    .info-header p {
+      font-size: 0.8rem;
+      color: var(--color-text-sub);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .fact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .fact-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(56, 189, 248, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .fact-card h3 {
+      margin: 0 0 4px 0;
+      color: var(--color-accent);
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Tombol Unduh Mewah */
+    .download-btn {
+      margin-top: auto;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, #0284c7 100%);
+      color: #0f172a;
+      border: none;
+      border-radius: 1.25rem;
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+    }
+
+    .download-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.45);
+      filter: brightness(1.1);
+    }
+
+    .download-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .download-btn:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-text-sub);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Area Penampil 3D -->
+  <div class="viewer-area">
+    <canvas id="threeCanvas"></canvas>
+    <div class="viewer-instruction">
+      <i class="ti ti-rotate-3d"></i> Seret untuk memutar · Scroll untuk zoom
+    </div>
+  </div>
+
+  <!-- Panel Informasi Kanan -->
+  <div class="info-panel">
+    <div class="info-header">
+      <h1>Menara Eiffel</h1>
+      <p><i class="ti ti-map-pin"></i> Paris, Prancis · Landmark 3D Eksklusif</p>
+    </div>
+
+    <div class="facts-list">
+      <div class="fact-card">
+        <h3><i class="ti ti-building-arch"></i> Pameran Dunia 1889</h3>
+        Dibangun oleh insinyur Alexandre-Gustave Eiffel sebagai gerbang lengkung masuk megah untuk Pameran Dunia (*World's Fair*) merayakan 100 tahun Revolusi Prancis.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-flame"></i> Sempat Ingin Dibongkar</h3>
+        Awalnya direncanakan berdiri hanya selama 20 tahun. Namun diselamatkan karena tingginya menara sangat berguna sebagai antena pemancar radio militer dan ilmiah.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-scale"></i> Struktur Kisi Besi Wrought</h3>
+        Menara setinggi 330 meter ini terbuat dari 18.000 lebih potongan besi tempa (*wrought iron*) yang dirangkai secara presisi dengan 2,5 juta paku keling (*rivets*).
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-arrows-vertical"></i> Pemuaian Suhu</h3>
+        Bahan besi menara memuai jika terkena panas matahari. Pada musim panas, tinggi Menara Eiffel bisa bertambah hingga 15 cm dan kembali menyusut di musim dingin.
+      </div>
+    </div>
+
+    <button id="dlBtn" class="download-btn">
+      <i class="ti ti-download"></i> Unduh france.glb
+    </button>
+  </div>
+</div>
+
+<!-- Memuat Three.js r128 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('threeCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  camera.position.set(0, 6, 17);
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // --- Sistem Pencahayaan ---
+  const ambient = new THREE.AmbientLight(0xfff8f0, 0.9);
+  scene.add(ambient);
+
+  const sun = new THREE.DirectionalLight(0xffebd2, 1.6);
+  sun.position.set(10, 22, 10);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 1024;
+  sun.shadow.mapSize.height = 1024;
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 40;
+  const d = 9;
+  sun.shadow.camera.left = -d;
+  sun.shadow.camera.right = d;
+  sun.shadow.camera.top = d;
+  sun.shadow.camera.bottom = -d;
+  sun.shadow.bias = -0.0005;
+  scene.add(sun);
+
+  // --- Material PBR Khas Menara Eiffel ---
+  const ironMat = new THREE.MeshStandardMaterial({color: 0x5a626f, roughness: 0.65, metalness: 0.55}); // Besi abu-abu baja hangat
+  const goldMat = new THREE.MeshStandardMaterial({color: 0xffea75, metalness: 0.8, roughness: 0.1, emissive: 0xffd700, emissiveIntensity: 0.3}); // Mercusuar emas menyala
+
+  // --- Group Utama Landmark (Murni Tanpa Alas) ---
+  const landmarkGroup = new THREE.Group();
+  landmarkGroup.name = 'FranceLandmark';
+
+  // --- Pembuat Menara Eiffel Low-Poly Detail ---
+  function makeEiffelTower() {
+    const eiffel = new THREE.Group();
+    eiffel.name = 'EiffelTower';
+
+    // 1. KAKI-KAKI TIER 1 (Legs - 4 Kolom Miring ke Dalam)
+    const legGeo = new THREE.BoxGeometry(0.35, 3.8, 0.35);
+    const legAngleX = 0.28;
+    const legAngleZ = 0.28;
+    
+    // Leg 1 (Utara-Timur)
+    const leg1 = new THREE.Mesh(legGeo, ironMat);
+    leg1.name = 'Leg_NE';
+    leg1.position.set(1.05, 1.8, 1.05);
+    leg1.rotation.set(-legAngleX, 0, legAngleZ);
+    leg1.castShadow = true;
+    eiffel.add(leg1);
+
+    // Leg 2 (Selatan-Timur)
+    const leg2 = new THREE.Mesh(legGeo, ironMat);
+    leg2.name = 'Leg_SE';
+    leg2.position.set(1.05, 1.8, -1.05);
+    leg2.rotation.set(legAngleX, 0, legAngleZ);
+    leg2.castShadow = true;
+    eiffel.add(leg2);
+
+    // Leg 3 (Utara-Barat)
+    const leg3 = new THREE.Mesh(legGeo, ironMat);
+    leg3.name = 'Leg_NW';
+    leg3.position.set(-1.05, 1.8, 1.05);
+    leg3.rotation.set(-legAngleX, 0, -legAngleZ);
+    leg3.castShadow = true;
+    eiffel.add(leg3);
+
+    // Leg 4 (Selatan-Barat)
+    const leg4 = new THREE.Mesh(legGeo, ironMat);
+    leg4.name = 'Leg_SW';
+    leg4.position.set(-1.05, 1.8, -1.05);
+    leg4.rotation.set(legAngleX, 0, -legAngleZ);
+    leg4.castShadow = true;
+    eiffel.add(leg4);
+
+    // --- DETAIL KISI BESI (X-BRACING) TIER 1 ---
+    const braceGeo1 = new THREE.BoxGeometry(0.06, 3.8, 0.06);
+    const rotAngle1 = 0.52; // kemiringan silang
+
+    // Sisi Utara (North Face, z = 1.05)
+    const bN1 = new THREE.Mesh(braceGeo1, ironMat);
+    bN1.position.set(0, 1.7, 1.05);
+    bN1.rotation.z = rotAngle1;
+    bN1.castShadow = true;
+    eiffel.add(bN1);
+
+    const bN2 = new THREE.Mesh(braceGeo1, ironMat);
+    bN2.position.set(0, 1.7, 1.05);
+    bN2.rotation.z = -rotAngle1;
+    bN2.castShadow = true;
+    eiffel.add(bN2);
+
+    // Sisi Selatan (South Face, z = -1.05)
+    const bS1 = new THREE.Mesh(braceGeo1, ironMat);
+    bS1.position.set(0, 1.7, -1.05);
+    bS1.rotation.z = rotAngle1;
+    bS1.castShadow = true;
+    eiffel.add(bS1);
+
+    const bS2 = new THREE.Mesh(braceGeo1, ironMat);
+    bS2.position.set(0, 1.7, -1.05);
+    bS2.rotation.z = -rotAngle1;
+    bS2.castShadow = true;
+    eiffel.add(bS2);
+
+    // Sisi Timur (East Face, x = 1.05)
+    const bE1 = new THREE.Mesh(braceGeo1, ironMat);
+    bE1.position.set(1.05, 1.7, 0);
+    bE1.rotation.x = rotAngle1;
+    bE1.castShadow = true;
+    eiffel.add(bE1);
+
+    const bE2 = new THREE.Mesh(braceGeo1, ironMat);
+    bE2.position.set(1.05, 1.7, 0);
+    bE2.rotation.x = -rotAngle1;
+    bE2.castShadow = true;
+    eiffel.add(bE2);
+
+    // Sisi Barat (West Face, x = -1.05)
+    const bW1 = new THREE.Mesh(braceGeo1, ironMat);
+    bW1.position.set(-1.05, 1.7, 0);
+    bW1.rotation.x = rotAngle1;
+    bW1.castShadow = true;
+    eiffel.add(bW1);
+
+    const bW2 = new THREE.Mesh(braceGeo1, ironMat);
+    bW2.position.set(-1.05, 1.7, 0);
+    bW2.rotation.x = -rotAngle1;
+    bW2.castShadow = true;
+    eiffel.add(bW2);
+
+    // 2. LENGKUNGAN DEKORATIF (Decorative Arches)
+    const archRadius = 0.95;
+    const archGeo = new THREE.TorusGeometry(archRadius, 0.08, 4, 12, Math.PI);
+    archGeo.rotateZ(Math.PI);
+
+    // Lengkungan N, S, E, W
+    const archN = new THREE.Mesh(archGeo, ironMat);
+    archN.position.set(0, 1.8, 1.05);
+    eiffel.add(archN);
+
+    const archS = new THREE.Mesh(archGeo, ironMat);
+    archS.position.set(0, 1.8, -1.05);
+    eiffel.add(archS);
+
+    const archE = new THREE.Mesh(archGeo, ironMat);
+    archE.position.set(1.05, 1.8, 0);
+    archE.rotation.y = Math.PI / 2;
+    eiffel.add(archE);
+
+    const archW = new THREE.Mesh(archGeo, ironMat);
+    archW.position.set(-1.05, 1.8, 0);
+    archW.rotation.y = Math.PI / 2;
+    eiffel.add(archW);
+
+    // 3. PLATFORM UTAMA TINGKAT 1 (First Platform)
+    const plat1 = new THREE.Mesh(new THREE.BoxGeometry(2.35, 0.22, 2.35), ironMat);
+    plat1.name = 'Platform_1';
+    plat1.position.set(0, 3.4, 0);
+    plat1.castShadow = true;
+    plat1.receiveShadow = true;
+    eiffel.add(plat1);
+
+    // Pagar keliling platform 1
+    const rail1 = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.1, 2.4), ironMat);
+    rail1.position.set(0, 3.52, 0);
+    eiffel.add(rail1);
+
+    // 4. KOLOM TIER 2 (Middle Section Columns)
+    const midLegGeo = new THREE.BoxGeometry(0.24, 3.1, 0.24);
+    const midAngleX = 0.14;
+    const midAngleZ = 0.14;
+
+    // Col 1
+    const col1 = new THREE.Mesh(midLegGeo, ironMat);
+    col1.name = 'Col_NE';
+    col1.position.set(0.62, 5.0, 0.62);
+    col1.rotation.set(-midAngleX, 0, midAngleZ);
+    col1.castShadow = true;
+    eiffel.add(col1);
+
+    // Col 2
+    const col2 = new THREE.Mesh(midLegGeo, ironMat);
+    col2.name = 'Col_SE';
+    col2.position.set(0.62, 5.0, -0.62);
+    col2.rotation.set(midAngleX, 0, midAngleZ);
+    col2.castShadow = true;
+    eiffel.add(col2);
+
+    // Col 3
+    const col3 = new THREE.Mesh(midLegGeo, ironMat);
+    col3.name = 'Col_NW';
+    col3.position.set(-0.62, 5.0, 0.62);
+    col3.rotation.set(-midAngleX, 0, -midAngleZ);
+    col3.castShadow = true;
+    eiffel.add(col3);
+
+    // Col 4
+    const col4 = new THREE.Mesh(midLegGeo, ironMat);
+    col4.name = 'Col_SW';
+    col4.position.set(-0.62, 5.0, -0.62);
+    col4.rotation.set(midAngleX, 0, -midAngleZ);
+    col4.castShadow = true;
+    eiffel.add(col4);
+
+    // --- DETAIL KISI BESI (X-BRACING) TIER 2 ---
+    const braceGeo2 = new THREE.BoxGeometry(0.04, 3.0, 0.04);
+    const rotAngle2 = 0.35;
+
+    // Sisi Utara (z = 0.62)
+    const bN2_1 = new THREE.Mesh(braceGeo2, ironMat);
+    bN2_1.position.set(0, 5.0, 0.62);
+    bN2_1.rotation.z = rotAngle2;
+    bN2_1.castShadow = true;
+    eiffel.add(bN2_1);
+
+    const bN2_2 = new THREE.Mesh(braceGeo2, ironMat);
+    bN2_2.position.set(0, 5.0, 0.62);
+    bN2_2.rotation.z = -rotAngle2;
+    bN2_2.castShadow = true;
+    eiffel.add(bN2_2);
+
+    // Sisi Selatan (z = -0.62)
+    const bS2_1 = new THREE.Mesh(braceGeo2, ironMat);
+    bS2_1.position.set(0, 5.0, -0.62);
+    bS2_1.rotation.z = rotAngle2;
+    bS2_1.castShadow = true;
+    eiffel.add(bS2_1);
+
+    const bS2_2 = new THREE.Mesh(braceGeo2, ironMat);
+    bS2_2.position.set(0, 5.0, -0.62);
+    bS2_2.rotation.z = -rotAngle2;
+    bS2_2.castShadow = true;
+    eiffel.add(bS2_2);
+
+    // Sisi Timur (x = 0.62)
+    const bE2_1 = new THREE.Mesh(braceGeo2, ironMat);
+    bE2_1.position.set(0.62, 5.0, 0);
+    bE2_1.rotation.x = rotAngle2;
+    bE2_1.castShadow = true;
+    eiffel.add(bE2_1);
+
+    const bE2_2 = new THREE.Mesh(braceGeo2, ironMat);
+    bE2_2.position.set(0.62, 5.0, 0);
+    bE2_2.rotation.x = -rotAngle2;
+    bE2_2.castShadow = true;
+    eiffel.add(bE2_2);
+
+    // Sisi Barat (x = -0.62)
+    const bW2_1 = new THREE.Mesh(braceGeo2, ironMat);
+    bW2_1.position.set(-0.62, 5.0, 0);
+    bW2_1.rotation.x = rotAngle2;
+    bW2_1.castShadow = true;
+    eiffel.add(bW2_1);
+
+    const bW2_2 = new THREE.Mesh(braceGeo2, ironMat);
+    bW2_2.position.set(-0.62, 5.0, 0);
+    bW2_2.rotation.x = -rotAngle2;
+    bW2_2.castShadow = true;
+    eiffel.add(bW2_2);
+
+    // 5. PLATFORM TINGKAT 2 (Second Platform)
+    const plat2 = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.18, 1.4), ironMat);
+    plat2.name = 'Platform_2';
+    plat2.position.set(0, 6.45, 0);
+    plat2.castShadow = true;
+    eiffel.add(plat2);
+
+    const rail2 = new THREE.Mesh(new THREE.BoxGeometry(1.44, 0.08, 1.44), ironMat);
+    rail2.position.set(0, 6.55, 0);
+    eiffel.add(rail2);
+
+    // 6. MENARA ATAS TIER 3 (Upper Tapering Tower)
+    const spireHeight = 4.8;
+    const upperTowerGeo = new THREE.ConeGeometry(0.64, spireHeight, 4);
+    upperTowerGeo.rotateY(Math.PI / 4); // Sejajarkan sisinya
+    const upperTower = new THREE.Mesh(upperTowerGeo, ironMat);
+    upperTower.name = 'UpperTower';
+    upperTower.position.set(0, 6.45 + 0.09 + spireHeight/2, 0); // y = 6.54 + 2.4 = 8.94
+    upperTower.castShadow = true;
+    eiffel.add(upperTower);
+
+    // Sabuk ornamen penopang tengah atas
+    const ringMid = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.12, 0.72), ironMat);
+    ringMid.position.set(0, 8.8, 0);
+    eiffel.add(ringMid);
+
+    // 7. DEK OBSERVASI PUNCAK (Third Platform / Dome)
+    const topDome = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.32, 0.4, 8), ironMat);
+    topDome.name = 'TopDome';
+    topDome.position.set(0, 11.45, 0);
+    eiffel.add(topDome);
+
+    // Kubah kecil penutup
+    const topCap = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 8, 0, Math.PI*2, 0, Math.PI/2), ironMat);
+    topCap.position.set(0, 11.65, 0);
+    eiffel.add(topCap);
+
+    // 8. JARUM ANTENA & SUAR MERDEKA (Antenna & Beacon)
+    const antennaGeo = new THREE.CylinderGeometry(0.02, 0.06, 1.5, 4);
+    const antenna = new THREE.Mesh(antennaGeo, ironMat);
+    antenna.name = 'Antenna';
+    antenna.position.set(0, 11.65 + 0.75, 0); // y = 12.4
+    eiffel.add(antenna);
+
+    // Lampu suar mercusuar kuning emas paling atas
+    const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.09, 6, 6), goldMat);
+    beacon.name = 'BeaconLight';
+    beacon.position.set(0, 11.65 + 1.5 + 0.045, 0); // y = 13.195
+    eiffel.add(beacon);
+
+    return eiffel;
+  }
+  landmarkGroup.add(makeEiffelTower());
+
+  scene.add(landmarkGroup);
+
+  // --- Orbit Kontrol Manual ---
+  let isDragging=false, lastX=0, lastY=0;
+  let theta=0, phi=1.3, radius=17;
+
+  function updateCamera(){
+    camera.position.x = radius*Math.sin(phi)*Math.sin(theta);
+    camera.position.y = radius*Math.cos(phi) + 5;
+    camera.position.z = radius*Math.sin(phi)*Math.cos(theta);
+    camera.lookAt(0, 6, 0);
+  }
+  updateCamera();
+
+  canvas.addEventListener('mousedown', e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+  window.addEventListener('mouseup', ()=>isDragging=false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDragging)return;
+    theta -= (e.clientX-lastX)*0.007;
+    phi = Math.max(0.1, Math.min(Math.PI/2 + 0.1, phi+(e.clientY-lastY)*0.007));
+    lastX=e.clientX; lastY=e.clientY; updateCamera();
+  });
+  canvas.addEventListener('touchstart',e=>{isDragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',()=>isDragging=false);
+  window.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    theta-=(e.touches[0].clientX-lastX)*0.009;
+    phi=Math.max(0.1,Math.min(Math.PI/2 + 0.1,phi+(e.touches[0].clientY-lastY)*0.009));
+    lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;updateCamera();
+  },{passive:true});
+  canvas.addEventListener('wheel',e=>{
+    radius=Math.max(7,Math.min(35,radius+e.deltaY*0.02));
+    updateCamera(); e.preventDefault();
+  },{passive:false});
+
+  function animate(){ 
+    requestAnimationFrame(animate); 
+    renderer.render(scene,camera); 
+  }
+  animate();
+
+  // --- Sistem Eksportir GLB Prancis ---
+  document.getElementById('dlBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('dlBtn');
+    btn.innerHTML = '<i class="ti ti-loader animate-spin"></i> Mengekspor...';
+    btn.disabled = true;
+
+    try {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js';
+      document.head.appendChild(s);
+      await new Promise((res,rej)=>{s.onload=res;s.onerror=rej;});
+
+      const exporter = new THREE.GLTFExporter();
+      exporter.parse(landmarkGroup, function(glb){
+        if (glb instanceof ArrayBuffer) {
+          const blob = new Blob([glb], {type: 'model/gltf-binary'});
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href = url; 
+          a.download = 'france.glb'; 
+          a.click();
+          URL.revokeObjectURL(url);
+          btn.innerHTML = '<i class="ti ti-check"></i> Berhasil diunduh!';
+        } else {
+          console.error('Gagal mengekspor: Hasil bukan ArrayBuffer', glb);
+          alert('Kesalahan ekspor: Format keluaran salah.');
+          btn.innerHTML = '<i class="ti ti-alert-triangle"></i> Gagal';
+        }
+        setTimeout(()=>{
+          btn.innerHTML = '<i class="ti ti-download"></i> Unduh france.glb';
+          btn.disabled = false;
+        }, 3000);
+      }, { binary: true });
+
+    } catch(e){
+      btn.innerHTML = '<i class="ti ti-download"></i> Unduh france.glb';
+      btn.disabled = false;
+      alert('Ekspor gagal: ' + e.message);
+    }
+  });
+})();
+</script>
+</body>
+</html>

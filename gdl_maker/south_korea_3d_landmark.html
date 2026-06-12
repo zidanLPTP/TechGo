@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model 3D Interaktif Namsan Seoul Tower - TechGo</title>
+  <!-- Google Fonts: Fredoka & Quicksand -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  <style>
+    :root {
+      --color-bg-dark: #0f172a;
+      --color-glass-bg: rgba(30, 41, 59, 0.7);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
+      --color-text-main: #f8fafc;
+      --color-text-sub: #94a3b8;
+      --color-accent: #c084fc; /* Ungu Korea / Namsan */
+      --color-accent-hover: #a855f7;
+      --font-title: 'Fredoka', sans-serif;
+      --font-body: 'Quicksand', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-bg-dark);
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Kontainer Utama Glassmorphism */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      max-width: 1100px;
+      height: 90vh;
+      max-height: 720px;
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 2.5rem;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        flex-direction: row;
+      }
+    }
+
+    /* Area Viewer 3D */
+    .viewer-area {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewer-instruction {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel Informasi Kanan */
+    .info-panel {
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--color-glass-border);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+      overflow-y: auto;
+    }
+
+    @media (min-width: 768px) {
+      .info-panel {
+        width: 320px;
+        border-top: none;
+        border-left: 1px solid var(--color-glass-border);
+      }
+    }
+
+    .info-header h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--color-accent);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+
+    .info-header p {
+      font-size: 0.8rem;
+      color: var(--color-text-sub);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .fact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .fact-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(192, 132, 252, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .fact-card h3 {
+      margin: 0 0 4px 0;
+      color: var(--color-accent);
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Tombol Unduh Mewah */
+    .download-btn {
+      margin-top: auto;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, #7e22ce 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 1.25rem;
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(192, 132, 252, 0.3);
+    }
+
+    .download-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(192, 132, 252, 0.45);
+      filter: brightness(1.1);
+    }
+
+    .download-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .download-btn:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-text-sub);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Area Penampil 3D -->
+  <div class="viewer-area">
+    <canvas id="threeCanvas"></canvas>
+    <div class="viewer-instruction">
+      <i class="ti ti-rotate-3d"></i> Seret untuk memutar · Scroll untuk zoom
+    </div>
+  </div>
+
+  <!-- Panel Informasi Kanan -->
+  <div class="info-panel">
+    <div class="info-header">
+      <h1>Namsan Seoul Tower</h1>
+      <p><i class="ti ti-map-pin"></i> Seoul, Korea Selatan · Landmark 3D Eksklusif</p>
+    </div>
+
+    <div class="facts-list">
+      <div class="fact-card">
+        <h3><i class="ti ti-antenna"></i> Menara Pemancar Pertama</h3>
+        Dibangun pada tahun 1969 di puncak Gunung Namsan sebagai menara pemancar gelombang radio dan TV pertama di Korea Selatan. Mulai dibuka untuk umum pada tahun 1980.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-bulb"></i> Lampu Indikator Polusi Udara</h3>
+        Menara ini menyala dengan warna lampu yang berbeda di malam hari untuk menunjukkan tingkat polusi udara di kota Seoul: Biru (sangat bersih), Hijau (bersih), Kuning (sedang), dan Merah (buruk).
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-heart"></i> Gembok Cinta Namsan</h3>
+        Terkenal sebagai lokasi romantis. Ribuan pasangan dari seluruh dunia memasang "Gembok Cinta" (*Love Locks*) di pagar teras dasar menara sebagai lambang cinta abadi.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-compass"></i> Pemandangan 360 Derajat</h3>
+        Berdiri di puncak Gunung Namsan memberikan menara ini tinggi total 480 meter di atas permukaan laut, menawarkan pemandangan panorama 360 derajat kota Seoul yang menakjubkan.
+      </div>
+    </div>
+
+    <button id="dlBtn" class="download-btn">
+      <i class="ti ti-download"></i> Unduh south_korea.glb
+    </button>
+  </div>
+</div>
+
+<!-- Memuat Three.js r128 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('threeCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  camera.position.set(0, 6, 17);
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // --- Sistem Pencahayaan ---
+  const ambient = new THREE.AmbientLight(0xfff8f0, 0.85);
+  scene.add(ambient);
+
+  const sun = new THREE.DirectionalLight(0xffebd2, 1.55);
+  sun.position.set(10, 22, 10);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 1024;
+  sun.shadow.mapSize.height = 1024;
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 30;
+  const d = 8;
+  sun.shadow.camera.left = -d;
+  sun.shadow.camera.right = d;
+  sun.shadow.camera.top = d;
+  sun.shadow.camera.bottom = -d;
+  sun.shadow.bias = -0.0005;
+  scene.add(sun);
+
+  // --- Material PBR Namsan Tower ---
+  const baseMat   = new THREE.MeshStandardMaterial({color: 0xe2e8f0, roughness: 0.65, metalness: 0.1}); // Gedung dasar abu-abu
+  const towerMat  = new THREE.MeshStandardMaterial({color: 0xf8fafc, roughness: 0.5, metalness: 0.15}); // Tiang putih bersih
+  const silverMat = new THREE.MeshStandardMaterial({color: 0xcbd5e1, metalness: 0.8, roughness: 0.2}); // Logam perak dek observasi
+  const glassMat  = new THREE.MeshStandardMaterial({color: 0x1e293b, roughness: 0.1, metalness: 0.9}); // Kaca jendela gelap
+  const orangeMat = new THREE.MeshStandardMaterial({color: 0xe11d48, roughness: 0.5}); // Antena merah/oranye
+  const whiteMat  = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.5}); // Antena putih
+
+  // --- Group Utama Landmark (Murni Tanpa Alas) ---
+  const landmarkGroup = new THREE.Group();
+  landmarkGroup.name = 'SouthKoreaLandmark';
+
+  // --- Pembuat Namsan Tower Low-Poly ---
+  function makeNamsanTower() {
+    const tower = new THREE.Group();
+    tower.name = 'NamsanTower';
+
+    // 1. Gedung Dasar Heksagonal (Annex/Lobby)
+    const baseHeight = 1.8;
+    const baseBuilding = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.2, baseHeight, 8), baseMat);
+    baseBuilding.name = 'BaseAnnex';
+    baseBuilding.position.y = baseHeight / 2; // Bottom di y=0
+    baseBuilding.castShadow = true;
+    baseBuilding.receiveShadow = true;
+    tower.add(baseBuilding);
+
+    // Detail tangga/lobby masuk depan
+    const lobbyEntrance = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.9, 0.4), baseMat);
+    lobbyEntrance.name = 'EntranceLobby';
+    lobbyEntrance.position.set(0, 0.45, 1.1);
+    lobbyEntrance.castShadow = true;
+    tower.add(lobbyEntrance);
+
+    // 2. Kolom Tiang Utama (Tapered Shaft)
+    const shaftHeight = 7.0;
+    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.45, shaftHeight, 8), towerMat);
+    shaft.name = 'TowerShaft';
+    shaft.position.y = baseHeight + shaftHeight / 2; // y = 1.8 + 3.5 = 5.3
+    shaft.castShadow = true;
+    tower.add(shaft);
+
+    // 3. Dek Observasi Bawah (Lower ring)
+    const lowerDeck = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 0.9, 0.4, 12), silverMat);
+    lowerDeck.name = 'LowerDeck';
+    lowerDeck.position.y = 7.3;
+    lowerDeck.castShadow = true;
+    tower.add(lowerDeck);
+
+    // 4. Dek Observasi Utama (Main Observatory - Silver & Glass layers)
+    const obsGroup = new THREE.Group();
+    obsGroup.name = 'ObservatoryGroup';
+    obsGroup.position.y = 7.85; // y = 7.85
+
+    // Ring perak bawah
+    const obsBottom = new THREE.Mesh(new THREE.CylinderGeometry(1.23, 1.2, 0.12, 12), silverMat);
+    obsBottom.position.y = -0.29;
+    obsBottom.castShadow = true;
+    obsGroup.add(obsBottom);
+
+    // Ring kaca jendela tengah
+    const obsGlass = new THREE.Mesh(new THREE.CylinderGeometry(1.27, 1.24, 0.46, 12), glassMat);
+    obsGlass.castShadow = true;
+    obsGroup.add(obsGlass);
+
+    // Ring perak atas (atap dek observasi)
+    const obsTop = new THREE.Mesh(new THREE.CylinderGeometry(1.3, 1.27, 0.12, 12), silverMat);
+    obsTop.position.y = 0.29;
+    obsTop.castShadow = true;
+    obsGroup.add(obsTop);
+
+    tower.add(obsGroup);
+
+    // 5. Tiang Silinder Atas (Upper Small Shaft)
+    const upperShaftHeight = 1.0;
+    const upperShaft = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, upperShaftHeight, 8), towerMat);
+    upperShaft.name = 'UpperShaft';
+    upperShaft.position.y = 8.2 + upperShaftHeight/2; // y = 8.7
+    upperShaft.castShadow = true;
+    tower.add(upperShaft);
+
+    // 6. Tiang Antena Bergaris Merah-Putih (Spire Antenna)
+    const antennaGroup = new THREE.Group();
+    antennaGroup.name = 'AntennaGroup';
+    antennaGroup.position.y = 9.2; // Mulai di y = 9.2
+
+    const segHeight = 0.6;
+    const segGeo = new THREE.CylinderGeometry(0.08, 0.08, segHeight, 6);
+
+    const segmentsData = [
+      { name: 'RedSeg1', y: 0.3, mat: orangeMat },
+      { name: 'WhiteSeg1', y: 0.9, mat: whiteMat },
+      { name: 'RedSeg2', y: 1.5, mat: orangeMat },
+      { name: 'WhiteSeg2', y: 2.1, mat: whiteMat },
+      { name: 'RedSeg3', y: 2.7, mat: orangeMat }
+    ];
+
+    segmentsData.forEach((segData) => {
+      const seg = new THREE.Mesh(segGeo, segData.mat);
+      seg.name = segData.name;
+      seg.position.y = segData.y;
+      seg.castShadow = true;
+      antennaGroup.add(seg);
+    });
+
+    // Jarum needle paling atas
+    const needle = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.04, 1.0, 4), silverMat);
+    needle.name = 'AntennaNeedle';
+    needle.position.y = 3.5; // y = 3.0 + 0.5 = 3.5 (relatif ke antennaGroup)
+    needle.castShadow = true;
+    antennaGroup.add(needle);
+
+    tower.add(antennaGroup);
+
+    return tower;
+  }
+  landmarkGroup.add(makeNamsanTower());
+
+  scene.add(landmarkGroup);
+
+  // --- Orbit Kontrol Manual ---
+  let isDragging=false, lastX=0, lastY=0;
+  let theta=0, phi=1.3, radius=17;
+
+  function updateCamera(){
+    camera.position.x = radius*Math.sin(phi)*Math.sin(theta);
+    camera.position.y = radius*Math.cos(phi) + 6;
+    camera.position.z = radius*Math.sin(phi)*Math.cos(theta);
+    camera.lookAt(0, 6, 0);
+  }
+  updateCamera();
+
+  canvas.addEventListener('mousedown', e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+  window.addEventListener('mouseup', ()=>isDragging=false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDragging)return;
+    theta -= (e.clientX-lastX)*0.007;
+    phi = Math.max(0.1, Math.min(Math.PI/2 + 0.1, phi+(e.clientY-lastY)*0.007));
+    lastX=e.clientX; lastY=e.clientY; updateCamera();
+  });
+  canvas.addEventListener('touchstart',e=>{isDragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',()=>isDragging=false);
+  window.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    theta-=(e.touches[0].clientX-lastX)*0.009;
+    phi=Math.max(0.1,Math.min(Math.PI/2 + 0.1,phi+(e.touches[0].clientY-lastY)*0.009));
+    lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;updateCamera();
+  },{passive:true});
+  canvas.addEventListener('wheel',e=>{
+    radius=Math.max(8,Math.min(35,radius+e.deltaY*0.02));
+    updateCamera(); e.preventDefault();
+  },{passive:false});
+
+  function animate(){ 
+    requestAnimationFrame(animate); 
+    renderer.render(scene,camera); 
+  }
+  animate();
+
+  // --- Sistem Eksportir GLB Korea Selatan ---
+  document.getElementById('dlBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('dlBtn');
+    btn.innerHTML = '<i class="ti ti-loader animate-spin"></i> Mengekspor...';
+    btn.disabled = true;
+
+    try {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js';
+      document.head.appendChild(s);
+      await new Promise((res,rej)=>{s.onload=res;s.onerror=rej;});
+
+      const exporter = new THREE.GLTFExporter();
+      exporter.parse(landmarkGroup, function(glb){
+        if (glb instanceof ArrayBuffer) {
+          const blob = new Blob([glb], {type: 'model/gltf-binary'});
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href = url; 
+          a.download = 'south_korea.glb'; 
+          a.click();
+          URL.revokeObjectURL(url);
+          btn.innerHTML = '<i class="ti ti-check"></i> Berhasil diunduh!';
+        } else {
+          console.error('Gagal mengekspor: Hasil bukan ArrayBuffer', glb);
+          alert('Kesalahan ekspor: Format keluaran salah.');
+          btn.innerHTML = '<i class="ti ti-alert-triangle"></i> Gagal';
+        }
+        setTimeout(()=>{
+          btn.innerHTML = '<i class="ti ti-download"></i> Unduh south_korea.glb';
+          btn.disabled = false;
+        }, 3000);
+      }, { binary: true });
+
+    } catch(e){
+      btn.innerHTML = '<i class="ti ti-download"></i> Unduh south_korea.glb';
+      btn.disabled = false;
+      alert('Ekspor gagal: ' + e.message);
+    }
+  });
+})();
+</script>
+</body>
+</html>
