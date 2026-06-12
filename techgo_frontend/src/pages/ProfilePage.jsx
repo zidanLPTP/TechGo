@@ -22,7 +22,9 @@ import {
   Sun,
   Flame,
   BarChart2,
-  Compass
+  Compass,
+  Wifi,
+  Terminal
 } from 'lucide-react';
 import logoImg from '../assets/logo.png';
 
@@ -37,7 +39,9 @@ const COUNTRIES_DATA = [
   { id: 7, code: 'USA', nameId: 'Amerika Serikat', nameEn: 'United States', titleId: 'Roket Reusable SpaceX Falcon 9', titleEn: 'SpaceX Falcon 9 Reusable Rocket', icon: 'rocket', color: 'brandTeal' },
   { id: 8, code: 'BRA', nameId: 'Brasil', nameEn: 'Brazil', titleId: 'Bahan Bakar Bersih Bioetanol Tebu', titleEn: 'Clean Sugarcane Bioethanol Fuel', icon: 'biofuel', color: 'brandOrange' },
   { id: 9, code: 'KEN', nameId: 'Kenya', nameEn: 'Kenya', titleId: 'Sistem Uang Elektronik Seluler M-Pesa', titleEn: 'M-Pesa Mobile Money Network', icon: 'money', color: 'brandRose' },
-  { id: 10, code: 'EGY', nameId: 'Mesir', nameEn: 'Egypt', titleId: 'Mega Proyek Surya Gurun Benban', titleEn: 'Benban Desert Mega Solar Grid', icon: 'solar', color: 'brandBlue' }
+  { id: 10, code: 'EGY', nameId: 'Mesir', nameEn: 'Egypt', titleId: 'Mega Proyek Surya Gurun Benban', titleEn: 'Benban Desert Mega Solar Grid', icon: 'solar', color: 'brandBlue' },
+  { id: 11, code: 'AUS', nameId: 'Australia', nameEn: 'Australia', titleId: 'Jaringan Wi-Fi Nirkabel Komersial', titleEn: 'Commercial Wireless Wi-Fi Network', icon: 'wifi', color: 'brandTeal' },
+  { id: 12, code: 'FIN', nameId: 'Finlandia', nameEn: 'Finland', titleId: 'Sistem Operasi Open Source Linux', titleEn: 'Linux Open Source Operating System', icon: 'linux', color: 'brandOrange' }
 ];
 
 export default function ProfilePage() {
@@ -54,7 +58,7 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    // Membaca data progress dari localStorage untuk ke-10 negara
+    // Membaca data progress dari localStorage untuk ke-12 negara
     const list = COUNTRIES_DATA.map((c) => {
       const level = localStorage.getItem(`techgo_skill_${c.id}`) || 'Beginner';
       const score = parseInt(localStorage.getItem(`techgo_score_${c.id}`) || '0');
@@ -105,6 +109,8 @@ export default function ProfilePage() {
       case 'biofuel': return <Leaf className="w-8 h-8 text-brandOrange" />;
       case 'money': return <Smartphone className="w-8 h-8 text-brandRose" />;
       case 'solar': return <Sun className="w-8 h-8 text-brandBlue" />;
+      case 'wifi': return <Wifi className="w-8 h-8 text-brandTeal" />;
+      case 'linux': return <Terminal className="w-8 h-8 text-brandOrange" />;
       default: return <Award className="w-8 h-8 text-brandBlue" />;
     }
   };
@@ -213,7 +219,7 @@ export default function ProfilePage() {
               {/* Stat 1: Negara Dijelajahi */}
               <div className="bg-brandBlue/10 border-4 border-brandBlue/35 p-5 rounded-3xl text-center flex flex-col items-center justify-center">
                 <Globe className="text-brandBlue mb-2" size={32} />
-                <span className="text-3xl font-fredoka text-brandNavy font-bold">{stats.countriesExplored} / 10</span>
+                <span className="text-3xl font-fredoka text-brandNavy font-bold">{stats.countriesExplored} / {progresList.length}</span>
                 <span className="text-xs text-brandNavy/60 font-bold mt-1">{t('profilePage.statCountries')}</span>
               </div>
 
@@ -244,12 +250,12 @@ export default function ProfilePage() {
                   <Compass className="text-brandTeal" size={16} />
                   <span>{language === 'en' ? 'Global Exploration Progress' : 'Progres Eksplorasi Global'}</span>
                 </span>
-                <span>{stats.countriesExplored * 10}%</span>
+                <span>{Math.round((stats.countriesExplored / (progresList.length || 1)) * 100)}%</span>
               </div>
               <div className="w-full h-5 bg-brandNavy/5 rounded-full overflow-hidden border-2 border-brandNavy/10 p-0.5">
                 <div 
                   className="h-full bg-brandTeal rounded-full transition-all duration-1000 ease-out"
-                  style={{ width: `${stats.countriesExplored * 10}%` }}
+                  style={{ width: `${Math.round((stats.countriesExplored / (progresList.length || 1)) * 100)}%` }}
                 ></div>
               </div>
             </div>

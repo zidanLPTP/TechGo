@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model 3D Interaktif Sydney Opera House - TechGo</title>
+  <!-- Google Fonts: Fredoka & Quicksand -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  <style>
+    :root {
+      --color-bg-dark: #0f172a;
+      --color-glass-bg: rgba(30, 41, 59, 0.7);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
+      --color-text-main: #f8fafc;
+      --color-text-sub: #94a3b8;
+      --color-accent: #5cc2f2; /* Sky Blue */
+      --color-accent-hover: #38bdf8;
+      --font-title: 'Fredoka', sans-serif;
+      --font-body: 'Quicksand', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-bg-dark);
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Kontainer Utama Glassmorphism */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      max-width: 1100px;
+      height: 90vh;
+      max-height: 720px;
+      background: var(--color-glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--color-glass-border);
+      border-radius: 2.5rem;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        flex-direction: row;
+      }
+    }
+
+    /* Area Viewer 3D */
+    .viewer-area {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewer-instruction {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Panel Informasi Kanan */
+    .info-panel {
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--color-glass-border);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(15, 23, 42, 0.4);
+      overflow-y: auto;
+    }
+
+    @media (min-width: 768px) {
+      .info-panel {
+        width: 320px;
+        border-top: none;
+        border-left: 1px solid var(--color-glass-border);
+      }
+    }
+
+    .info-header h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--color-accent);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+
+    .info-header p {
+      font-size: 0.8rem;
+      color: var(--color-text-sub);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .facts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+    }
+
+    .fact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.25rem;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .fact-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(92, 194, 242, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .fact-card h3 {
+      margin: 0 0 4px 0;
+      color: var(--color-accent);
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Tombol Unduh Mewah */
+    .download-btn {
+      margin-top: auto;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, #0284c7 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 1.25rem;
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(92, 194, 242, 0.3);
+    }
+
+    .download-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(92, 194, 242, 0.45);
+      filter: brightness(1.1);
+    }
+
+    .download-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .download-btn:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--color-text-sub);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Area Penampil 3D -->
+  <div class="viewer-area">
+    <canvas id="threeCanvas"></canvas>
+    <div class="viewer-instruction">
+      <i class="ti ti-rotate-3d"></i> Seret untuk memutar · Scroll untuk zoom
+    </div>
+  </div>
+
+  <!-- Panel Informasi Kanan -->
+  <div class="info-panel">
+    <div class="info-header">
+      <h1>Gedung Opera Sydney</h1>
+      <p><i class="ti ti-map-pin"></i> Sydney, Australia · Landmark 3D Eksklusif</p>
+    </div>
+
+    <div class="facts-list">
+      <div class="fact-card">
+        <h3><i class="ti ti-brightness"></i> Cangkang Layar Putih</h3>
+        Desain atap Gedung Opera Sydney menyerupai layar kapal putih besar yang terkembang di pelabuhan. Secara geometris, cangkang-cangkang ini dibentuk dari irisan bola raksasa.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-trophy"></i> Karya Arsitek Denmark</h3>
+        Bangunan ikonik abad ke-20 ini dirancang oleh Jørn Utzon, seorang arsitek asal Denmark yang memenangkan kompetisi desain internasional pada tahun 1957.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-anchor"></i> Di Atas Tanjung Bennelong</h3>
+        Gedung ini dikelilingi laut dari tiga penjuru di Sydney Harbour, menjadikannya salah satu mahakarya arsitektur modern paling dikenal di dunia.
+      </div>
+      <div class="fact-card">
+        <h3><i class="ti ti-bulb"></i> Ubin Keramik Memukau</h3>
+        Meskipun tampak putih dari kejauhan, cangkang atapnya ditutupi oleh lebih dari satu juta ubin keramik kecil buatan Swedia yang memantulkan cahaya matahari secara indah.
+      </div>
+    </div>
+
+    <button id="dlBtn" class="download-btn">
+      <i class="ti ti-download"></i> Unduh australia.glb
+    </button>
+  </div>
+</div>
+
+<!-- Memuat Three.js r128 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('threeCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  camera.position.set(0, 4, 10);
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // --- Sistem Pencahayaan 3 Arah ---
+  const ambient = new THREE.AmbientLight(0xfff8f0, 0.7);
+  scene.add(ambient);
+
+  // 1. Sun Light (Kuning hangat dari depan-atas)
+  const sun = new THREE.DirectionalLight(0xffebd2, 1.55);
+  sun.position.set(10, 20, 8);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 1024;
+  sun.shadow.mapSize.height = 1024;
+  scene.add(sun);
+
+  // 2. Harbour Fill Light (Biru pelabuhan dari bawah-samping)
+  const harbourFill = new THREE.DirectionalLight(0x5cc2f2, 0.6);
+  harbourFill.position.set(-10, -5, -10);
+  scene.add(harbourFill);
+
+  // 3. Rim Light (Putih terang dari belakang-atas untuk siluet cangkang)
+  const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  rimLight.position.set(-15, 10, -15);
+  scene.add(rimLight);
+
+  // --- Material PBR Khas Gedung Opera Sydney ---
+  const podiumMat = new THREE.MeshStandardMaterial({color: 0x7e858e, roughness: 0.8, metalness: 0.1});
+  const shellMat  = new THREE.MeshStandardMaterial({color: 0xf5f3ea, roughness: 0.3, metalness: 0.05});
+  const glassMat  = new THREE.MeshStandardMaterial({
+    color: 0x1e3a5f, 
+    roughness: 0.1, 
+    metalness: 0.9,
+    transparent: true,
+    opacity: 0.6
+  });
+  const innerShellMat = new THREE.MeshStandardMaterial({
+    color: 0xd8d4c7, // Lebih gelap/abu-abu hangat untuk bagian dalam cangkang
+    roughness: 0.4,
+    metalness: 0.05,
+    side: THREE.BackSide
+  });
+  const bronzeGlassMat = new THREE.MeshStandardMaterial({
+    color: 0xcd7f32, // Kaca perunggu hangat
+    roughness: 0.15,
+    metalness: 0.9,
+    transparent: true,
+    opacity: 0.7
+  });
+
+  // --- Group Utama Landmark (Murni Tanpa Alas) ---
+  const landmarkGroup = new THREE.Group();
+  landmarkGroup.name = 'AustraliaLandmark';
+
+  // --- Pembuat Gedung Opera Sydney Low-Poly ---
+  function makeSydneyOperaHouse() {
+    const opera = new THREE.Group();
+    opera.name = 'SydneyOperaHouse';
+
+    // 1. PODIUM BERTINGKAT MASIF
+    const lvl1 = new THREE.Mesh(new THREE.BoxGeometry(5.4, 0.2, 4.2), podiumMat);
+    lvl1.position.y = 0.1; lvl1.castShadow = true; lvl1.receiveShadow = true;
+    opera.add(lvl1);
+
+    const lvl2 = new THREE.Mesh(new THREE.BoxGeometry(4.9, 0.2, 3.8), podiumMat);
+    lvl2.position.y = 0.3; lvl2.castShadow = true; lvl2.receiveShadow = true;
+    opera.add(lvl2);
+
+    // Tangga Besar Frontal
+    const stepCount = 5;
+    for (let i = 0; i < stepCount; i++) {
+      const step = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.08 * (stepCount - i), 2.0), podiumMat);
+      step.position.set(2.45 + (i * 0.15), (0.08 * (stepCount - i)) / 2, 0);
+      step.castShadow = true; step.receiveShadow = true;
+      opera.add(step);
+    }
+
+    // 2. WALL BASES (Penutup Ompong)
+    const concertHallBase = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.6, 1.3), podiumMat);
+    concertHallBase.position.set(-0.2, 0.7, 0.65);
+    concertHallBase.castShadow = true; concertHallBase.receiveShadow = true;
+    opera.add(concertHallBase);
+
+    const theatreBase = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.6, 1.2), podiumMat);
+    theatreBase.position.set(-0.1, 0.7, -0.65);
+    theatreBase.castShadow = true; theatreBase.receiveShadow = true;
+    opera.add(theatreBase);
+
+    // 3. PABRIKASI SOLID SAILS
+    // Set material shell ke double side agar bagian dalam aman di-render di HTML browser
+    shellMat.side = THREE.DoubleSide; 
+    const ribsMat = new THREE.MeshStandardMaterial({color: 0x555a62, roughness: 0.5});
+
+    function createSolidSail(radius, height, px, py, pz, rotY, scaleZ) {
+      const sailGroup = new THREE.Group();
+
+      const shellGeo = new THREE.ConeGeometry(radius, height, 4, 1, true, 0, Math.PI / 1.5);
+      shellGeo.rotateX(Math.PI / 2); shellGeo.rotateZ(Math.PI / 2);
+      const shell = new THREE.Mesh(shellGeo, shellMat);
+      shell.scale.set(1, 1, scaleZ);
+      shell.castShadow = true; shell.receiveShadow = true;
+      sailGroup.add(shell);
+
+      const glassGeo = new THREE.CylinderGeometry(radius * 0.95, radius * 0.95, 0.05, 16, 1, false, 0, Math.PI / 1.5);
+      glassGeo.rotateX(Math.PI / 2);
+      const glass = new THREE.Mesh(glassGeo, glassMat);
+      glass.position.set(0, 0, -0.02); glass.scale.set(1, 1, scaleZ);
+      sailGroup.add(glass);
+
+      const rib = new THREE.Mesh(new THREE.BoxGeometry(radius * 1.8, 0.04, 0.06), ribsMat);
+      rib.position.set(0, -radius * 0.2, 0.01);
+      sailGroup.add(rib);
+
+      sailGroup.position.set(px, py, pz);
+      sailGroup.rotation.y = rotY;
+      return sailGroup;
+    }
+
+    // Concert Hall
+    opera.add(createSolidSail(1.1, 1.8, -0.9, 1.2, 0.65, -0.1, 0.6));
+    opera.add(createSolidSail(0.9, 1.4, -0.2, 1.2, 0.65, -0.1, 0.55));
+    opera.add(createSolidSail(0.7, 1.0, 0.4, 1.1, 0.65, -0.1, 0.5));
+    opera.add(createSolidSail(0.5, 0.7, 0.9, 0.9, 0.65, -0.1, 0.45));
+
+    // Theatre
+    opera.add(createSolidSail(1.0, 1.6, -0.8, 1.15, -0.65, 0.1, 0.55));
+    opera.add(createSolidSail(0.8, 1.3, -0.1, 1.15, -0.65, 0.1, 0.5));
+    opera.add(createSolidSail(0.6, 0.9, 0.4, 1.05, -0.65, 0.1, 0.45));
+    opera.add(createSolidSail(0.4, 0.6, 0.8, 0.85, -0.65, 0.1, 0.4));
+
+    // Restaurant
+    opera.add(createSolidSail(0.5, 0.7, 0.2, 0.8, -1.3, 0.3, 0.4));
+    opera.add(createSolidSail(0.4, 0.5, 0.6, 0.75, -1.25, 0.3, 0.35));
+
+    // Penyelarasan Ground Level Y = 0
+    const box = new THREE.Box3().setFromObject(opera);
+    const minY = box.min.y;
+    opera.children.forEach(child => { child.position.y -= minY; });
+
+    return opera;
+  }
+  landmarkGroup.add(makeSydneyOperaHouse());
+  scene.add(landmarkGroup);
+
+  // --- Orbit Kontrol Manual ---
+  let isDragging=false, lastX=0, lastY=0;
+  let theta=0.8, phi=1.2, radius=10;
+
+  function updateCamera(){
+    camera.position.x = radius*Math.sin(phi)*Math.sin(theta);
+    camera.position.y = radius*Math.cos(phi) + 1.2;
+    camera.position.z = radius*Math.sin(phi)*Math.cos(theta);
+    camera.lookAt(0, 1.2, 0);
+  }
+  updateCamera();
+
+  canvas.addEventListener('mousedown', e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;});
+  window.addEventListener('mouseup', ()=>isDragging=false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDragging)return;
+    theta -= (e.clientX-lastX)*0.007;
+    phi = Math.max(0.1, Math.min(Math.PI/2 + 0.1, phi+(e.clientY-lastY)*0.007));
+    lastX=e.clientX; lastY=e.clientY; updateCamera();
+  });
+  canvas.addEventListener('touchstart',e=>{isDragging=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',()=>isDragging=false);
+  window.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    theta-=(e.touches[0].clientX-lastX)*0.009;
+    phi=Math.max(0.1,Math.min(Math.PI/2 + 0.1,phi+(e.touches[0].clientY-lastY)*0.009));
+    lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;updateCamera();
+  },{passive:true});
+  canvas.addEventListener('wheel',e=>{
+    radius=Math.max(4,Math.min(20,radius+e.deltaY*0.02));
+    updateCamera(); e.preventDefault();
+  },{passive:false});
+
+  function animate(){ 
+    requestAnimationFrame(animate); 
+    renderer.render(scene,camera); 
+  }
+  animate();
+
+  // --- Sistem Eksportir GLB ---
+  document.getElementById('dlBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('dlBtn');
+    btn.innerHTML = '<i class="ti ti-loader animate-spin"></i> Mengekspor...';
+    btn.disabled = true;
+
+    try {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js';
+      document.head.appendChild(s);
+      await new Promise((res,rej)=>{s.onload=res;s.onerror=rej;});
+
+      const exporter = new THREE.GLTFExporter();
+      exporter.parse(landmarkGroup, function(glb){
+        if (glb instanceof ArrayBuffer) {
+          const blob = new Blob([glb], {type: 'model/gltf-binary'});
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href = url; 
+          a.download = 'australia.glb'; 
+          a.click();
+          URL.revokeObjectURL(url);
+          btn.innerHTML = '<i class="ti ti-check"></i> Berhasil diunduh!';
+        } else {
+          console.error('Gagal mengekspor GLB');
+          btn.innerHTML = '<i class="ti ti-alert-triangle"></i> Gagal';
+        }
+        setTimeout(()=>{
+          btn.innerHTML = '<i class="ti ti-download"></i> Unduh australia.glb';
+          btn.disabled = false;
+        }, 3000);
+      }, { binary: true });
+
+    } catch(e){
+      btn.innerHTML = '<i class="ti ti-download"></i> Unduh australia.glb';
+      btn.disabled = false;
+      alert('Ekspor gagal: ' + e.message);
+    }
+  });
+})();
+</script>
+</body>
+</html>

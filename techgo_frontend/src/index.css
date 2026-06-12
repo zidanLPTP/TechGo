@@ -70,3 +70,17 @@ h1, h2, h3, h4, h5, h6 {
 .transition-playful {
   @apply transition-all duration-300 ease-in-out;
 }
+
+/* Custom heights for Map Layout */
+.main-map-area {
+  height: calc(100vh - 80px);
+}
+.panel-detail-area {
+  height: calc(50vh - 80px);
+}
+@media (min-width: 1024px) {
+  .panel-detail-area {
+    height: 100%;
+  }
+}
+

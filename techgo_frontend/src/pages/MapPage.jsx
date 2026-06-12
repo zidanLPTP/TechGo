@@ -26,183 +26,12 @@ import {
   Laptop, 
   Leaf, 
   Smartphone, 
-  Sun 
+  Sun,
+  Wifi,
+  Terminal
 } from 'lucide-react';
 import logoImg from '../assets/logo.png';
-
-// Data fallback lokal untuk pengujian frontend jika API backend/database belum tersambung
-const FALLBACK_COUNTRIES = [
-  {
-    id: 1,
-    country_code: 'IDN',
-    country_name_id: 'Indonesia',
-    country_name_en: 'Indonesia',
-    continent: 'Asia',
-    latitude: -7.052457,
-    longitude: 108.256638,
-    innovations: [{
-      id: 1,
-      title_id: 'Sensor Pertanian Pintar IoT',
-      title_en: 'Smart Agriculture IoT Sensors',
-      description_id: 'Teknologi sensor nirkabel berbasis IoT yang dipasang di sawah untuk memantau kelembaban tanah, suhu udara, dan kesehatan padi secara langsung melalui handphone petani agar hasil panen meningkat.',
-      description_en: 'IoT-based wireless sensor technology installed in rice fields to monitor soil moisture, air temperature, and crop health directly via mobile devices to boost crop yields.',
-      icon_name: 'icon_asia_iot.png'
-    }]
-  },
-  {
-    id: 2,
-    country_code: 'JPN',
-    country_name_id: 'Jepang',
-    country_name_en: 'Japan',
-    continent: 'Asia',
-    latitude: 36.001670,
-    longitude: 138.576247,
-    innovations: [{
-      id: 2,
-      title_id: 'Kereta Cepat Magnetik Shinkansen',
-      title_en: 'Shinkansen Magnetic Bullet Train',
-      description_id: 'Kereta peluru Shinkansen menggunakan gaya magnet super kuat untuk melayang di atas rel dan meluncur sangat cepat tanpa gesekan, mencapai kecepatan lebih dari 320 km/jam.',
-      description_en: 'Shinkansen bullet trains utilize powerful magnetic forces to hover above the tracks and glide smoothly without friction, achieving speeds of over 320 km/h.',
-      icon_name: 'icon_asia_train.png'
-    }]
-  },
-  {
-    id: 3,
-    country_code: 'KOR',
-    country_name_id: 'Korea Selatan',
-    country_name_en: 'South Korea',
-    continent: 'Asia',
-    latitude: 36.067083,
-    longitude: 127.906735,
-    innovations: [{
-      id: 3,
-      title_id: 'Jaringan Robotik & Kota Pintar 5G',
-      title_en: '5G Robotic Smart City Network',
-      description_id: 'Sistem jaringan internet 5G ultra cepat yang menghubungkan robot pembersih otomatis, lampu jalan pintar, dan mobil kemudi otomatis untuk kehidupan hemat energi.',
-      description_en: 'An ultra-fast 5G internet network connecting autonomous cleaning robots, smart streetlights, and self-driving cars to support energy-efficient living.',
-      icon_name: 'icon_asia_5g.png'
-    }]
-  },
-  {
-    id: 4,
-    country_code: 'DEU',
-    country_name_id: 'Jerman',
-    country_name_en: 'Germany',
-    continent: 'Europe',
-    latitude: 51.668798,
-    longitude: 9.733546,
-    innovations: [{
-      id: 4,
-      title_id: 'Otomasi Industri Robotik 4.0',
-      title_en: 'Industry 4.0 Robotic Automation',
-      description_id: 'Pabrik pintar yang menggunakan lengan robot cerdas dan sensor kecerdasan buatan untuk merakit mobil listrik secara otomatis, cepat, dan presisi tinggi.',
-      description_en: 'Smart factories using intelligent robotic arms and artificial intelligence sensors to assemble electric vehicles automatically, quickly, and with high precision.',
-      icon_name: 'icon_europe_industry.png'
-    }]
-  },
-  {
-    id: 5,
-    country_code: 'FRA',
-    country_name_id: 'Prancis',
-    country_name_en: 'France',
-    continent: 'Europe',
-    latitude: 45.848573,
-    longitude: 2.280187,
-    innovations: [{
-      id: 5,
-      title_id: 'Pesawat Terbang Bertenaga Surya Bersih',
-      title_en: 'Clean Solar-Powered Aircraft',
-      description_id: 'Pesawat eksperimental berukuran raksasa yang seluruh sayapnya ditutupi panel surya tipis, mampu terbang tinggi menembus awan tanpa bahan bakar minyak bumi.',
-      description_en: 'A giant experimental airplane covered in ultra-thin solar panels on its wings, capable of flying high above the clouds without consuming any fossil fuel.',
-      icon_name: 'icon_europe_plane.png'
-    }]
-  },
-  {
-    id: 6,
-    country_code: 'GBR',
-    country_name_id: 'Inggris',
-    country_name_en: 'United Kingdom',
-    continent: 'Europe',
-    latitude: 52.620117,
-    longitude: -2.414026,
-    innovations: [{
-      id: 6,
-      title_id: 'Komputer Mikro Edukasi Raspberry Pi',
-      title_en: 'Raspberry Pi Educational Micro-Computer',
-      description_id: 'Komputer mungil seukuran kartu saku yang dibuat khusus untuk membantu anak-anak belajar dasar coding, robotika, dan eksperimen teknologi.',
-      description_en: 'A pocket-sized credit-card microcomputer designed specifically to help children learn basic coding, robotics, and build digital technology experiments.',
-      icon_name: 'icon_europe_pi.png'
-    }]
-  },
-  {
-    id: 7,
-    country_code: 'USA',
-    country_name_id: 'Amerika Serikat',
-    country_name_en: 'United States',
-    continent: 'America',
-    latitude: 39.528976,
-    longitude: -99.211269,
-    innovations: [{
-      id: 7,
-      title_id: 'Roket Reusable SpaceX Falcon 9',
-      title_en: 'SpaceX Falcon 9 Reusable Rocket',
-      description_id: 'Roket luar angkasa pertama yang dapat terbang kembali ke bumi dan mendarat tegak lurus secara otomatis, membuat perjalanan ke luar angkasa jauh lebih murah.',
-      description_en: 'The first orbital rocket capable of returning to Earth and landing upright automatically on an ocean drone ship, making space travel far cheaper.',
-      icon_name: 'icon_america_rocket.png'
-    }]
-  },
-  {
-    id: 8,
-    country_code: 'BRA',
-    country_name_id: 'Brasil',
-    country_name_en: 'Brazil',
-    continent: 'America',
-    latitude: -10.447299,
-    longitude: -52.401329,
-    innovations: [{
-      id: 8,
-      title_id: 'Bahan Bakar Bersih Bioetanol Tebu',
-      title_en: 'Clean Sugarcane Bioethanol Fuel',
-      description_id: 'Teknologi pengolahan tanaman tebu menjadi bahan bakar cair ramah lingkungan (bioetanol) untuk mengurangi polusi asap udara di kota-kota besar Brasil.',
-      description_en: 'An environmentally friendly technology processing sugarcane crops into liquid bioethanol fuel, significantly reducing air pollution in major Brazilian cities.',
-      icon_name: 'icon_america_biofuel.png'
-    }]
-  },
-  {
-    id: 9,
-    country_code: 'KEN',
-    country_name_id: 'Kenya',
-    country_name_en: 'Kenya',
-    continent: 'Africa',
-    latitude: -1.047682,
-    longitude: 39.245191,
-    innovations: [{
-      id: 9,
-      title_id: 'Sistem Uang Elektronik Seluler M-Pesa',
-      title_en: 'M-Pesa Mobile Money Network',
-      description_id: 'Layanan keuangan seluler pertama di dunia yang memungkinkan jutaan orang mengirim uang secara aman hanya menggunakan SMS di handphone jadul.',
-      description_en: 'The world’s first mobile financial service that allows millions of unbanked citizens to safely send and receive money using basic SMS text messaging.',
-      icon_name: 'icon_africa_money.png'
-    }]
-  },
-  {
-    id: 10,
-    country_code: 'EGY',
-    country_name_id: 'Mesir',
-    country_name_en: 'Egypt',
-    continent: 'Africa',
-    latitude: 27.491489,
-    longitude: 29.296290,
-    innovations: [{
-      id: 10,
-      title_id: 'Mega Proyek Surya Gurun Benban',
-      title_en: 'Benban Desert Mega Solar Grid',
-      description_id: 'Pembangkit listrik tenaga surya terbesar di benua Afrika yang memproduksi listrik bersih dari matahari untuk menerangi jutaan rumah warga.',
-      description_en: 'The largest solar power plant in Africa built in the middle of the Egyptian desert, producing clean electricity from the sun to power millions of homes.',
-      icon_name: 'icon_africa_solar.png'
-    }]
-  }
-];
+import { FALLBACK_COUNTRIES } from '../data/fallbackCountries';
 
 // Menghasilkan data URL gambar laut Sky Blue (#5CC2F2) secara dinamis agar samudra tidak berwarna merah
 const createPastelOceanImage = () => {
@@ -216,6 +45,29 @@ const createPastelOceanImage = () => {
   return canvas.toDataURL();
 };
 const PASTEL_OCEAN_IMAGE = typeof document !== 'undefined' ? createPastelOceanImage() : '';
+
+// Helper function to render cute Lucide icons dynamically based on their database-saved filenames
+const renderInnovationIcon = (iconName, size = 32) => {
+  if (!iconName) return <Cpu size={size} className="text-brandNavy" />;
+  try {
+    const name = iconName.toLowerCase();
+    if (name.includes('iot')) return <Sprout size={size} className="text-brandTeal" />;
+    if (name.includes('train')) return <Train size={size} className="text-brandBlue" />;
+    if (name.includes('5g')) return <Cpu size={size} className="text-brandOrange" />;
+    if (name.includes('industry')) return <Settings size={size} className="text-brandNavy" />;
+    if (name.includes('plane')) return <Plane size={size} className="text-brandBlue" />;
+    if (name.includes('pi')) return <Laptop size={size} className="text-brandNavy" />;
+    if (name.includes('rocket')) return <Rocket size={size} className="text-brandRose" />;
+    if (name.includes('biofuel')) return <Leaf size={size} className="text-brandTeal" />;
+    if (name.includes('money')) return <Smartphone size={size} className="text-brandTeal" />;
+    if (name.includes('solar')) return <Sun size={size} className="text-brandOrange" />;
+    if (name.includes('wifi')) return <Wifi size={size} className="text-brandTeal" />;
+    if (name.includes('linux')) return <Terminal size={size} className="text-brandOrange" />;
+  } catch (e) {
+    console.error('Error in renderInnovationIcon:', e);
+  }
+  return <Cpu size={size} className="text-brandNavy" />;
+};
 
 export default function MapPage() {
   const { language, changeLanguage } = useLanguage();
@@ -247,20 +99,31 @@ export default function MapPage() {
       })
       .then((json) => {
         if (json.status === 'success' && json.data.length > 0) {
-          // Menyelaraskan koordinat dari FALLBACK_COUNTRIES agar perubahan koordinat lokal di frontend langsung diterapkan
-          const mergedData = json.data.map((dbCountry) => {
-            const localCountry = FALLBACK_COUNTRIES.find(
-              (c) => c.country_code === dbCountry.country_code
+          // Mulai dengan semua FALLBACK_COUNTRIES sebagai salinan dasar
+          // agar jika ada negara baru (seperti Australia/Finlandia) yang belum masuk ke database lokal user,
+          // negara tersebut tetap dirender dari fallback lokal.
+          const mergedData = FALLBACK_COUNTRIES.map((localCountry) => {
+            const dbCountry = json.data.find(
+              (c) => c.country_code === localCountry.country_code
             );
-            if (localCountry) {
+            if (dbCountry) {
               return {
                 ...dbCountry,
                 latitude: localCountry.latitude,
                 longitude: localCountry.longitude,
               };
             }
-            return dbCountry;
+            return localCountry;
           });
+
+          // Tambahkan negara lain dari database jika ada yang tidak terdaftar di fallback
+          json.data.forEach((dbCountry) => {
+            const exists = mergedData.some((c) => c.country_code === dbCountry.country_code);
+            if (!exists) {
+              mergedData.push(dbCountry);
+            }
+          });
+
           setCountries(mergedData);
         }
       })
@@ -306,18 +169,23 @@ export default function MapPage() {
 
   // 5. Otomatis posisikan kamera globe ke negara yang diklik
   const handleCountryClick = (country) => {
-    setSelectedCountry(country);
-    setActiveTab(0); // Reset ke inovasi pertama
-    
-    if (globeRef.current) {
-      // Pindahkan kamera dengan transisi halus
-      globeRef.current.pointOfView({
-        lat: country.latitude,
-        lng: country.longitude,
-        altitude: 1.5
-      }, 1200);
+    try {
+      setSelectedCountry(country);
+      setActiveTab(0); // Reset ke inovasi pertama
+      
+      if (globeRef.current) {
+        // Pindahkan kamera dengan transisi halus ke koordinat landmark negara dengan zoom sangat dekat
+        globeRef.current.pointOfView({
+          lat: country?.latitude || 0,
+          lng: country?.longitude || 0,
+          altitude: 0.3
+        }, 1200);
+      }
+    } catch (err) {
+      console.error('Error in handleCountryClick:', err);
     }
   };
+
 
   // 6. Fungsi Keluar / Logout
   const handleLogout = () => {
@@ -325,17 +193,36 @@ export default function MapPage() {
     navigate('/');
   };
 
-  // 7. Handler klik globe untuk menyalin koordinat latitude & longitude
+  // Helper untuk merender ikon inovasi berdasarkan kata kunci di nama ikon
+  const renderInnovationIcon = (iconName, size = 32) => {
+    if (!iconName) return <GlobeIcon size={size} className="text-brandBlue" />;
+    const name = iconName.toLowerCase();
+    if (name.includes('iot')) return <Sprout size={size} className="text-brandTeal" />;
+    if (name.includes('train')) return <Train size={size} className="text-brandBlue" />;
+    if (name.includes('5g')) return <Cpu size={size} className="text-brandOrange" />;
+    if (name.includes('industry')) return <Settings size={size} className="text-brandNavy" />;
+    if (name.includes('plane')) return <Plane size={size} className="text-brandBlue" />;
+    if (name.includes('pi')) return <Laptop size={size} className="text-brandNavy" />;
+    if (name.includes('rocket')) return <Rocket size={size} className="text-brandRose" />;
+    if (name.includes('biofuel')) return <Leaf size={size} className="text-brandTeal" />;
+    if (name.includes('money')) return <Smartphone size={size} className="text-brandTeal" />;
+    if (name.includes('solar')) return <Sun size={size} className="text-brandOrange" />;
+    if (name.includes('wifi')) return <Wifi size={size} className="text-brandTeal" />;
+    if (name.includes('linux')) return <Terminal size={size} className="text-brandOrange" />;
+    return <Rocket size={size} className="text-brandRose" />; // default fallback
+  };
+
+  // 7. Handler klik globe untuk menyalin koordinat latitude & longitude (Dinonaktifkan demi kebersihan UI)
   const handleGlobeClick = ({ lat, lng }) => {
-    setDebugCoords({ lat, lng });
-    const coordText = `latitude: ${lat.toFixed(6)},\nlongitude: ${lng.toFixed(6)},`;
-    navigator.clipboard.writeText(coordText)
-      .then(() => {
-        console.log('Koordinat disalin ke clipboard:\n', coordText);
-      })
-      .catch((err) => {
-        console.error('Gagal menyalin koordinat:', err);
-      });
+    // setDebugCoords({ lat, lng });
+    // const coordText = `latitude: ${lat.toFixed(6)},\nlongitude: ${lng.toFixed(6)},`;
+    // navigator.clipboard.writeText(coordText)
+    //   .then(() => {
+    //     console.log('Koordinat disalin ke clipboard:\n', coordText);
+    //   })
+    //   .catch((err) => {
+    //     console.error('Gagal menyalin koordinat:', err);
+    //   });
   };
 
   // Memoisasi pembuatan objek 3D untuk mencegah render ulang/flicker dan pemuatan ulang berkas GLB saat MapPage dirender ulang
@@ -364,7 +251,23 @@ export default function MapPage() {
         const size = new THREE.Vector3();
         box.getSize(size);
         const maxDim = Math.max(size.x, size.y, size.z);
-        const targetSize = 10;
+
+        // --- KONFIGURASI TALAAN HALUS MODEL (FINE-TUNING) PER NEGARA ---
+        let scaleMultiplier = 1.0;
+        let modelRotY = 0;       // Rotasi pada poros vertikal model (heading/arah hadap)
+        let pivotRotX = Math.PI / 2; // Rotasi untuk menegakkan model di globe (Y-up ke Z-out)
+
+        if (c.country_code === 'FIN') {
+          // Finlandia (Helsinki Cathedral) diperkecil agar tidak raksasa karena bentuknya yang melebar
+          scaleMultiplier = 0.45;
+        } else if (c.country_code === 'AUS') {
+          // Australia (Sydney Opera House) diperkecil dan diputar agar tidak terbalik/salah arah
+          scaleMultiplier = 0.65;
+          modelRotY = 0;
+          pivotRotX = Math.PI / 2; // Kembali ke positif 90 derajat agar tidak tenggelam/terbalik
+        }
+
+        const targetSize = 10 * scaleMultiplier;
         const scale = targetSize / (maxDim || 1);
         model.scale.set(scale, scale, scale);
         
@@ -376,10 +279,13 @@ export default function MapPage() {
         model.position.z = -center.z;
         model.position.y = -scaledBox.min.y;
         
-        // Bungkus dalam pivot group dan putar 90 derajat (Y-up ke Z-out) agar berdiri tegak lurus
+        // Atur rotasi hadap model pada poros vertikalnya sebelum ditegakkan di permukaan bumi
+        model.rotation.y = modelRotY;
+
+        // Bungkus dalam pivot group dan putar agar berdiri tegak lurus (Y-up ke Z-out)
         const pivot = new THREE.Group();
         pivot.add(model);
-        pivot.rotation.x = Math.PI / 2;
+        pivot.rotation.x = pivotRotX;
         
         g.add(pivot);
       },
@@ -398,9 +304,19 @@ export default function MapPage() {
       const coords = globeRef.current.getCoords(c.latitude, c.longitude, 0.01);
       Object.assign(obj.position, coords);
       
-      // Sejajarkan arah atas objek tegak lurus keluar dari permukaan bumi
-      const dir = new THREE.Vector3(coords.x, coords.y, coords.z).normalize();
-      obj.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir);
+      // Sejajarkan arah atas objek tegak lurus keluar dari permukaan bumi secara stabil (North-aligned basis)
+      const zAxis = new THREE.Vector3(coords.x, coords.y, coords.z).normalize(); // Outward normal (Up di permukaan globe)
+      const worldUp = new THREE.Vector3(0, 1, 0); // Arah kutub utara
+      
+      // Hitung sumbu X (Timur) yang tegak lurus terhadap sumbu Z dan Up dunia
+      const xAxis = new THREE.Vector3().crossVectors(worldUp, zAxis).normalize();
+      
+      // Hitung sumbu Y (Utara lokal di permukaan globe)
+      const yAxis = new THREE.Vector3().crossVectors(zAxis, xAxis).normalize();
+      
+      // Buat matriks rotasi basis orthogonal
+      const matrix = new THREE.Matrix4().makeBasis(xAxis, yAxis, zAxis);
+      obj.quaternion.setFromRotationMatrix(matrix);
       
       // Rotasi putaran lambat pada porosnya sendiri agar terlihat menarik (seperti collectible)
       const spinAngle = (Date.now() * 0.0008) % (Math.PI * 2);
@@ -503,14 +419,14 @@ export default function MapPage() {
       </header>
 
       {/* AREA UTAMA MAP (FLEX LAYOUT DENGAN CENTERING MEGAH) */}
-      <div className="flex-1 flex flex-col lg:flex-row relative z-10 w-full overflow-hidden h-[calc(100vh-80px)]">
+      <div className="flex flex-col lg:flex-row relative z-10 w-full overflow-hidden main-map-area">
         
         {/* KONTENER KIRI: GLOBE 3D (Tinggi diatur eksplisit dan selalu memosisikan bola dunia di tengah) */}
         <div 
           ref={containerRef} 
-          className="flex-1 w-full h-[50vh] lg:h-[calc(100vh-80px)] flex items-center justify-center bg-brandCream relative cursor-grab active:cursor-grabbing"
+          className="flex-1 min-w-0 w-full h-[50vh] lg:h-full flex items-center justify-center bg-brandCream relative cursor-grab active:cursor-grabbing"
         >
-          {/* Debugging HUD Koordinat */}
+          {/* Debugging HUD Koordinat (Dinonaktifkan demi kebersihan UI)
           {debugCoords && (
             <div className="absolute top-4 left-4 z-30 bg-white/85 backdrop-blur-md border-4 border-brandBlue/35 p-4 rounded-3xl shadow-2xl font-fredoka text-xs text-brandNavy flex flex-col gap-1.5 select-text max-w-xs animate-scale-up">
               <div className="flex justify-between items-center gap-4">
@@ -529,6 +445,7 @@ export default function MapPage() {
               <span className="text-[9px] text-brandNavy/60 font-semibold">Format siap paste ke source code!</span>
             </div>
           )}
+          */}
 
           {/* Banner Bantuan Petunjuk Sederhana yang kini lebih bersih */}
 
@@ -574,7 +491,26 @@ export default function MapPage() {
               `}
               onCustomLayerClick={(c) => handleCountryClick(c)}
               onGlobeClick={handleGlobeClick}
-              onPolygonClick={(polygon, event, { lat, lng }) => handleGlobeClick({ lat, lng })}
+              onPolygonClick={(polygon, event) => {
+                try {
+                  if (!polygon) return;
+                  const props = polygon.properties || {};
+                  const countryCode = (props.ISO_A3 || props.ADM0_A3 || props.SOV_A3 || '').toUpperCase();
+                  const countryName = (props.ADMIN || props.NAME || '').toLowerCase();
+                  
+                  const found = countries.find(c => 
+                    c.country_code.toUpperCase() === countryCode || 
+                    c.country_name_en.toLowerCase() === countryName ||
+                    (c.country_code === 'USA' && (countryCode === 'US' || countryName.includes('united states') || countryName.includes('america'))) ||
+                    (c.country_code === 'GBR' && (countryCode === 'GB' || countryName.includes('united kingdom') || countryName.includes('britain')))
+                  );
+                  if (found) {
+                    handleCountryClick(found);
+                  }
+                } catch (err) {
+                  console.error('Error in onPolygonClick:', err);
+                }
+              }}
             />
           ) : (
             // Spinner Loading Imut sebelum Globe terpasang
@@ -587,7 +523,7 @@ export default function MapPage() {
  
         {/* KONTENER KANAN / BAWAH: PANEL DETAIL INOVASI */}
         <div className={`
-          w-full lg:w-[450px] bg-white border-t-8 lg:border-t-0 lg:border-l-8 border-brandBlue/20 
+          w-full lg:w-[450px] panel-detail-area overflow-hidden bg-white border-t-8 lg:border-t-0 lg:border-l-8 border-brandBlue/20 
           p-6 flex flex-col justify-between transition-all duration-300 z-15 shadow-2xl
           ${selectedCountry 
             ? 'relative translate-y-0 lg:translate-x-0' 
@@ -621,64 +557,103 @@ export default function MapPage() {
                   {language === 'id' ? selectedCountry.country_name_id : selectedCountry.country_name_en}
                 </h2>
  
-                {/* Tab Inovasi (Jika memiliki lebih dari 1 inovasi) */}
-                {selectedCountry.innovations.length > 1 && (
-                  <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
-                    {selectedCountry.innovations.map((inv, idx) => (
-                      <button
-                        key={inv.id}
-                        onClick={() => setActiveTab(idx)}
-                        className={`px-3 py-1.5 rounded-xl font-fredoka text-xs transition-playful whitespace-nowrap cursor-pointer ${
-                          activeTab === idx 
-                            ? 'bg-brandBlue text-white shadow-sm' 
-                            : 'bg-brandCream text-brandNavy hover:bg-brandBlue/10'
-                        }`}
-                      >
-                        Tech {idx + 1}
-                      </button>
-                    ))}
-                  </div>
-                )}
- 
-                {/* Detail Inovasi Terpilih */}
-                {selectedCountry.innovations[activeTab] ? (
-                  <div className="bg-brandCream/40 border-4 border-brandBlue/20 p-5 rounded-3xl mb-6">
-                    
-                    {/* Visual Ikon Lucu */}
-                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-md border-2 border-brandBlue/10 mb-4 animate-bounce-slow">
-                      {/* Ikon Lucide Dinamis */}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('iot') && <Sprout size={32} className="text-brandTeal" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('train') && <Train size={32} className="text-brandBlue" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('5g') && <Cpu size={32} className="text-brandOrange" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('industry') && <Settings size={32} className="text-brandNavy" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('plane') && <Plane size={32} className="text-brandBlue" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('pi') && <Laptop size={32} className="text-brandNavy" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('rocket') && <Rocket size={32} className="text-brandRose" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('biofuel') && <Leaf size={32} className="text-brandTeal" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('money') && <Smartphone size={32} className="text-brandTeal" />}
-                      {selectedCountry.innovations[activeTab].icon_name.includes('solar') && <Sun size={32} className="text-brandOrange" />}
-                    </div>
- 
-                    {/* Judul Inovasi */}
-                    <h3 className="text-xl text-brandNavy font-fredoka mb-2">
-                      {language === 'id' 
-                        ? selectedCountry.innovations[activeTab].title_id 
-                        : selectedCountry.innovations[activeTab].title_en
+                {/* Daftar Inovasi Vertikal (Scrollable Accordion Cards) */}
+                <div className="flex flex-col gap-3 mb-6">
+                  {selectedCountry.innovations && selectedCountry.innovations.length > 0 ? (
+                    selectedCountry.innovations.map((inv, idx) => {
+                      const isOpen = activeTab === idx;
+                      const skillLevel = localStorage.getItem(`techgo_skill_${inv.id}`) || 'Beginner';
+                      
+                      // Terjemahan level untuk anak-anak
+                      let levelLabel = 'Beginner 🌟';
+                      let levelColor = 'bg-brandTeal/10 text-brandTeal border-brandTeal/20';
+                      if (skillLevel === 'Intermediate') {
+                        levelLabel = 'Intermediate 🚀';
+                        levelColor = 'bg-brandBlue/10 text-brandBlue border-brandBlue/20';
+                      } else if (skillLevel === 'Expert') {
+                        levelLabel = 'Expert 🏆';
+                        levelColor = 'bg-brandOrange/10 text-brandOrange border-brandOrange/20';
                       }
-                    </h3>
- 
-                    {/* Deskripsi Inovasi */}
-                    <p className="text-brandNavy/80 font-quicksand font-medium text-sm sm:text-base leading-relaxed">
-                      {language === 'id' 
-                        ? selectedCountry.innovations[activeTab].description_id 
-                        : selectedCountry.innovations[activeTab].description_en
-                      }
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-gray-500 font-medium text-sm">Tidak ada inovasi terdaftar.</p>
-                )}
- 
+
+                      return (
+                        <div
+                          key={inv.id}
+                          className={`border-4 rounded-3xl transition-all duration-300 overflow-hidden cursor-pointer ${
+                            isOpen 
+                              ? 'bg-brandCream/40 border-brandBlue/30 shadow-md' 
+                              : 'bg-white border-brandBlue/10 hover:border-brandBlue/20 hover:bg-brandCream/10'
+                          }`}
+                          onClick={() => setActiveTab(idx)}
+                        >
+                          {/* Header Kartu (Selalu Terlihat) */}
+                          <div className="p-4 flex items-center justify-between gap-3 select-none">
+                            <div className="flex items-center gap-3">
+                              {/* Ikon Lucu */}
+                              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-brandBlue/10 ${
+                                isOpen ? 'bg-white animate-bounce-slow' : 'bg-brandCream/30'
+                              }`}>
+                                {renderInnovationIcon(inv.icon_name, 24)}
+                              </div>
+                              
+                              {/* Judul & Level */}
+                              <div className="flex flex-col">
+                                <span className="font-fredoka text-xs text-brandBlue font-bold uppercase tracking-wider">
+                                  {language === 'id' ? `Penemuan ${idx + 1}` : `Discovery ${idx + 1}`}
+                                </span>
+                                <h3 className="text-base text-brandNavy font-fredoka leading-snug line-clamp-1">
+                                  {language === 'id' ? inv.title_id : inv.title_en}
+                                </h3>
+                              </div>
+                            </div>
+
+                            {/* Level Badge & Panah */}
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-fredoka font-bold border ${levelColor}`}>
+                                {levelLabel}
+                              </span>
+                              <span className={`text-brandNavy/30 transition-transform duration-300 font-bold ${
+                                isOpen ? 'rotate-180 text-brandBlue' : ''
+                              }`}>
+                                ▼
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Konten yang Diperluas (Hanya Muncul jika Aktif) */}
+                          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                            isOpen ? 'max-h-[800px] border-t-2 border-brandBlue/10 p-5 bg-brandCream/20' : 'max-h-0'
+                          }`}>
+                            {/* Deskripsi Inovasi */}
+                            <p className="text-brandNavy/80 font-quicksand font-medium text-sm sm:text-base leading-relaxed mb-4">
+                              {language === 'id' ? inv.description_id : inv.description_en}
+                            </p>
+
+                            {/* Tombol Mulai Kuis untuk Inovasi Ini */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation(); // Mencegah memicu toggle accordion kembali
+                                navigate('/quiz', {
+                                  state: {
+                                    innovationId: inv.id,
+                                    innovationTitle: language === 'id' ? inv.title_id : inv.title_en
+                                  }
+                                });
+                              }}
+                              className="flex items-center justify-center gap-2 w-full py-3 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-2xl font-fredoka text-sm transition-playful shadow-md border-b-4 border-brandTeal/70 hover:scale-[1.01] active:scale-95 cursor-pointer"
+                            >
+                              <BookOpen size={16} />
+                              <span>{language === 'id' ? 'Mulai Kuis Adaptif AI' : 'Start AI Adaptive Quiz'}</span>
+                              <ArrowRight size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-gray-500 font-medium text-sm">Tidak ada inovasi terdaftar.</p>
+                  )}
+                </div>
+
                 {/* Banner Peringatan untuk Pengguna Tamu (Guest) */}
                 {user?.isGuest && (
                   <div className="bg-brandOrange/15 border-2 border-brandOrange/30 text-brandNavy p-4 rounded-2xl mb-4 flex gap-2 items-start text-xs sm:text-sm font-bold">
@@ -689,25 +664,6 @@ export default function MapPage() {
                     </div>
                   </div>
                 )}
-              </div>
- 
-              {/* Tombol Aksi Kuis di bagian Bawah */}
-              <div className="pt-4 border-t-4 border-brandBlue/10 bg-white">
-                <button
-                  onClick={() => navigate('/quiz', {
-                    state: {
-                      innovationId: selectedCountry.innovations[activeTab]?.id || 1,
-                      innovationTitle: language === 'id' 
-                        ? selectedCountry.innovations[activeTab]?.title_id 
-                        : selectedCountry.innovations[activeTab]?.title_en
-                    }
-                  })}
-                  className="flex items-center justify-center gap-2 w-full py-4 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-3xl font-fredoka text-lg transition-playful shadow-md border-b-6 border-brandTeal/70 hover:scale-[1.02] active:scale-95 cursor-pointer"
-                >
-                  <BookOpen size={20} />
-                  <span>Mulai Kuis Adaptif AI</span>
-                  <ArrowRight size={18} />
-                </button>
               </div>
             </>
           ) : (
