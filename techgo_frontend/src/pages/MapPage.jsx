@@ -590,7 +590,7 @@ export default function MapPage() {
                             <div className="flex items-center gap-3">
                               {/* Ikon Lucu */}
                               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-brandBlue/10 ${
-                                isOpen ? 'bg-white animate-bounce-slow' : 'bg-brandCream/30'
+                                isOpen ? 'bg-white' : 'bg-brandCream/30'
                               }`}>
                                 {renderInnovationIcon(inv.icon_name, 24)}
                               </div>

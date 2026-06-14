@@ -8,8 +8,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Roket Reusable SpaceX Falcon 9',
     title_en: 'SpaceX Falcon 9 Reusable Rocket',
-    description_id: 'Roket luar angkasa pertama yang dapat terbang kembali ke bumi dan mendarat tegak lurus secara otomatis di atas kapal laut setelah mengantar satelit, membuat perjalanan ke luar angkasa jauh lebih murah.',
-    description_en: 'The first orbital rocket capable of returning to Earth and landing upright automatically on an ocean drone ship after launching satellites, making space travel far cheaper.',
+    description_id: 'Peluncuran roket Falcon 9 menandai babak baru penjelajahan luar angkasa sebagai roket orbital pertama yang dapat kembali ke bumi dan mendarat tegak lurus secara mandiri. Teknologi pendaratan otomatis ini memangkas biaya penerbangan antariksa secara signifikan karena roket dapat dipakai berulang kali.',
+    description_en: 'The Falcon 9 represents a breakthrough in space exploration as the first orbital rocket capable of returning to Earth and landing upright. This automated landing technology dramatically lowers the cost of space travel by enabling rocket reuse.',
     icon_name: 'icon_america_rocket.png'
   },
   {
@@ -17,8 +17,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Telepon Kabel Pertama',
     title_en: 'The First Telephone',
-    description_id: 'Bayangkan kamu mau mengobrol dengan sahabatmu yang rumahnya jauh, tapi kamu harus berjalan kaki berjam-jam dulu hanya untuk menyapa mereka. Melelahkan, kan? Nah, di tahun 1876, Om Alexander Graham Bell menciptakan alat ajaib bernama Telepon! Alat ini bertugas mengubah suara obrolan kita menjadi sinyal listrik yang mengalir lewat kabel panjang, lalu mengubahnya kembali menjadi suara di ujung sana. Berkat telepon kabel pertama ini, manusia akhirnya bisa saling berbicara secara instan dari jarak yang sangat jauh!',
-    description_en: 'How did people talk to each other before smartphones? They had to write letters that took days to arrive! In 1876, Alexander Graham Bell changed everything by inventing the telephone. This smart machine turned spoken words into electrical signals, sent them through copper wires, and turned them back into sounds on the other side. It is the amazing ancestor of all the phone calls and voice chats we use today!',
+    description_id: 'Dulu, kalau mau menyapa sahabat yang rumahnya jauh, orang harus berjalan kaki berjam-jam atau kirim surat yang sampainya berhari-hari. Kesulitan ini berubah saat telepon ditemukan pada tahun 1876 oleh Alexander Graham Bell. Alat ini memindahkan suara obrolan kita menjadi sinyal listrik lewat kabel panjang, lalu mengubahnya balik jadi suara di ujung satunya. Manusia pun bisa mengobrol jarak jauh secara instan!',
+    description_en: 'Before smartphones, people wrote letters that took days to arrive. In 1876, Alexander Graham Bell changed communication with the telephone. It turned spoken voices into electrical signals, sent them through long wires, and turned them back into sound. This is the ancestor of our phone calls and voice chats!',
     icon_name: 'icon_america_telephone_iot.png'
   },
   {
@@ -26,8 +26,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Alat Perekam Suara (Phonograph)',
     title_en: 'Phonograph Sound Recorder',
-    description_id: 'Sebelum ada Spotify, YouTube Music, atau fitur voice note di HP-mu, suara manusia tidak pernah bisa direkam lho! Sekali kamu berbicara atau bernyanyi, suaramu akan hilang ditiup angin. Untungnya pada tahun 1877, Om Thomas Edison yang jenius menciptakan Phonograph. Alat ini menggunakan silinder berputar dan jarum kecil untuk mengukir getaran suaramu di atas logam tipis. Begitu mesinnya diputar kembali, suaramu bisa terdengar lagi! Inilah awal mula manusia bisa merekam lagu, membuat podcast, dan menyimpan suara favorit mereka.',
-    description_en: 'Imagine a world where music could only be heard live, and no one could ever record their voice! In 1877, Thomas Edison invented the phonograph. This clever machine used a tiny needle to carve sound vibrations onto a spinning cylinder. When you spun it again, your recorded voice played back! This invention started the whole history of record players, podcasts, and digital music.',
+    description_id: 'Sebelum ada aplikasi pemutar musik atau fitur voice note di ponsel, suara manusia yang diucapkan akan langsung hilang ditiup angin tanpa bisa disimpan. Pada tahun 1877, Thomas Edison membuat mesin bernama Phonograph. Alat ini memakai silinder berputar dan jarum kecil untuk mengukir getaran suara di atas lembaran logam tipis. Saat mesinnya diputar ulang, suara yang tersimpan pun terdengar lagi, memulai sejarah perekaman lagu dan podcast.',
+    description_en: 'In a world where music could only be heard live, Thomas Edison created the phonograph in 1877. This machine used a tiny needle to carve sound vibrations onto a spinning cylinder. Playing it back let people hear the recorded voice, starting the history of music recordings and podcasts.',
     icon_name: 'icon_america_phonograph_pi.png'
   },
   {
@@ -35,8 +35,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Mesin Pencuci Piring Otomatis',
     title_en: 'Automatic Dishwasher',
-    description_id: 'Selesai makan malam, pekerjaan apa yang paling bikin malas? Yup, mencuci tumpukan piring kotor! Masalah ini juga dirasakan oleh Tante Josephine Cochrane pada tahun 1886. Bedanya, Tante Josephine tidak tinggal diam. Beliau mendesain sebuah kotak besi dengan rak piring di dalamnya yang bisa menyemprotkan air sabun bertekanan tinggi secara otomatis. Piring-piring kotor pun langsung bersih berkilau tanpa perlu dikucek pakai tangan. Mesin inilah yang menjadi pelopor asisten rumah tangga pintar di masa depan!',
-    description_en: 'Doing the dishes after a delicious meal can be pretty tiring. Back in 1886, Josephine Cochrane decided to build a smart solution! She invented the first mechanical dishwasher. It used high-pressure water and a special rack system to wash plates clean and shiny. This helpful machine paved the way for modern smart kitchens and home robots!',
+    description_id: 'Apalagi kalau bukan urusan cuci piring kotor yang menumpuk di wastafel dapur setelah makan malam. Rasa malas mencuci piring ini membuat Josephine Cochrane mendesain kotak besi berisi rak piring pada tahun 1886. Kotak ini bisa menyemprotkan air sabun bertekanan tinggi secara otomatis, membuat piring kotor bersih berkilau tanpa perlu dikucek dengan tangan. Mesin ini menjadi cikal bakal asisten rumah tangga pintar modern.',
+    description_en: 'Washing dishes after a meal is a chore that Josephine Cochrane solved in 1886 by inventing the mechanical dishwasher. It used high-pressure water and a rack system to wash plates clean. This machine paved the way for modern smart kitchens and home robots.',
     icon_name: 'icon_america_dishwasher_industry.png'
   },
   {
@@ -44,8 +44,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Mobil Listrik Pertama',
     title_en: 'The First Electric Car',
-    description_id: 'Kamu mungkin berpikir kalau mobil listrik ramah lingkungan seperti Tesla baru saja ditemukan beberapa tahun lalu. Wah, ternyata salah besar! Jauh sebelum bensin populer, seorang penemu bernama Om William Morrison sudah berhasil membuat mobil listrik pertama yang sukses di Amerika Serikat pada tahun 1889. Mobil imut ini bertenaga baterai raksasa dan motor listrik tanpa perlu mengeluarkan asap polusi sama sekali. Keren banget, kan? Penemuan ini adalah jembatan sejarah menuju mobil masa depan yang bebas polusi!',
-    description_en: 'Think electric vehicles like Teslas are brand-new inventions? Think again! Back in 1889, William Morrison built one of the very first successful electric cars. Instead of loud, smoky engines, his car ran quietly on large batteries and electric motors. It is the historic bridge to the green, pollution-free electric cars we see on the roads today!',
+    description_id: 'Mobil listrik ramah lingkungan sering kali dikira sebagai penemuan baru abad ini. Padahal, sebelum bensin populer, William Morrison sudah membuat mobil listrik pertama yang sukses di Amerika Serikat pada tahun 1889. Dijalankan dengan baterai berukuran besar dan motor listrik, mobil ini melaju tenang tanpa polusi asap. Penemuan ini menjadi jembatan sejarah penting bagi perkembangan kendaraan listrik ramah lingkungan saat ini.',
+    description_en: 'Electric vehicles are older than most people think. In 1889, William Morrison built one of the first successful electric cars. Running quietly on batteries and an electric motor instead of gasoline, this car became a historic bridge to the green electric vehicles of today.',
     icon_name: 'icon_america_electric_car_solar.png'
   },
   {
@@ -53,8 +53,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Pesawat Terbang Bermesin Pertama',
     title_en: 'The First Powered Airplane',
-    description_id: 'Sejak zaman purba, manusia selalu bermimpi ingin terbang bebas di langit seperti burung. Mimpi indah itu akhirnya diwujudkan oleh dua bersaudara yang pantang menyerah, yaitu Wilbur dan Orville Wright (Wright Brothers) pada tahun 1903! Mereka menciptakan pesawat kayu bernama Wright Flyer yang dilengkapi mesin bertenaga bensin dan sayap yang bisa dikendalikan. Penerbangan pertama mereka memang hanya berlangsung selama 12 detik, tapi keberhasilan itu langsung mengubah cara manusia bepergian melintasi benua dan samudra!',
-    description_en: 'For thousands of years, humans dreamed of flying like birds. In 1903, two brothers named Wilbur and Orville Wright made that dream a reality! They built the Wright Flyer, the first airplane with a working engine and steerable wings. Their first flight lasted only 12 seconds, but it proved that machines heavier than air could fly! This changed global travel forever.',
+    description_id: 'Impian manusia untuk terbang bebas di langit seperti burung akhirnya terwujud melalui kerja keras Wilbur dan Orville Wright (Wright Brothers) pada tahun 1903. Mereka merakit pesawat kayu bernama Wright Flyer yang digerakkan oleh mesin bertenaga bensin dan memiliki sayap yang bisa dikendalikan. Uji coba terbang pertama mereka berlangsung selama 12 detik, membuktikan bahwa mesin yang lebih berat dari udara bisa melayang dan menjadi cikal bakal transportasi udara modern.',
+    description_en: 'Orville and Wilbur Wright turned the dream of flight into reality in 1903. They built the Wright Flyer, an airplane with a gasoline engine and steerable wings. Their first flight lasted 12 seconds, proving that heavy flying machines could work and changing global travel forever.',
     icon_name: 'icon_america_airplane_plane.png'
   },
   {
@@ -62,8 +62,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Jalur Perakitan Mobil Berjalan',
     title_en: 'Moving Assembly Line',
-    description_id: 'Dulu, untuk membuat satu buah mobil, sekelompok mekanik harus merakitnya di satu tempat dari awal sampai akhir secara manual. Proses ini sangat lama dan membuat harga mobil menjadi sangat mahal. Nah, pada tahun 1913, Om Henry Ford membuat ide gokil! Alih-alih mekanik yang berjalan memutari mobil, mobilnyalah yang berjalan di atas rel berjalan melewati para mekanik yang berbaris rapi. Cara ini membuat pembuatan mobil menjadi super cepat, murah, dan menjadi awal lahirnya pabrik robotik otomatis di seluruh dunia!',
-    description_en: 'Long ago, building a car took a very long time because workers had to build it in one spot from scratch. In 1913, Henry Ford introduced a brilliant idea: the moving assembly line! Instead of workers walking around the car, the car moved on a conveyor belt past different workers. This made manufacturing lightning-fast and cheap, paving the way for today\'s automated smart factories!',
+    description_id: 'Merakit mobil secara manual dari awal sampai akhir di satu tempat dulunya memakan waktu sangat lama dan memicu harga mobil melambung tinggi. Henry Ford memecahkan masalah ini pada tahun 1913 dengan memperkenalkan jalur perakitan berjalan. Rangka mobil digerakkan di atas rel berjalan melewati para mekanik yang bertugas memasang bagian tertentu. Metode ini memangkas waktu produksi secara drastis dan menginspirasi sistem pabrik otomatis modern.',
+    description_en: 'Building cars used to be slow because workers built them in one spot. In 1913, Henry Ford introduced the moving assembly line. Rigs moved on conveyor belts past stationary workers, making manufacturing fast and affordable. This pioneered today\'s automated factories.',
     icon_name: 'icon_america_assembly_line_industry.png'
   },
   {
@@ -71,8 +71,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Pemanggang Gelombang Mikro (Microwave)',
     title_en: 'Microwave Oven',
-    description_id: 'Tahukah kamu kalau penghangat makanan instan di dapurmu ini ditemukan secara tidak sengaja? Saat Om Percy Spencer sedang meneliti radar militer di tahun 1945, dia heran karena cokelat di dalam saku celananya tiba-tiba meleleh! Dari sana, dia sadar kalau gelombang radio tak terlihat (mikro) bisa membuat molekul air di dalam makanan bergerak sangat cepat dan menghasilkan panas secara instan. Penemuan ini bikin kita bisa menghangatkan pizza dingin atau memasak popcorn hanya dalam waktu semenit!',
-    description_en: 'Did you know your kitchen microwave was invented by accident? In 1945, while Percy Spencer was working on military radars, he noticed a chocolate bar in his pocket had suddenly melted! He realized that invisible radio waves could make water particles inside food wiggle super fast, creating instant heat. That is how we got the quick microwave oven to pop our popcorn in seconds!',
+    description_id: 'Alat penghangat makanan instan di dapur ini lahir dari ketidaksengajaan. Ketika Percy Spencer sedang meneliti radar militer pada tahun 1945, sebatang cokelat di saku celananya meleleh karena pancaran alat tersebut. Kejadian ini mengungkap fakta bahwa gelombang radio mikro dapat menggetarkan partikel air dalam makanan dengan sangat cepat hingga menghasilkan panas. Penemuan ini memicu terciptanya oven microwave untuk mematangkan makanan dalam hitungan menit.',
+    description_en: 'The kitchen microwave was created by accident. In 1945, Percy Spencer noticed a chocolate bar in his pocket melted while he worked on military radars. He discovered that invisible micro waves wiggle water particles inside food to create heat, leading to the fast ovens we use today.',
     icon_name: 'icon_america_microwave_solar.png'
   },
   {
@@ -80,8 +80,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Komputer Elektronik ENIAC',
     title_en: 'ENIAC Giant Computer',
-    description_id: 'Komputer pertamamu di rumah mungkin berupa laptop tipis yang muat masuk tas sekolah. Tapi tahukah kamu kalau komputer elektronik digital pertama di dunia yang bernama ENIAC ukurannya sebesar ruang kelas sekolahmu? Dibuat pada tahun 1943, komputer raksasa ini beratnya mencapai 27 ton dan dipenuhi ribuan kabel serta saklar lampu raksasa. Meskipun sangat besar, ENIAC adalah pahlawan yang membuktikan bahwa mesin elektronik bisa menghitung angka rumit ribuan kali lebih cepat daripada manusia!',
-    description_en: 'Your computer today might be a slim laptop, but the world\'s first general-purpose electronic computer, ENIAC, was as big as a whole classroom! Built in 1943, this 27-ton giant was filled with messy cables and glowing tubes. Even though it was massive, ENIAC proved that electronic machines could calculate math problems thousands of times faster than humans!',
+    description_id: 'Komputer pertama di dunia itu nggak bisa dipindah-pindah karena gedenya minta ampun, sampai harus pakai satu ruangan kelas penuh hanya untuk naruh mesinnya! Bernama ENIAC dan dibangun pada tahun 1943, komputer raksasa ini memiliki berat 27 ton serta dipenuhi ribuan kabel meliuk-liuk. Mesin ini membuktikan bahwa sistem elektronik mampu menghitung operasi matematika rumit jauh lebih cepat dibanding kecepatan otak manusia.',
+    description_en: 'While computers today are small, the first computer, ENIAC, was as large as a classroom. Built in 1943, this 27-ton machine was filled with vacuum tubes and cables. It proved that electronic circuits could calculate math problems thousands of times faster than humans.',
     icon_name: 'icon_america_eniac_pi.png'
   },
   {
@@ -89,8 +89,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Saklar Elektronik Transistor',
     title_en: 'The Transistor',
-    description_id: 'Pahlawan tanpa tanda jasa di dalam dunia gadget! Transistor adalah komponen elektronik super kecil yang diciptakan di lab Bell pada tahun 1947. Fungsinya mirip seperti saklar lampu otomatis yang mengatur aliran listrik di dalam mesin. Sebelum ada transistor, komputer berukuran raksasa dan gampang panas. Berkat transistor, komputer bisa menyusut menjadi kecil, dingin, cepat, dan membuat miliaran saklar pintar bisa masuk ke dalam smartphone kecil yang ada di genggaman tanganmu sekarang!',
-    description_en: 'The ultimate tiny hero inside all of our gadgets! Invented in 1947, a transistor acts like a microscopic light switch that turns electrical signals on and off. Before transistors, computers were giant and got hot quickly. Because of this tiny invention, computers shrank, became incredibly fast, and allowed billions of smart switches to fit inside your phone!',
+    description_id: 'Komponen kecil penyusun gadget modern ini bekerja layaknya saklar lampu otomatis yang menyalurkan aliran listrik di dalam sirkuit. Diciptakan di Laboratorium Bell pada tahun 1947, transistor berhasil menggantikan tabung kaca besar yang membuat komputer kuno berukuran raksasa dan cepat panas. Penemuan transistor memungkinkan sirkuit komputer menyusut hingga miliaran di antaranya bisa masuk ke dalam ponsel pintar saat ini.',
+    description_en: 'A transistor is a tiny component that acts like a micro light switch turning electrical currents on and off. Developed in 1947, it replaced hot glass tubes, letting computers become small, fast, and fit into modern mobile phones.',
     icon_name: 'icon_america_transistor_pi.png'
   },
   {
@@ -98,8 +98,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Otak Mikro (Microchip)',
     title_en: 'Microchip / Integrated Circuit',
-    description_id: 'Jika transistor adalah saklar lampunya, maka Microchip adalah tumpukan miliaran saklar yang disatukan di atas sekeping papan silikon seukuran kuku jarimu! Ditemukan oleh Om Jack Kilby dan Robert Noyce pada tahun 1958, otak mikro ini membuat miliaran komponen elektronik bisa mengobrol dan bekerja sama di ruang yang sangat sempit. Tanpa adanya penemuan microchip ini, game console seperti Nintendo Switch, PS5, laptop, dan smartphone tidak akan pernah bisa dibuat!',
-    description_en: 'If transistors are tiny switches, a microchip is a city of billions of those switches packed onto a silicon board the size of your fingernail! Co-invented in 1958, the microchip allowed complex electronics to work together in a tiny space. Without this brainy chip, high-tech devices like the Nintendo Switch, PS5, and smartphones wouldn\'t exist!',
+    description_id: 'Papan sirkuit mikro seukuran kuku jari ini menyatukan jutaan sirkuit kecil di atas kepingan silikon tipis. Dibuat oleh Jack Kilby dan Robert Noyce pada tahun 1958, microchip bertindak sebagai pusat pemrosesan terpadu yang memadatkan ruang kelistrikan. Kehadiran microchip menjadi fondasi penting bagi pembuatan konsol game, laptop, hingga telepon pintar modern.',
+    description_en: 'A microchip fits millions of sirkuit switches onto a silicon piece the size of a fingernail. Developed in 1958, this chip allows electronics to work together in small spaces, making modern laptops and smartphones possible.',
     icon_name: 'icon_america_microchip_pi.png'
   },
   {
@@ -107,8 +107,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Tetikus Komputer (Mouse)',
     title_en: 'Computer Mouse',
-    description_id: 'Bayangkan kamu sedang mabar game Minecraft atau Roblox, tapi kamu dilarang menyentuh layar dan tidak punya mouse. Ribet banget, kan? Dulu, sebelum ada mouse, orang-orang terpaksa mengetik barisan teks perintah kaku hanya untuk memindahkan sesuatu di layar komputer. Om Douglas Engelbart memecahkan masalah ini pada tahun 1964 dengan membuat boks kayu kecil dengan kabel menjulur di belakangnya yang mirip ekor tikus. Kita jadi bisa menunjuk dan mengeklik layar dengan sangat seru!',
-    description_en: 'Imagine playing Minecraft without a mouse—you would have to type boring text codes just to look around! In 1964, Douglas Engelbart built the first computer mouse out of wood, with a wire sticking out the back that looked like a mouse\'s tail. It allowed users to point, click, and navigate on screens easily, changing how we play and work forever!',
+    description_id: 'Mengoperasikan komputer sebelum mouse ditemukan mewajibkan penggunanya mengetik baris teks perintah yang rumit hanya untuk menggeser kursor. Douglas Engelbart memecahkan kendala ini pada tahun 1964 dengan merakit kotak kayu kecil berperekat kabel di bagian belakang yang tampak seperti ekor tikus. Penemuan ini mempermudah manusia menunjuk, menggeser, dan mengeklik berbagai objek di layar secara langsung.',
+    description_en: 'Before the computer mouse, users typed text codes to move around screens. In 1964, Douglas Engelbart built a wooden box with a wire resembling a mouse tail. It allowed users to click and navigate screens, simplifying how we interact with computers.',
     icon_name: 'icon_america_mouse_pi.png'
   },
   {
@@ -116,8 +116,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Protokol Bahasa Internet (TCP/IP)',
     title_en: 'TCP/IP Internet Protocol',
-    description_id: 'Ketika kamu mengirim chat ke temanmu atau mabar game online, bagaimana komputer-komputer itu bisa saling mengirim data tanpa tertukar atau hilang di jalan? Nah, semua itu karena TCP/IP yang diciptakan pada tahun 1974. TCP/IP adalah \'buku aturan\' bahasa universal yang menyatukan seluruh komputer di bumi agar bisa saling bertukar paket data secara tertib dan aman tanpa tersesat. Inilah aturan rahasia yang melahirkan jaringan Internet global!',
-    description_en: 'How do computers, phones, and game consoles all over the world talk to each other without getting confused? They use TCP/IP! Created in 1974, TCP/IP is like a universal rulebook that guides internet data packets. It makes sure your game commands or messages travel across networks safely and arrive at the right place without getting lost. It is the backbone of the Internet!',
+    description_id: 'Pertukaran pesan teks dan game multipemain antarkomputer memerlukan jalur komunikasi teratur agar data tidak tersesat di tengah jalan. Protokol TCP/IP yang dirilis pada tahun 1974 menetapkan aturan bahasa universal yang menyatukan seluruh jaringan komputer di dunia. Berkat tata tertib transfer data ini, informasi dikirim dalam bentuk paket-paket kecil secara aman dan melahirkan internet global.',
+    description_en: 'Computers and networks communicate without confusion using TCP/IP. Developed in 1974, TCP/IP is a universal rulebook for routing data packages across networks safely. It forms the core foundation of our global Internet.',
     icon_name: 'icon_america_tcpip_wifi.png'
   },
   {
@@ -125,8 +125,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Peta Satelit Global (GPS)',
     title_en: 'Global Positioning System (GPS)',
-    description_id: 'Bagaimana bisa Gojek, Grab, atau Google Maps tahu di mana posisi jemputanmu secara akurat? Jawabannya adalah GPS! Sistem navigasi luar biasa ini memanfaatkan bantuan 24 satelit canggih yang berputar di atas langit bumi untuk memantulkan sinyal koordinat. Berkat GPS yang diluncurkan pada tahun 1973 ini, semua HP, mobil, pesawat, kapal laut, hingga drone di seluruh dunia bisa tahu persis di mana posisi mereka berada agar tidak tersesat!',
-    description_en: 'Ever wondered how food delivery drivers or online maps find your house? They use GPS! This amazing navigation system uses a constellation of satellites orbiting the Earth to beam coordinate signals. Launched in 1973, GPS helps smartphones, cars, planes, and drones calculate exactly where they are on our planet so they can navigate anywhere!',
+    description_id: 'Aplikasi peta digital dan layanan ojek online dapat melacak posisi penjemputan dengan akurat berkat keberadaan GPS (Global Positioning System). Dirancang mulai tahun 1973, sistem navigasi ini menggunakan konstelasi puluhan satelit di ruang angkasa untuk memancarkan sinyal penentu koordinat. Sinyal tersebut diterima oleh gawai di bumi untuk menghitung letak lintang dan bujur secara waktu nyata.',
+    description_en: 'Maps and delivery apps find locations using GPS. Developed starting in 1973, this navigation system uses satellites orbiting Earth to beam coordinates. This helps phones and vehicles calculate their exact position anywhere on the planet.',
     icon_name: 'icon_america_gps_rocket.png'
   },
   {
@@ -134,8 +134,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Telepon Genggam Pertama',
     title_en: 'Handheld Mobile Phone',
-    description_id: 'Temui \'kakek buyut\' legendaris dari smartphone tipismu! Diciptakan oleh Om Martin Cooper dari Motorola pada tahun 1973, HP pertama di dunia ini bentuknya sangat bongsor, seberat batu bata, dan baterainya sangat cepat habis. Harganya pun setara harga motor baru! Meskipun sangat besar dan kaku, penemuan ini adalah pahlawan yang berhasil membuktikan kepada dunia kalau manusia bisa menelepon sambil berjalan-jalan bebas tanpa kabel!',
-    description_en: 'Meet the legendary grandfather of your modern smartphone! Invented in 1973 by Martin Cooper at Motorola, the first mobile phone was as big and heavy as a clay brick. It had no color screen and could only be used for calling. However, it was a heroic step that proved humans could talk on the go without being plugged into a wall!',
+    description_id: 'Ponsel genggam pertama di dunia memiliki bentuk tebal seberat batu bata dengan daya tahan baterai yang sangat singkat. Dibuat oleh Martin Cooper dari Motorola pada tahun 1973, alat komunikasi ini awalnya dijual dengan harga yang sangat tinggi. Meskipun berat dan berukuran besar, penemuan ini membuktikan bahwa percakapan suara dapat dilakukan sambil berjalan bebas tanpa hambatan kabel.',
+    description_en: 'The first mobile phone, built by Martin Cooper in 1973, was as heavy as a brick and had short battery life. Despite its size and high cost, it proved that people could make phone calls on the move without cables.',
     icon_name: 'icon_america_mobile_phone_iot.png'
   },
   {
@@ -143,8 +143,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Kamera Digital Pertama',
     title_en: 'The First Digital Camera',
-    description_id: 'Anak zaman dulu kalau berfoto harus menggunakan kamera berisi gulungan pita film hitam yang sangat sensitif. Jika salah pencet, fotonya bisa rusak dan hangus! Pada tahun 1975, Om Steven Sasson dari Kodak mengubah hal itu dengan menciptakan kamera digital pertama di dunia. Kamera ini menangkap gambar lalu mengubahnya menjadi kode biner 0 dan 1 untuk disimpan secara elektronik di memori kaset. Inilah awal mula lahirnya kamera HP modern tempat kamu berswafoto!',
-    description_en: 'Long ago, cameras used rolls of plastic film to take photos, and you had to wait days to print them. In 1975, Steven Sasson at Kodak built the first digital camera. It captured light and turned images into electronic data (0s and 1s) stored on a cassette tape. This smart invention laid the foundation for the digital cameras and selfie cameras inside our phones!',
+    description_id: 'Pembuatan foto di masa lampau mengandalkan kamera berisi gulungan pita film sensitif cahaya yang rentan rusak jika terpapar sinar secara tidak sengaja. Steven Sasson merancang kamera digital pertama pada tahun 1975 di laboratorium Kodak. Kamera ini menangkap pantulan cahaya dan menyimpannya dalam bentuk data biner elektronik pada pita kaset, melahirkan cikal bakal sensor kamera yang dipasang di ponsel pintar.',
+    description_en: 'Before digital photography, cameras used rolls of film that took days to develop. In 1975, Steven Sasson built the first digital camera. It converted light into binary data stored on cassette tape, pioneering the cameras in our smartphones today.',
     icon_name: 'icon_america_digital_camera_pi.png'
   },
   {
@@ -152,8 +152,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Komputer Portabel IBM 5100',
     title_en: 'IBM 5100 Portable Computer',
-    description_id: 'Pada tahun 1975, sebuah komputer biasanya berukuran sebesar meja makan raksasa yang tidak bisa digeser. Tapi, perusahaan IBM membuat gebrakan dengan meluncurkan IBM 5100, komputer portabel pertama di dunia! Meskipun beratnya mencapai 22 kilogram (hampir seberat satu karung beras!), komputer ini sudah dilengkapi layar monitor kecil, keyboard, dan pembaca data terintegrasi. Komputer ini membuktikan kalau komputer masa depan bisa dilipat dan dibawa bepergian ke mana saja!',
-    description_en: 'In 1975, computers were massive machines locked in offices. But IBM changed that by introducing the IBM 5100, the first portable personal computer! Even though it weighed 22 kilograms—as heavy as a big bag of rice!—it had a built-in screen, keyboard, and tape reader. It proved that computers could become transportable, leading to modern laptops!',
+    description_id: 'Saat komputer di tahun 1970-an masih berukuran sebesar meja makan dan tidak dapat dipindahkan, IBM meluncurkan seri IBM 5100 pada tahun 1975 sebagai komputer portabel pertama. Meskipun berbobot 22 kilogram, perangkat ini menyatukan layar monitor berukuran kecil, papan ketik, dan pembaca data pita dalam satu wadah ringkas. Inovasi ini memicu pengembangan komputer jinjing dan laptop.',
+    description_en: 'While 1970s computers were giant machines, IBM launched the portable IBM 5100 in 1975. Weighing 22 kilograms, it put a screen, keyboard, and drive in a single unit, proving that computers could travel and leading to laptops.',
     icon_name: 'icon_america_ibm5100_pi.png'
   },
   {
@@ -161,8 +161,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Era Baru Smartphone (iPhone)',
     title_en: 'iPhone Smartphone Milestone',
-    description_id: 'Pada tahun 2007, Om Steve Jobs naik ke atas panggung dan memamerkan sebuah kotak kaca tipis ajaib yang mengubah sejarah dunia gadget selamanya: iPhone! Sebelum ada iPhone, HP lama biasanya memiliki banyak tombol plastik kecil yang kaku. iPhone menggabungkan pemutar musik, browser internet, telepon, dan layar sentuh kapasitif penuh tanpa tombol fisik. Benda di saku celanamu ini adalah awal mula lahirnya aplikasi-aplikasi modern di dunia!',
-    description_en: 'In 2007, Steve Jobs introduced a sleek glass device that changed the world forever: the iPhone! Before the iPhone, phones had clunky plastic buttons. The iPhone combined a phone, an iPod music player, and internet browser into one device with a brilliant multi-touch screen. It popularized the modern smartphone style that we use every single day!',
+    description_id: 'Peluncuran iPhone pada tahun 2007 oleh Steve Jobs mengubah arah perkembangan perangkat telekomunikasi secara global. Ponsel di masa itu umumnya mengandalkan tombol plastik fisik yang kaku untuk mengetik teks. iPhone merombak desain tersebut dengan menggabungkan pemutar musik, penjelajah web, dan telepon ke dalam satu layar kaca sentuh kapasitif utuh tanpa tombol mekanis, memicu lahirnya era aplikasi seluler modern.',
+    description_en: 'The launch of the iPhone in 2007 changed smartphones forever. Steve Jobs replaced physical buttons with a responsive multi-touch screen, combining a music player, phone, and internet browser. This started the modern app-driven ecosystem we use daily.',
     icon_name: 'icon_america_iphone_iot.png'
   },
   {
@@ -170,8 +170,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Toko Aplikasi Ponsel (App Store)',
     title_en: 'Mobile App Store',
-    description_id: 'Pikirkan HP-mu tanpa ada aplikasi game, peta, chat, atau aplikasi edukasi TechGo ini. Pasti sangat sepi dan membosankan, kan? Nah, di tahun 2008, diluncurkanlah App Store, sebuah pasar digital raksasa tempat berkumpulnya ratusan aplikasi canggih buatan para developer kreatif di seluruh dunia. Berkat App Store, kita bisa mengunduh game, media sosial, hingga aplikasi belajar sekolah secara aman dan mudah hanya dengan satu ketukan jari!',
-    description_en: 'What is a smartphone without games, chat tools, or learning apps? Just a boring phone! In 2008, Apple launched the App Store, a safe digital marketplace where anyone could download software made by creative developers. It started a massive global wave of mobile learning, mobile gaming, and digital tools we love today!',
+    description_id: 'Keberadaan pasar digital App Store sejak tahun 2008 mempermudah pemilik ponsel pintar mengunduh berbagai program buatan pengembang independen di seluruh dunia. Tanpa wadah terpusat ini, penyebaran game, media sosial, dan platform edukasi digital akan berjalan lambat dan berisiko. Layanan ini memungkinkan sirkulasi aplikasi dilakukan secara aman lewat satu ketukan layar.',
+    description_en: 'The launch of the App Store in 2008 created a central, secure platform for developers to distribute software. It allowed users to download gaming, social, and educational tools safely, starting the mobile app revolution.',
     icon_name: 'icon_america_appstore_iot.png'
   },
   {
@@ -179,8 +179,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Penyejuk Udara Modern (AC)',
     title_en: 'Modern Air Conditioning (AC)',
-    description_id: 'Saat hari sedang panas terik di luar rumah dan kamu ingin mabar game dengan sejuk di dalam kamar, pahlawan penyelamatmu adalah AC! Mesin penyejuk udara modern pertama di dunia ini diciptakan oleh Om Willis Carrier pada tahun 1902. AC bertugas menarik udara panas yang pengap, menyaring debu kotor, menurunkan kelembapan, lalu menyemburkan kembali udara dingin yang sangat bersih dan nyaman untuk pernapasan manusia serta menjaga mesin komputer agar tidak kepanasan!',
-    description_en: 'On hot, sweaty days, nothing feels better than stepping into a cool, air-conditioned room! In 1902, Willis Carrier invented the first modern air conditioner. Instead of just blowing air, it controlled temperature and humidity, making rooms comfortable for people and keeping giant factory machines or computers cool enough to work safely!',
+    description_id: 'Willis Carrier menciptakan mesin penyejuk udara modern pertama pada tahun 1902 untuk mengatur kelembapan dan temperatur ruangan di pabrik cetak. Mesin AC bekerja dengan menyedot udara hangat, melewatkannya ke sirkuit pendingin, menyaring partikel debu, lalu mengembuskannya kembali menjadi udara sejuk. Penemuan ini membuat gedung perkantoran, rumah tinggal, serta ruang server komputer tetap dingin dan nyaman.',
+    description_en: 'In 1902, Willis Carrier designed the first modern air conditioner to regulate humidity and temperature. The system cooled indoor air and filtered dust, making homes comfortable and keeping industrial equipment or server rooms from overheating.',
     icon_name: 'icon_america_ac_industry.png'
   },
   {
@@ -188,8 +188,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Televisi Elektronik Pertama',
     title_en: 'Electronic Television',
-    description_id: 'Dulu, televisi awal bekerja menggunakan piringan kayu berputar mekanik yang gambarnya sangat buram dan berkedip kasar. Pada tahun 1927, seorang anak muda jenius bernama Kak Philo Farnsworth berhasil menciptakan sistem TV elektronik murni. TV ini menggunakan tabung pemancar khusus untuk menembakkan berkas elektron ke layar kaca dengan kecepatan tinggi, menghasilkan gambar bergerak yang sangat jernih. Inilah awal mula lahirnya Smart TV, Netflix, dan layar video streaming di HP-mu!',
-    description_en: 'Early TVs used spinning mechanical wheels that made blurry, flickering pictures. In 1927, a young genius named Philo Farnsworth changed entertainment by creating the first all-electronic television. It used a special tube to shoot beams of electrons at a glass screen, creating sharp, moving images. This paved the way for color TVs, smart TVs, and video streaming!',
+    description_id: 'Philo Farnsworth merancang sistem televisi elektronik pertama pada tahun 1927, menggantikan TV mekanik kuno yang menggunakan piringan berputar dengan gambar buram. Sistem baru ini memakai tabung pemancar berkas elektron untuk menggambar garis-garis gambar di layar kaca berkecepatan tinggi. Teknologi pemancaran sinyal gambar ini menjadi basis bagi pengembangan siaran televisi jernih dan streaming video saat ini.',
+    description_en: 'Philo Farnsworth developed the first fully electronic television system in 1927. It used electron beams to paint sharp, moving images on a screen, replacing blurry mechanical spinning discs and laying the foundation for modern television broadcasting.',
     icon_name: 'icon_america_tv_pi.png'
   },
   {
@@ -197,8 +197,8 @@ const innovations = [
     country_id: 7,
     title_id: 'Pesawat Tanpa Pilot (Drone)',
     title_en: 'Drone / UAV Development',
-    description_id: 'Bayangkan ada sebuah helikopter mini terbang di atas langit kamarmu sambil merekam video indah secara langsung tanpa ada pilot di dalamnya! Benda itu namanya Drone atau UAV (Uncrewed Aerial Vehicle). Teknologi ini mulai dirintis sejak tahun 1950-an untuk kebutuhan patroli pemantauan wilayah bahaya. Sekarang, berkat drone, kita bisa mengambil foto pemandangan sinematik yang megah dari langit, menyiram pupuk tanaman sawah secara otomatis, hingga mengantar paket belanjaan dengan cepat!',
-    description_en: 'Imagine a mini helicopter flying outside your window, filming beautiful videos, with no pilot sitting inside! That is a drone or UAV (Uncrewed Aerial Vehicle). Developed starting in the 1950s for remote surveillance, drones today are used for taking cinematic videos from the sky, monitoring forests, spraying crops, and even delivering packages!',
+    description_id: 'Pesawat tanpa awak atau UAV (Uncrewed Aerial Vehicle), yang kini populer disebut drone, mulai dirintis perkembangannya sejak pertengahan abad ke-20 untuk keperluan pemantauan jarak jauh. Drone memanfaatkan sirkuit giroskop digital dan motor listrik multi-baling-baling agar dapat melayang stabil di udara tanpa kemudi fisik di kabin. Penggunaan drone kini meluas untuk fotografi udara, pemantauan lahan pertanian, hingga pengiriman logistik darurat.',
+    description_en: 'Uncrewed Aerial Vehicles (UAVs), known as drones, were developed mid-20th century for surveillance. Drones use digital gyroscopes and electric motors to hover steadily without an onboard pilot. Today, they are widely used for aerial photography, monitoring crops, and emergency deliveries.',
     icon_name: 'icon_america_drone_plane.png'
   }
 ];
