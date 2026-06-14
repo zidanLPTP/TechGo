@@ -10,7 +10,8 @@ const dictionary = {
       map: "Peta Inovasi",
       profile: "Profilku",
       login: "Masuk",
-      logout: "Keluar"
+      logout: "Keluar",
+      loginGoogle: "Masuk dengan Google"
     },
     hero: {
       tagline: "Petualangan Teknologi Seru!",
@@ -32,7 +33,14 @@ const dictionary = {
       googlePlaceholder: "Masukkan email Google...",
       loginAction: "Ayo Mulai!",
       cancelAction: "Kembali",
-      validationName: "Tolong tulis nama panggilanmu dulu ya!"
+      validationName: "Tolong tulis nama panggilanmu dulu ya!",
+      chooseAccount: "Pilih akun",
+      continueTo: "untuk melanjutkan ke TechGo",
+      useAnother: "Gunakan akun lain",
+      googleDisclaimer: "Untuk melanjutkan, Google akan membagikan nama, alamat email, preferensi bahasa, dan foto profil Anda dengan TechGo.",
+      addGoogleAccount: "Tambah Akun Google",
+      back: "Kembali",
+      guestInfo: "* Info: Progres belajar dan hasil kuis tidak disimpan permanen."
     },
     footer: {
       copyright: "© 2026 TechGo - Platform Pembelajaran Edukatif Interaktif Anak."
@@ -64,7 +72,8 @@ const dictionary = {
       map: "Innovation Map",
       profile: "My Profile",
       login: "Login",
-      logout: "Logout"
+      logout: "Logout",
+      loginGoogle: "Sign in with Google"
     },
     hero: {
       tagline: "Exciting Tech Adventures!",
@@ -86,7 +95,14 @@ const dictionary = {
       googlePlaceholder: "Enter your Google email...",
       loginAction: "Let's Go!",
       cancelAction: "Cancel",
-      validationName: "Please write your nickname first!"
+      validationName: "Please write your nickname first!",
+      chooseAccount: "Choose an account",
+      continueTo: "to continue to TechGo",
+      useAnother: "Use another account",
+      googleDisclaimer: "To continue, Google will share your name, email address, language preference, and profile picture with TechGo.",
+      addGoogleAccount: "Add Google Account",
+      back: "Back",
+      guestInfo: "* Note: Learning progress and quiz scores will not be saved permanently."
     },
     footer: {
       copyright: "© 2026 TechGo - Interactive Playful EdTech Learning Platform."
@@ -100,7 +116,7 @@ const dictionary = {
       statCountries: "Countries Explored",
       statAvgScore: "Average Score",
       statLevel: "Explorer Rank",
-      badgesTitle: "Technology Badge Collection",
+      badgesTitle: "Interactive Badge Collection",
       lockedBadge: "Locked",
       unlockHint: "Complete the quiz to unlock this badge!",
       highestScore: "Highest Score:",

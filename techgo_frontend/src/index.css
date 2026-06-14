@@ -143,12 +143,6 @@ h1, h2, h3, h4, h5, h6 {
   will-change: transform, opacity;
   transform: translate3d(0, 0, 0);
 }
-.animate-eye-blink {
-  animation: eye-blink 4s ease-in-out infinite;
-  transform-box: fill-box;
-  transform-origin: center;
-  will-change: transform;
-}
 .animate-spin-slow {
   animation: spin 25s linear infinite;
   will-change: transform;
@@ -181,10 +175,6 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes twinkle {
   0%, 100% { opacity: 0.25; transform: scale(0.85); }
   50% { opacity: 1; transform: scale(1.15); }
-}
-@keyframes eye-blink {
-  0%, 90%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.15); }
 }
 
 /* ─── ZZZ Float: naik dari bawah kanan ke atas, lalu fade out ────────────── */

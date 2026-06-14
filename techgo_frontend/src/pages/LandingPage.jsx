@@ -130,12 +130,24 @@ export default function LandingPage() {
     const newClickCount = clickCount + 1;
     setClickCount(newClickCount);
 
-    if (newClickCount <= 3) {
-      setEmotion('happy');
+    if (themeMode === 'malam') {
+      // Malam: tidak bisa diganggu (tetap neutral/tidur) saat klik biasa, tapi jika dispam > 3 kali akan marah
+      if (newClickCount > 3) {
+        setEmotion('angry');
+        setIsShaking(true);
+        setTimeout(() => setIsShaking(false), 600);
+      } else {
+        setEmotion('neutral');
+      }
     } else {
-      setEmotion('angry');
-      setIsShaking(true);
-      setTimeout(() => setIsShaking(false), 600);
+      // Pagi/Siang/Sore: klik biasa happy, spam > 3 kali marah
+      if (newClickCount <= 3) {
+        setEmotion('happy');
+      } else {
+        setEmotion('angry');
+        setIsShaking(true);
+        setTimeout(() => setIsShaking(false), 600);
+      }
     }
 
     emotionTimeoutRef.current = setTimeout(() => {
@@ -192,37 +204,68 @@ export default function LandingPage() {
   // ─── RENDER HELPERS: EYES ─────────────────────────────────────────────────
   const eyeScaleY = isBlinking ? 0.1 : 1;
 
-  const renderNeutralEyes = (extra = null) => (
-    <g style={{ transform: `scaleY(${eyeScaleY})`, transformOrigin: '200px 200px', transition: 'transform 0.08s' }}>
-      <ellipse cx={160 + pupilOffset.x} cy={200 + pupilOffset.y} rx="9" ry="14" fill="#1E3A5F" />
-      <circle cx={156 + pupilOffset.x} cy={194 + pupilOffset.y} r="3" fill="#FFF" />
-      <circle cx={163 + pupilOffset.x} cy={207 + pupilOffset.y} r="1.5" fill="#FFF" opacity="0.5" />
-      <ellipse cx={240 + pupilOffset.x} cy={200 + pupilOffset.y} rx="9" ry="14" fill="#1E3A5F" />
-      <circle cx={236 + pupilOffset.x} cy={194 + pupilOffset.y} r="3" fill="#FFF" />
-      <circle cx={243 + pupilOffset.x} cy={207 + pupilOffset.y} r="1.5" fill="#FFF" opacity="0.5" />
-      {extra}
-    </g>
-  );
+  const renderDynamicEyes = (rx, ry, refY, refR, lidPathL = null, lidPathR = null, strokeW = 4.5, showEyeballs = true) => {
+    if (!showEyeballs) {
+      return (
+        <g>
+          {lidPathL && (
+            <path d={lidPathL} fill="none" stroke="#1E3A5F" strokeWidth={strokeW} strokeLinecap="round" />
+          )}
+          {lidPathR && (
+            <path d={lidPathR} fill="none" stroke="#1E3A5F" strokeWidth={strokeW} strokeLinecap="round" />
+          )}
+        </g>
+      );
+    }
+
+    return (
+      <g style={{ transform: `scaleY(${eyeScaleY})`, transformOrigin: '200px 200px', transition: 'transform 0.08s' }}>
+        {/* Eyeball Left */}
+        <ellipse cx={160 + pupilOffset.x} cy={200 + pupilOffset.y} rx={rx} ry={ry} fill="#1E3A5F" />
+        <circle cx={156 + pupilOffset.x} cy={refY + pupilOffset.y} r={refR} fill="#FFF" />
+        {ry > 10 && (
+          <circle cx={163 + pupilOffset.x} cy={207 + pupilOffset.y} r="1.5" fill="#FFF" opacity="0.5" />
+        )}
+        
+        {/* Eyeball Right */}
+        <ellipse cx={240 + pupilOffset.x} cy={200 + pupilOffset.y} rx={rx} ry={ry} fill="#1E3A5F" />
+        <circle cx={236 + pupilOffset.x} cy={refY + pupilOffset.y} r={refR} fill="#FFF" />
+        {ry > 10 && (
+          <circle cx={243 + pupilOffset.x} cy={207 + pupilOffset.y} r="1.5" fill="#FFF" opacity="0.5" />
+        )}
+
+        {/* Lids if any */}
+        {lidPathL && (
+          <path d={lidPathL} fill="none" stroke="#1E3A5F" strokeWidth={strokeW} strokeLinecap="round" />
+        )}
+        {lidPathR && (
+          <path d={lidPathR} fill="none" stroke="#1E3A5F" strokeWidth={strokeW} strokeLinecap="round" />
+        )}
+      </g>
+    );
+  };
 
   // ─── SVG BUMI MASKOT HELPER ───────────────────────────────────────────────
   const renderEarthFace = () => {
-    // Happy eyes (mata melengkung)
+    // Happy eyes (mata melengkung) dengan scale kedipan
     const happyEyes = (
-      <g>
+      <g style={{ transform: `scaleY(${eyeScaleY})`, transformOrigin: '200px 200px', transition: 'transform 0.08s' }}>
         <path d="M 145,200 Q 160,184 175,200" fill="none" stroke="#1E3A5F" strokeWidth="6" strokeLinecap="round" />
         <path d="M 225,200 Q 240,184 255,200" fill="none" stroke="#1E3A5F" strokeWidth="6" strokeLinecap="round" />
       </g>
     );
 
-    // Angry eyes dengan alis miring (kunci cy di 200)
+    // Angry eyes dengan alis miring (alis tetap diam, eyeball di dalam mengedip dengan scaleY)
     const angryEyes = (
       <g>
         <path d="M 143,179 L 172,188" stroke="#1E3A5F" strokeWidth="6" strokeLinecap="round" />
         <path d="M 257,179 L 228,188" stroke="#1E3A5F" strokeWidth="6" strokeLinecap="round" />
-        <circle cx="160" cy="200" r="12" fill="#1E3A5F" />
-        <circle cx="155" cy="195" r="3" fill="#FFF" />
-        <circle cx="240" cy="200" r="12" fill="#1E3A5F" />
-        <circle cx="235" cy="195" r="3" fill="#FFF" />
+        <g style={{ transform: `scaleY(${eyeScaleY})`, transformOrigin: '200px 200px', transition: 'transform 0.08s' }}>
+          <circle cx="160" cy="200" r="12" fill="#1E3A5F" />
+          <circle cx="155" cy="195" r="3" fill="#FFF" />
+          <circle cx="240" cy="200" r="12" fill="#1E3A5F" />
+          <circle cx="235" cy="195" r="3" fill="#FFF" />
+        </g>
       </g>
     );
 
@@ -258,13 +301,13 @@ export default function LandingPage() {
       </g>
     );
 
-    // NEUTRAL — sesuaikan per tema
+    // NEUTRAL — sesuaikan per tema dengan menggunakan renderDynamicEyes
     return (
       <>
         {cheeks}
         {themeMode === 'pagi' && (
           <>
-            {renderNeutralEyes()}
+            {renderDynamicEyes(9, 14, 194, 3)}
             {/* Senyum cerah pagi */}
             <path d="M 180,224 Q 200,244 220,224" fill="none" stroke="#1E3A5F" strokeWidth="5.5" strokeLinecap="round" />
           </>
@@ -274,7 +317,7 @@ export default function LandingPage() {
             {/* Alis sedikit berkeringat */}
             <path d="M 147,183 Q 160,180 173,185" fill="none" stroke="#1E3A5F" strokeWidth="3.5" strokeLinecap="round" />
             <path d="M 227,185 Q 240,180 253,183" fill="none" stroke="#1E3A5F" strokeWidth="3.5" strokeLinecap="round" />
-            {renderNeutralEyes()}
+            {renderDynamicEyes(9, 14, 194, 3)}
             {/* Mulut sedikit terbuka kepanasan */}
             <path d="M 186,228 L 214,228" stroke="#1E3A5F" strokeWidth="5.5" strokeLinecap="round" />
             <ellipse cx="200" cy="234" rx="8" ry="5" fill="#1E3A5F" opacity="0.4" />
@@ -282,26 +325,16 @@ export default function LandingPage() {
         )}
         {themeMode === 'sore' && (
           <>
-            {/* Mata sedikit lelah — setengah tutup */}
-            <path d="M 143,196 Q 160,207 177,196" fill="none" stroke="#1E3A5F" strokeWidth="4.5" strokeLinecap="round" />
-            <ellipse cx="160" cy="200" rx="9" ry="10" fill="#1E3A5F" />
-            <circle cx="156" cy="196" r="2.5" fill="#FFF" />
-            <path d="M 223,196 Q 240,207 257,196" fill="none" stroke="#1E3A5F" strokeWidth="4.5" strokeLinecap="round" />
-            <ellipse cx="240" cy="200" rx="9" ry="10" fill="#1E3A5F" />
-            <circle cx="236" cy="196" r="2.5" fill="#FFF" />
+            {/* Mata sedikit lelah — mata tertutup rileks, tanpa eyeball (anti melompat/overlap) */}
+            {renderDynamicEyes(9, 10, 196, 2.5, "M 143,198 Q 160,207 177,198", "M 223,198 Q 240,207 257,198", 4.5, false)}
             {/* Senyum lelah */}
             <path d="M 184,226 Q 200,236 216,226" fill="none" stroke="#1E3A5F" strokeWidth="4.5" strokeLinecap="round" />
           </>
         )}
         {themeMode === 'malam' && (
           <>
-            {/* Mata mengantuk separuh tutup (kunci cy di 200) */}
-            <path d="M 143,200 Q 160,192 177,200" fill="none" stroke="#1E3A5F" strokeWidth="5" strokeLinecap="round" />
-            <ellipse cx="160" cy="200" rx="9" ry="7" fill="#1E3A5F" />
-            <circle cx="156" cy="197" r="2" fill="#FFF" />
-            <path d="M 223,200 Q 240,192 257,200" fill="none" stroke="#1E3A5F" strokeWidth="5" strokeLinecap="round" />
-            <ellipse cx="240" cy="200" rx="9" ry="7" fill="#1E3A5F" />
-            <circle cx="236" cy="197" r="2" fill="#FFF" />
+            {/* Mata mengantuk tertutup pulas tidur, tanpa eyeball */}
+            {renderDynamicEyes(9, 7, 197, 2, "M 143,198 Q 160,207 177,198", "M 223,198 Q 240,207 257,198", 5, false)}
             {/* Mulut kantuk */}
             <ellipse cx="200" cy="230" rx="7" ry="5" fill="#1E3A5F" opacity="0.6" />
           </>
@@ -324,30 +357,6 @@ export default function LandingPage() {
     </div>
   );
 
-  // Topi tidur (malam, di luar bumi di atas)
-  const renderSleepingCap = () => (
-    <div
-      className="absolute pointer-events-none animate-scale-up"
-      style={{ top: '-14%', left: '50%', transform: 'translateX(-58%)', zIndex: 25, width: '55%' }}
-    >
-      <svg viewBox="0 0 220 130" className="w-full h-auto overflow-visible">
-        {/* Badan topi — runcing ke kiri atas */}
-        <path d="M 30,100 Q 60,60 90,30 Q 110,10 120,5 Q 115,20 105,40 Q 90,70 70,95 Z"
-          fill="#FF6B9B" stroke="#1E3A5F" strokeWidth="5" strokeLinejoin="round" />
-        {/* Brim putih bawah topi */}
-        <path d="M 10,95 Q 55,82 100,90 Q 120,93 130,97 Q 100,108 55,108 Q 25,108 10,95 Z"
-          fill="#FFFFFF" stroke="#1E3A5F" strokeWidth="4" />
-        {/* Strip dekorasi bintang kecil di brim */}
-        <circle cx="35" cy="99" r="3" fill="#FFD23F" />
-        <circle cx="60" cy="96" r="2.5" fill="#FFD23F" />
-        <circle cx="85" cy="97" r="3" fill="#FFD23F" />
-        <circle cx="110" cy="99" r="2" fill="#FFD23F" />
-        {/* Pompom bulat di ujung topi */}
-        <circle cx="122" cy="6" r="16" fill="#FFFFFF" stroke="#1E3A5F" strokeWidth="4" />
-        <circle cx="120" cy="4" r="5" fill="#FFB3CC" opacity="0.5" />
-      </svg>
-    </div>
-  );
 
   // Gelembung ZZZ (malam, di luar bumi kanan atas)
   const renderZzz = () => (
@@ -390,33 +399,41 @@ export default function LandingPage() {
           </div>
         )}
 
-        {/* SIANG: Matahari dengan wajah lucu */}
+        {/* SIANG: Matahari Songong & Sumber Panas */}
         {themeMode === 'siang' && (
-          <div className="absolute top-[80px] md:top-[100px] right-[5%] w-20 h-20 md:w-28 md:h-28 pointer-events-none select-none z-10 transform-gpu">
-            <div className="relative w-full h-full">
-              <div className="absolute inset-[10%] bg-brandOrange/40 rounded-full blur-md animate-pulse"></div>
-              <svg className="absolute inset-0 w-full h-full text-brandOrange animate-spin-slow" viewBox="0 0 100 100" fill="currentColor">
-                <path d="M 50,2 L 54,20 L 46,20 Z" /><path d="M 50,98 L 54,80 L 46,80 Z" />
-                <path d="M 2,50 L 20,54 L 20,46 Z" /><path d="M 98,50 L 80,54 L 80,46 Z" />
-                <path d="M 16,16 L 31,29 L 24,36 Z" /><path d="M 84,84 L 69,71 L 76,64 Z" />
-                <path d="M 16,84 L 31,71 L 24,64 Z" /><path d="M 84,16 L 69,29 L 76,36 Z" />
-              </svg>
-              <svg className="absolute inset-[16%] w-[68%] h-[68%] drop-shadow-md" viewBox="0 0 70 70">
-                <circle cx="35" cy="35" r="28" fill="#FFD23F" stroke="#1E3A5F" strokeWidth="3" />
-                {/* Kacamata hitam */}
-                <rect x="11" y="20" width="18" height="14" rx="6" fill="#1E3A5F" />
-                <rect x="41" y="20" width="18" height="14" rx="6" fill="#1E3A5F" />
-                <path d="M 29,27 L 41,27" stroke="#1E3A5F" strokeWidth="3" strokeLinecap="round" />
-                <path d="M 11,27 L 5,25" stroke="#1E3A5F" strokeWidth="2.5" strokeLinecap="round" />
-                <path d="M 59,27 L 65,25" stroke="#1E3A5F" strokeWidth="2.5" strokeLinecap="round" />
-                <circle cx="19" cy="27" r="4" fill="#334155" />
-                <circle cx="49" cy="27" r="4" fill="#334155" />
-                <circle cx="16" cy="25" r="1.5" fill="#FFF" opacity="0.7" />
-                <circle cx="46" cy="25" r="1.5" fill="#FFF" opacity="0.7" />
-                <path d="M 26,45 Q 35,52 44,45" fill="none" stroke="#1E3A5F" strokeWidth="3" strokeLinecap="round" />
-              </svg>
+          <>
+            {/* Efek sumber cahaya kuning radiasi panas matahari di pojok kanan atas */}
+            <div className="absolute top-[-50px] right-[-50px] w-96 h-96 bg-yellow-200/40 rounded-full blur-3xl pointer-events-none z-0 animate-pulse-slow"></div>
+            
+            <div className="absolute top-[80px] md:top-[100px] right-[5%] w-20 h-20 md:w-28 md:h-28 pointer-events-none select-none z-10 transform-gpu">
+              <div className="relative w-full h-full">
+                <div className="absolute inset-[10%] bg-brandOrange/40 rounded-full blur-md animate-pulse"></div>
+                <svg className="absolute inset-0 w-full h-full text-brandOrange animate-spin-slow" viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M 50,2 L 54,20 L 46,20 Z" /><path d="M 50,98 L 54,80 L 46,80 Z" />
+                  <path d="M 2,50 L 20,54 L 20,46 Z" /><path d="M 98,50 L 80,54 L 80,46 Z" />
+                  <path d="M 16,16 L 31,29 L 24,36 Z" /><path d="M 84,84 L 69,71 L 76,64 Z" />
+                  <path d="M 16,84 L 31,71 L 24,64 Z" /><path d="M 84,16 L 69,29 L 76,36 Z" />
+                </svg>
+                <svg className="absolute inset-[16%] w-[68%] h-[68%] drop-shadow-md" viewBox="0 0 70 70">
+                  <circle cx="35" cy="35" r="28" fill="#FFD23F" stroke="#1E3A5F" strokeWidth="3" />
+                  {/* Kacamata hitam songong/smug tilted 6 derajat */}
+                  <g transform="rotate(-6, 35, 35)">
+                    <rect x="11" y="20" width="18" height="14" rx="6" fill="#1E3A5F" />
+                    <rect x="41" y="20" width="18" height="14" rx="6" fill="#1E3A5F" />
+                    <path d="M 29,27 L 41,27" stroke="#1E3A5F" strokeWidth="3" strokeLinecap="round" />
+                    <path d="M 11,27 L 5,25" stroke="#1E3A5F" strokeWidth="2.5" strokeLinecap="round" />
+                    <path d="M 59,27 L 65,25" stroke="#1E3A5F" strokeWidth="2.5" strokeLinecap="round" />
+                    <circle cx="19" cy="27" r="4" fill="#334155" />
+                    <circle cx="49" cy="27" r="4" fill="#334155" />
+                    <circle cx="16" cy="25" r="1.5" fill="#FFF" opacity="0.7" />
+                    <circle cx="46" cy="25" r="1.5" fill="#FFF" opacity="0.7" />
+                  </g>
+                  {/* Senyum smirk miring yang songong */}
+                  <path d="M 24,45 Q 34,49 43,38" fill="none" stroke="#1E3A5F" strokeWidth="3.5" strokeLinecap="round" />
+                </svg>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* SORE: burung terbang */}
@@ -444,30 +461,80 @@ export default function LandingPage() {
           </div>
         )}
 
-        {/* MALAM: bintang berkelip */}
+        {/* MALAM: bintang berkelip & Bulan Tersenyum di Kanan Atas */}
         {themeMode === 'malam' && (
-          <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-80">
-            {[
-              { top: '10%', left: '12%', size: 'w-4 h-4', color: 'text-yellow-200', delay: '0.1s' },
-              { top: '16%', right: '16%', size: 'w-5 h-5', color: 'text-yellow-100', delay: '0.7s' },
-              { top: '42%', left: '6%', size: 'w-3 h-3', color: 'text-white', delay: '1.3s' },
-              { top: '32%', right: '28%', size: 'w-4 h-4', color: 'text-yellow-200', delay: '1.9s' },
-              { bottom: '22%', left: '22%', size: 'w-4 h-4', color: 'text-white', delay: '0.4s' },
-              { top: '55%', right: '8%', size: 'w-3 h-3', color: 'text-yellow-100', delay: '1.1s' },
-              { top: '68%', left: '35%', size: 'w-4 h-4', color: 'text-yellow-200', delay: '2.2s' },
-              { top: '20%', left: '50%', size: 'w-3 h-3', color: 'text-white', delay: '0.6s' },
-            ].map((star, i) => (
-              <svg key={i} className={`absolute ${star.size} ${star.color} animate-twinkle`}
-                style={{ top: star.top, left: star.left, right: star.right, bottom: star.bottom, animationDelay: star.delay }}
-                viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" />
+          <>
+            {/* Glow indigo-biru di belakang bulan agar lebih menonjol */}
+            <div className="absolute top-[-50px] right-[-50px] w-96 h-96 bg-indigo-500/25 rounded-full blur-3xl pointer-events-none z-0"></div>
+            
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-85">
+              {[
+                { top: '10%', left: '12%', size: 'w-4 h-4', color: 'text-yellow-200', delay: '0.1s' },
+                { top: '16%', right: '16%', size: 'w-5 h-5', color: 'text-yellow-100', delay: '0.7s' },
+                { top: '42%', left: '6%', size: 'w-3 h-3', color: 'text-white', delay: '1.3s' },
+                { top: '32%', right: '28%', size: 'w-4 h-4', color: 'text-yellow-200', delay: '1.9s' },
+                { bottom: '22%', left: '22%', size: 'w-4 h-4', color: 'text-white', delay: '0.4s' },
+                { top: '55%', right: '8%', size: 'w-3 h-3', color: 'text-yellow-100', delay: '1.1s' },
+                { top: '68%', left: '35%', size: 'w-4 h-4', color: 'text-yellow-200', delay: '2.2s' },
+                { top: '20%', left: '50%', size: 'w-3 h-3', color: 'text-white', delay: '0.6s' },
+              ].map((star, i) => (
+                <svg key={i} className={`absolute ${star.size} ${star.color} animate-twinkle`}
+                  style={{ top: star.top, left: star.left, right: star.right, bottom: star.bottom, animationDelay: star.delay }}
+                  viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" />
+                </svg>
+              ))}
+            </div>
+
+            {/* Bulan Purnama Kartun */}
+            <div className="absolute top-[80px] md:top-[100px] right-[5%] w-20 h-20 md:w-28 md:h-28 pointer-events-none select-none z-10 transform-gpu animate-float-slow">
+              <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_20px_rgba(226,232,240,0.5)]">
+                <defs>
+                  <clipPath id="moon-crater-boundary-grey">
+                    <circle cx="50" cy="50" r="38" />
+                  </clipPath>
+                </defs>
+                <circle 
+                  cx="50" 
+                  cy="50" 
+                  r="38" 
+                  fill="#E2E8F0" 
+                  stroke="#1E3A5F" 
+                  strokeWidth="3.5" 
+                />
+                <g clipPath="url(#moon-crater-boundary-grey)">
+                  {/* Pola gelap/dataran laut bulan */}
+                  <path d="M 25,25 Q 42,15 58,28 Q 45,55 20,42 Z" fill="#1E3A5F" opacity="0.06" />
+                  <path d="M 55,38 Q 75,32 82,58 Q 52,65 55,38 Z" fill="#1E3A5F" opacity="0.06" />
+                  <path d="M 30,65 Q 50,78 68,68 Q 50,85 30,65 Z" fill="#1E3A5F" opacity="0.05" />
+
+                  {/* 4. WARNA KAWAH: Diubah dari Kuning Tua (#FDE047) menjadi Abu-Abu Sedikit Gelap (#CBD5E1) */}
+                  <circle cx="50" cy="22" r="6" fill="#CBD5E1" stroke="#1E3A5F" strokeWidth="1.5" opacity="0.8" />
+                  <circle cx="26" cy="54" r="4.5" fill="#CBD5E1" stroke="#1E3A5F" strokeWidth="1.5" opacity="0.8" />
+                  <circle cx="74" cy="46" r="5" fill="#CBD5E1" stroke="#1E3A5F" strokeWidth="1.5" opacity="0.8" />
+                  <circle cx="64" cy="70" r="3.5" fill="#CBD5E1" strokeWidth="1.2" stroke="#1E3A5F" opacity="0.8" />
+                  <circle cx="36" cy="28" r="2.5" fill="#CBD5E1" strokeWidth="1" stroke="#1E3A5F" opacity="0.6" />
+                </g>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#1E3A5F" strokeWidth="3.5" />
+                <g>
+                  {/* Alis Naik Sebelah */}
+                  <path d="M 33,40 Q 38,36 42,39" fill="none" stroke="#1E3A5F" strokeWidth="2.2" strokeLinecap="round" />
+                  <path d="M 56,37 Q 60,34 65,38" fill="none" stroke="#1E3A5F" strokeWidth="2.2" strokeLinecap="round" />
+                  
+                  <ellipse cx="39" cy="48" rx="4.5" ry="6" fill="#1E3A5F" />
+                  <circle cx="37.5" cy="50" r="1.3" fill="#FFF" />
+                  <ellipse cx="59" cy="48" rx="4.5" ry="6" fill="#1E3A5F" />
+                  <circle cx="57.5" cy="50" r="1.3" fill="#FFF" />
+                  
+                  {/* Mulut Smirk Miring */}
+                  <path d="M 44,57 Q 52,61 54,55" fill="none" stroke="#1E3A5F" strokeWidth="3" strokeLinecap="round" />
+                  
+                  <ellipse cx="31" cy="54" rx="4" ry="2.5" fill="#FF6B9B" opacity="0.7" />
+                  <ellipse cx="65" cy="53" rx="4" ry="2.5" fill="#FF6B9B" opacity="0.7" />
+                </g>
               </svg>
-            ))}
-            {/* Bulan Sabit */}
-            <svg className="absolute top-[8%] left-[18%] w-14 h-14 text-yellow-100 opacity-60" viewBox="0 0 60 60">
-              <path d="M 42,10 A 22,22 0 1 1 10,42 A 16,16 0 1 0 42,10 Z" fill="currentColor" />
-            </svg>
-          </div>
+            </div>
+          </>
         )}
       </div>
 
@@ -491,7 +558,7 @@ export default function LandingPage() {
         </h1>
 
         {/* Maskot Bumi */}
-        <div className="flex justify-center items-center order-2 md:col-start-2 md:row-start-1 md:row-span-3 relative z-10">
+        <div className="flex justify-center items-center order-2 md:col-start-2 md:row-start-1 md:row-span-3 relative z-10 group">
 
           {/* Glow aura di belakang Bumi */}
           {themeMode === 'pagi' && (
@@ -508,7 +575,6 @@ export default function LandingPage() {
           <div className="relative" style={{ width: 'clamp(190px, 48vw, 384px)', height: 'clamp(190px, 48vw, 384px)' }}>
 
             {/* Ornamen Luar: bergantung tema & state */}
-            {themeMode === 'malam' && emotion === 'neutral' && renderSleepingCap()}
             {themeMode === 'malam' && emotion === 'neutral' && renderZzz()}
             {themeMode === 'siang' && emotion === 'neutral' && renderSweat()}
 
@@ -623,7 +689,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-brandNavy/45 backdrop-blur-md transition-opacity" onClick={() => setIsModalOpen(false)}></div>
           <div className="bg-white rounded-[2.5rem] p-8 max-w-md w-full z-20 shadow-2xl relative animate-float">
             <div className="text-center mb-8">
-              <h2 className="text-3xl text-brandNavy font-fredoka">Halo Sahabat TechGo!</h2>
+              <h2 className="text-3xl text-brandNavy font-fredoka">{t('modal.title')}</h2>
             </div>
 
             {loginMode === 'select' && (
@@ -635,13 +701,13 @@ export default function LandingPage() {
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                   </svg>
-                  <span>{language === 'en' ? 'Sign in with Google' : 'Masuk dengan Google'}</span>
+                  <span>{t('navbar.loginGoogle')}</span>
                 </button>
                 <button type="button" onClick={() => setLoginMode('guest')} className="w-full py-3.5 bg-brandRose hover:bg-brandRose/90 text-white rounded-2xl font-fredoka text-lg transition-playful shadow-md border-b-4 border-brandRose/70 text-center cursor-pointer">
-                  {language === 'en' ? 'Sign in as Guest' : 'Masuk sebagai Tamu'}
+                  {t('modal.guestBtn')}
                 </button>
                 <button type="button" onClick={() => setIsModalOpen(false)} className="mt-3 text-sm text-brandNavy/60 hover:text-brandNavy font-semibold text-center cursor-pointer">
-                  {language === 'en' ? 'Cancel' : 'Batal'}
+                  {t('modal.cancelAction')}
                 </button>
               </div>
             )}
@@ -657,8 +723,8 @@ export default function LandingPage() {
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800">{language === 'en' ? 'Choose an account' : 'Pilih akun'}</h3>
-                  <p className="text-xs text-gray-500 mt-1">{language === 'en' ? 'to continue to TechGo' : 'untuk melanjutkan ke TechGo'}</p>
+                  <h3 className="text-xl font-semibold text-gray-800">{t('modal.chooseAccount')}</h3>
+                  <p className="text-xs text-gray-500 mt-1">{t('modal.continueTo')}</p>
                 </div>
                 <div className="flex flex-col border border-gray-200 rounded-2xl overflow-hidden divide-y divide-gray-100">
                   <button type="button" onClick={() => { loginWithGoogle("zidan@gmail.com", "Zidan TechGo"); setIsModalOpen(false); navigate('/map'); }} className="flex items-center w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150 cursor-pointer">
@@ -681,14 +747,14 @@ export default function LandingPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                       </svg>
                     </div>
-                    <span>{language === 'en' ? 'Use another account' : 'Gunakan akun lain'}</span>
+                    <span>{t('modal.useAnother')}</span>
                   </button>
                 </div>
                 <p className="text-[10px] text-gray-400 leading-relaxed text-center px-2 mt-2">
-                  {language === 'en' ? 'To continue, Google will share your name, email address, language preference, and profile picture with TechGo.' : 'Untuk melanjutkan, Google akan membagikan nama, alamat email, preferensi bahasa, dan foto profil Anda dengan TechGo.'}
+                  {t('modal.googleDisclaimer')}
                 </p>
                 <button type="button" onClick={() => setLoginMode('select')} className="mt-2 text-sm text-brandNavy/60 hover:text-brandNavy font-semibold text-center cursor-pointer">
-                  {language === 'en' ? 'Back' : 'Kembali'}
+                  {t('modal.back')}
                 </button>
               </div>
             )}
@@ -696,16 +762,16 @@ export default function LandingPage() {
             {loginMode === 'google_input' && (
               <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
                 <div className="text-center mb-2">
-                  <h3 className="text-lg font-bold text-brandNavy">{language === 'en' ? 'Add Google Account' : 'Tambah Akun Google'}</h3>
+                  <h3 className="text-lg font-bold text-brandNavy">{t('modal.addGoogleAccount')}</h3>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder={language === 'en' ? 'Enter nickname...' : 'Tulis nama panggilanmu...'} className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40" maxLength={15} />
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={language === 'en' ? 'Enter Google email...' : 'Masukkan email Google...'} className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40" />
+                  <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder={t('modal.usernamePlaceholder')} className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40" maxLength={15} />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t('modal.googlePlaceholder')} className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40" />
                 </div>
                 {errorMsg && <p className="text-brandRose font-fredoka text-sm text-center">{errorMsg}</p>}
                 <div className="flex gap-4 mt-2">
-                  <button type="button" onClick={() => { setLoginMode('google_select'); setErrorMsg(''); }} className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-brandNavy rounded-2xl font-fredoka text-base transition-playful border-b-4 border-slate-300 cursor-pointer">{language === 'en' ? 'Back' : 'Kembali'}</button>
-                  <button type="submit" className="flex-1 py-3 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-2xl font-fredoka text-base transition-playful border-b-4 border-brandTeal/70 shadow-md cursor-pointer">{language === 'en' ? "Let's Go!" : 'Ayo Mulai!'}</button>
+                  <button type="button" onClick={() => { setLoginMode('google_select'); setErrorMsg(''); }} className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-brandNavy rounded-2xl font-fredoka text-base transition-playful border-b-4 border-slate-300 cursor-pointer">{t('modal.back')}</button>
+                  <button type="submit" className="flex-1 py-3 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-2xl font-fredoka text-base transition-playful border-b-4 border-brandTeal/70 shadow-md cursor-pointer">{t('modal.loginAction')}</button>
                 </div>
               </form>
             )}
@@ -713,15 +779,15 @@ export default function LandingPage() {
             {loginMode === 'guest' && (
               <form onSubmit={handleLoginSubmit} className="flex flex-col gap-5">
                 <div>
-                  <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder={language === 'en' ? 'Enter your nickname...' : 'Tulis nama panggilanmu...'} className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40" maxLength={15} />
+                  <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder={t('modal.usernamePlaceholder')} className="w-full px-5 py-3 bg-brandCream rounded-2xl border-4 border-brandBlue/20 focus:border-brandBlue outline-none text-brandNavy font-quicksand font-bold transition-playful placeholder:text-brandNavy/40" maxLength={15} />
                 </div>
                 {errorMsg && <p className="text-brandRose font-fredoka text-sm text-center">{errorMsg}</p>}
                 <div className="flex gap-4 mt-2">
-                  <button type="button" onClick={() => { setLoginMode('select'); setNickname(''); setErrorMsg(''); }} className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-brandNavy rounded-2xl font-fredoka text-base transition-playful border-b-4 border-slate-300 cursor-pointer">{language === 'en' ? 'Back' : 'Kembali'}</button>
-                  <button type="submit" className="flex-1 py-3 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-2xl font-fredoka text-base transition-playful border-b-4 border-brandTeal/70 shadow-md cursor-pointer">{language === 'en' ? "Let's Go!" : 'Ayo Mulai!'}</button>
+                  <button type="button" onClick={() => { setLoginMode('select'); setNickname(''); setErrorMsg(''); }} className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-brandNavy rounded-2xl font-fredoka text-base transition-playful border-b-4 border-slate-300 cursor-pointer">{t('modal.back')}</button>
+                  <button type="submit" className="flex-1 py-3 bg-brandTeal hover:bg-brandTeal/90 text-white rounded-2xl font-fredoka text-base transition-playful border-b-4 border-brandTeal/70 shadow-md cursor-pointer">{t('modal.loginAction')}</button>
                 </div>
                 <p className="text-[11px] text-brandNavy/60 text-center leading-normal mt-2 font-semibold">
-                  {language === 'en' ? '* Note: Learning progress and quiz scores will not be saved permanently.' : '* Info: Progres belajar dan hasil kuis tidak disimpan permanen.'}
+                  {t('modal.guestInfo')}
                 </p>
               </form>
             )}
