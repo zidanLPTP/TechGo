@@ -8,7 +8,7 @@ const innovations = [
     country_id: 7,
     title_id: 'Roket Reusable SpaceX Falcon 9',
     title_en: 'SpaceX Falcon 9 Reusable Rocket',
-    description_id: 'Peluncuran roket Falcon 9 menandai babak baru penjelajahan luar angkasa sebagai roket orbital pertama yang dapat kembali ke bumi dan mendarat tegak lurus secara mandiri. Teknologi pendaratan otomatis ini memangkas biaya penerbangan antariksa secara signifikan karena roket dapat dipakai berulang kali.',
+    description_id: 'Peluncuran roket Falcon 9 menandai babak baru penjelajahan luar angkasa sebagai roket orbital pertama yang dapat kembali ke bumi dan mendarat tegak lurus secara mandiri. Teknologi pendaratan otomatis yang super canggih ini bikin biaya terbang ke luar angkasa jadi jauh lebih murah, karena roketnya nggak dibuang ke laut tapi bisa dipakai berkali-kali mirip pesawat terbang biasa!',
     description_en: 'The Falcon 9 represents a breakthrough in space exploration as the first orbital rocket capable of returning to Earth and landing upright. This automated landing technology dramatically lowers the cost of space travel by enabling rocket reuse.',
     icon_name: 'icon_america_rocket.png'
   },
@@ -99,7 +99,7 @@ const innovations = [
     title_id: 'Otak Mikro (Microchip)',
     title_en: 'Microchip / Integrated Circuit',
     description_id: 'Papan sirkuit mikro seukuran kuku jari ini menyatukan jutaan sirkuit kecil di atas kepingan silikon tipis. Dibuat oleh Jack Kilby dan Robert Noyce pada tahun 1958, microchip bertindak sebagai pusat pemrosesan terpadu yang memadatkan ruang kelistrikan. Kehadiran microchip menjadi fondasi penting bagi pembuatan konsol game, laptop, hingga telepon pintar modern.',
-    description_en: 'A microchip fits millions of sirkuit switches onto a silicon piece the size of a fingernail. Developed in 1958, this chip allows electronics to work together in small spaces, making modern laptops and smartphones possible.',
+    description_en: 'A microchip fits millions of circuit switches onto a silicon piece the size of a fingernail. Developed in 1958, this chip allows electronics to work together in small spaces, making modern laptops and smartphones possible.',
     icon_name: 'icon_america_microchip_pi.png'
   },
   {
@@ -125,7 +125,7 @@ const innovations = [
     country_id: 7,
     title_id: 'Peta Satelit Global (GPS)',
     title_en: 'Global Positioning System (GPS)',
-    description_id: 'Aplikasi peta digital dan layanan ojek online dapat melacak posisi penjemputan dengan akurat berkat keberadaan GPS (Global Positioning System). Dirancang mulai tahun 1973, sistem navigasi ini menggunakan konstelasi puluhan satelit di ruang angkasa untuk memancarkan sinyal penentu koordinat. Sinyal tersebut diterima oleh gawai di bumi untuk menghitung letak lintang dan bujur secara waktu nyata.',
+    description_id: 'Aplikasi peta digital dan layanan ojek online dapat melacak posisi penjemputan dengan akurat berkat keberadaan GPS (Global Positioning System). Dirancang mulai tahun 1973, sistem navigasi keren ini menggunakan rombongan satelit yang berputar di langit untuk memancarkan sinyal lokasi ke gawai di bumi secara waktu nyata (real-time) biar kita nggak kesasar.',
     description_en: 'Maps and delivery apps find locations using GPS. Developed starting in 1973, this navigation system uses satellites orbiting Earth to beam coordinates. This helps phones and vehicles calculate their exact position anywhere on the planet.',
     icon_name: 'icon_america_gps_rocket.png'
   },

@@ -28,7 +28,7 @@ const innovations = [
     title_id: 'Kode Respon Cepat (QR Code)',
     title_en: 'QR Code',
     description_id: 'Kotak berpola piksel hitam-putih yang sering dijumpai di kasir minimarket atau buku cetak sekolah berfungsi sebagai tempat penyimpanan data berkapasitas tinggi. Dirancang oleh perusahaan Jepang untuk pelacakan industri, kode QR dapat dibaca dengan mudah memakai kamera ponsel. Pemindaian kode ini langsung mengarahkan pengguna ke tautan video pembelajaran, presensi digital, atau sistem pembayaran nirkabel secara instan.',
-    description_en: 'This matrix barcode consisting of black and white pixel blocks functions as a high-density data storage system. Developed in Japan, QR codes are easily read by smartphone cameras, redirecting users instantly to educational links, digital check-ins, or cashless payment systems.',
+    description_en: 'This smart square filled with black and white pixel patterns looks like a tiny puzzle, but it is actually a secure mini-vault to store digital links and payments!',
     icon_name: 'icon_asia_qrcode_iot.png'
   },
   {

@@ -39,7 +39,7 @@ export const FALLBACK_COUNTRIES = [
         title_id: 'Kode Respon Cepat (QR Code)',
         title_en: 'QR Code',
         description_id: 'Kotak berpola piksel hitam-putih yang sering dijumpai di kasir minimarket atau buku cetak sekolah berfungsi sebagai tempat penyimpanan data berkapasitas tinggi. Dirancang oleh perusahaan Jepang untuk pelacakan industri, kode QR dapat dibaca dengan mudah memakai kamera ponsel. Pemindaian kode ini langsung mengarahkan pengguna ke tautan video pembelajaran, presensi digital, atau sistem pembayaran nirkabel secara instan.',
-        description_en: 'This matrix barcode consisting of black and white pixel blocks functions as a high-density data storage system. Developed in Japan, QR codes are easily read by smartphone cameras, redirecting users instantly to educational links, digital check-ins, or cashless payment systems.',
+        description_en: 'This smart square filled with black and white pixel patterns looks like a tiny puzzle, but it is actually a secure mini-vault to store digital links and payments!',
         icon_name: 'icon_asia_qrcode_iot.png'
       },
       {
@@ -161,7 +161,7 @@ export const FALLBACK_COUNTRIES = [
         id: 39,
         title_id: 'Televisi Mekanik Pertama',
         title_en: 'Mechanical Television',
-        description_id: 'Siaran televisi pada awal perkembangannya tidak menggunakan layar digital tipis, melainkan memakai sistem piringan berputar mekanik. John Logie Baird mendemonstrasikan televisi mekanik pertama di Inggris dengan mengubah gambar objek bergerak menjadi sinyal listrik. Sinyal tersebut dikirimkan lewat gelombang radio ke layar penangkap gambar, membuka jalan bagi terciptanya layar TV berwarna dan TV pintar.',
+        description_id: 'Siaran televisi pada awal perkembangannya tidak menggunakan layar digital tipis, melainkan memakai sistem piringan berputar mekanik. John Logie Baird bikin heboh Inggris waktu memamerkan kotak ajaib yang bisa menampilkan gambar bergerak hasil ubahan dari sinyal listrik gelombang radio.',
         description_en: 'Early television broadcasts did not use flat screens, but relied on a system of rotating discs. John Logie Baird demonstrated the first mechanical television in the UK by converting moving images into electrical signals, paving the way for digital and color televisions.',
         icon_name: 'icon_europe_tv_pi.png'
       },
@@ -169,7 +169,7 @@ export const FALLBACK_COUNTRIES = [
         id: 40,
         title_id: 'Mesin Jet Pesawat Terbang',
         title_en: 'Turbojet Engine',
-        description_id: 'Penerbangan lintas benua berlangsung sangat cepat karena pesawat komersial modern digerakkan oleh mesin jet. Dipatenkan oleh Frank Whittle di Inggris, mesin ini bekerja dengan cara menyedot udara dari depan, memadatkannya di ruang pembakaran, lalu menyemburkannya ke belakang dengan kekuatan ledakan yang sangat besar. Dorongan udara bertekanan tinggi ini meluncurkan pesawat lebih cepat dan lebih tinggi.',
+        description_id: 'Penerbangan lintas benua berlangsung sangat cepat karena pesawat komersial modern digerakkan oleh mesin jet. Dipatenkan oleh Frank Whittle di Inggris, mesin ini bekerja dengan cara menyedot udara dari depan, memadatkan udaranya, lalu menyemburkannya ke belakang dengan kekuatan dorong yang dahsyat banget sampai bisa meluncurkan pesawat secepat kilat.',
         description_en: 'Cross-continental flights are fast because modern airplanes are powered by jet engines. Patented by Frank Whittle in the UK, the engine sucks in air, compresses it, and blasts it backward. This high-pressure exhaust thrusts the airplane forward at extreme speeds.',
         icon_name: 'icon_europe_jet_plane.png'
       },
@@ -196,7 +196,7 @@ export const FALLBACK_COUNTRIES = [
         id: 7,
         title_id: 'Roket Reusable SpaceX Falcon 9',
         title_en: 'SpaceX Falcon 9 Reusable Rocket',
-        description_id: 'Peluncuran roket Falcon 9 menandai babak baru penjelajahan luar angkasa sebagai roket orbital pertama yang dapat kembali ke bumi dan mendarat tegak lurus secara mandiri. Teknologi pendaratan otomatis ini memangkas biaya penerbangan antariksa secara signifikan karena roket dapat dipakai berulang kali.',
+        description_id: 'Peluncuran roket Falcon 9 menandai babak baru penjelajahan luar angkasa sebagai roket orbital pertama yang dapat kembali ke bumi dan mendarat tegak lurus secara mandiri. Teknologi pendaratan otomatis yang super canggih ini bikin biaya terbang ke luar angkasa jadi jauh lebih murah, karena roketnya nggak dibuang ke laut tapi bisa dipakai berkali-kali mirip pesawat terbang biasa!',
         description_en: 'The Falcon 9 represents a breakthrough in space exploration as the first orbital rocket capable of returning to Earth and landing upright. This automated landing technology dramatically lowers the cost of space travel by enabling rocket reuse.',
         icon_name: 'icon_america_rocket.png'
       },
@@ -277,7 +277,7 @@ export const FALLBACK_COUNTRIES = [
         title_id: 'Otak Mikro (Microchip)',
         title_en: 'Microchip / Integrated Circuit',
         description_id: 'Papan sirkuit mikro seukuran kuku jari ini menyatukan jutaan sirkuit kecil di atas kepingan silikon tipis. Dibuat oleh Jack Kilby dan Robert Noyce pada tahun 1958, microchip bertindak sebagai pusat pemrosesan terpadu yang memadatkan ruang kelistrikan. Kehadiran microchip menjadi fondasi penting bagi pembuatan konsol game, laptop, hingga telepon pintar modern.',
-        description_en: 'A microchip fits millions of sirkuit switches onto a silicon piece the size of a fingernail. Developed in 1958, this chip allows electronics to work together in small spaces, making modern laptops and smartphones possible.',
+        description_en: 'A microchip fits millions of circuit switches onto a silicon piece the size of a fingernail. Developed in 1958, this chip allows electronics to work together in small spaces, making modern laptops and smartphones possible.',
         icon_name: 'icon_america_microchip_pi.png'
       },
       {
@@ -300,7 +300,7 @@ export const FALLBACK_COUNTRIES = [
         id: 25,
         title_id: 'Peta Satelit Global (GPS)',
         title_en: 'Global Positioning System (GPS)',
-        description_id: 'Aplikasi peta digital dan layanan ojek online dapat melacak posisi penjemputan dengan akurat berkat keberadaan GPS (Global Positioning System). Dirancang mulai tahun 1973, sistem navigasi ini menggunakan konstelasi puluhan satelit di ruang angkasa untuk memancarkan sinyal penentu koordinat. Sinyal tersebut diterima oleh gawai di bumi untuk menghitung letak lintang dan bujur secara waktu nyata.',
+        description_id: 'Aplikasi peta digital dan layanan ojek online dapat melacak posisi penjemputan dengan akurat berkat keberadaan GPS (Global Positioning System). Dirancang mulai tahun 1973, sistem navigasi keren ini menggunakan rombongan satelit yang berputar di langit untuk memancarkan sinyal lokasi ke gawai di bumi secara waktu nyata (real-time) biar kita nggak kesasar.',
         description_en: 'Maps and delivery apps find locations using GPS. Developed starting in 1973, this navigation system uses satellites orbiting Earth to beam coordinates. This helps phones and vehicles calculate their exact position anywhere on the planet.',
         icon_name: 'icon_america_gps_rocket.png'
       },
@@ -394,7 +394,7 @@ export const FALLBACK_COUNTRIES = [
         title_id: 'Dompet Digital SMS M-Pesa',
         title_en: 'M-Pesa Mobile Money',
         description_id: 'Masyarakat di pedalaman Kenya yang memiliki keterbatasan akses kantor perbankan atau mesin ATM memanfaatkan layanan keuangan nirkabel M-Pesa yang diluncurkan pada tahun 2007. Tanpa membutuhkan ponsel Android mahal maupun paket internet, pengguna dapat menyimpan dan mengirimkan saldo uang digital secara aman menggunakan pesan teks SMS di ponsel jadul. Sistem ini menginspirasi perkembangan dompet elektronik digital saat ini.',
-        description_en: 'In rural Kenya where bank branches are rare, mobile operators launched M-Pesa in 2007. Without smartphones or mobile internet, users securely transfer and save money using standard text-based SMS codes on basic mobile phones, inspiring modern e-wallets.',
+        description_en: 'In rural Kenya where bank branches are rare, mobile networks launched M-Pesa in 2007. Without smartphones or mobile internet, users securely transfer and save money using standard text-based SMS codes on basic mobile phones, inspiring modern e-wallets.',
         icon_name: 'icon_africa_mpesa_money.png'
       },
       {
@@ -444,7 +444,7 @@ export const FALLBACK_COUNTRIES = [
         id: 54,
         title_id: 'Kertas Papirus Kuno',
         title_en: 'Papyrus Writing Material',
-        description_id: 'Masyarakat Mesir Kuno sekitar tahun 2900 SM menemukan cara mencatat sejarah dengan membuat lembaran Papirus dari batang tanaman air. Sebelum lembaran ini diciptakan, orang kesulitan menuliskan informasi dalam jumlah banyak secara praktis. Penemuan media tulis berbahan serat tanaman ini memicu lahirnya kertas fisik, buku cetak, hingga dokumen digital yang digunakan hari ini.',
+        description_id: 'Masyarakat Mesir Kuno sekitar tahun 2900 SM menemukan cara mencatat sejarah dengan membuat lembaran Papirus dari batang tanaman air. Nah, dari anyaman serat tanaman air inilah sejarah mencatat awal mula lahirnya kertas buku sekolahmu hingga dokumen digital yang kamu baca di layar gadget saat ini.',
         description_en: 'Thousands of years ago, before notebooks and paper, ancient Egyptians solved writing limits by flattening water reeds into papyrus sheets. This historic creation developed into modern paper manufacturing and today\'s digital documents.',
         icon_name: 'icon_africa_papyrus_pi.png'
       },
@@ -452,7 +452,7 @@ export const FALLBACK_COUNTRIES = [
         id: 55,
         title_id: 'Gembok Pasak Kayu Tradisional',
         title_en: 'Egyptian Pin-Tumbler Lock',
-        description_id: 'Sistem penguncian pintu modern yang menggunakan anak kunci logam memiliki leluhur mekanisme pengaman berbahan kayu dari Mesir Kuno sekitar 4000 tahun lalu. Sistem pengunci tradisional ini memanfaatkan pasak kayu tersembunyi yang menahan posisi palang pintu. Pintu hanya dapat dibuka jika pasak tersebut didorong sejajar oleh anak kunci yang memiliki gerigi dengan ukuran tepat.',
+        description_id: 'Sistem penguncian pintu modern yang menggunakan anak kunci logam memiliki leluhur mekanisme pengaman berbahan kayu dari Mesir Kuno sekitar 4000 tahun lalu. Cara kerjanya unik: ada pasak kayu rahasia yang mengunci palang pintu, dan baru bisa longgar kalau didorong oleh gerigi anak kunci kayu yang ukurannya pas banget.',
         description_en: 'Metal keys and lock systems protect homes using mechanisms adapted from ancient Egyptian designs. These early mechanical locks used hidden wooden pins that aligned only when a custom wooden key was inserted, starting physical security design.',
         icon_name: 'icon_africa_lock_iot.png'
       },

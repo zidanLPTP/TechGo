@@ -55,7 +55,7 @@ const innovations = [
     country_id: 6,
     title_id: 'Televisi Mekanik Pertama',
     title_en: 'Mechanical Television',
-    description_id: 'Siaran televisi pada awal perkembangannya tidak menggunakan layar digital tipis, melainkan memakai sistem piringan berputar mekanik. John Logie Baird mendemonstrasikan televisi mekanik pertama di Inggris dengan mengubah gambar objek bergerak menjadi sinyal listrik. Sinyal tersebut dikirimkan lewat gelombang radio ke layar penangkap gambar, membuka jalan bagi terciptanya layar TV berwarna dan TV pintar.',
+    description_id: 'Siaran televisi pada awal perkembangannya tidak menggunakan layar digital tipis, melainkan memakai sistem piringan berputar mekanik. John Logie Baird bikin heboh Inggris waktu memamerkan kotak ajaib yang bisa menampilkan gambar bergerak hasil ubahan dari sinyal listrik gelombang radio.',
     description_en: 'Early television broadcasts did not use flat screens, but relied on a system of rotating discs. John Logie Baird demonstrated the first mechanical television in the UK by converting moving images into electrical signals, paving the way for digital and color televisions.',
     icon_name: 'icon_europe_tv_pi.png'
   },
@@ -64,7 +64,7 @@ const innovations = [
     country_id: 6,
     title_id: 'Mesin Jet Pesawat Terbang',
     title_en: 'Turbojet Engine',
-    description_id: 'Penerbangan lintas benua berlangsung sangat cepat karena pesawat komersial modern digerakkan oleh mesin jet. Dipatenkan oleh Frank Whittle di Inggris, mesin ini bekerja dengan cara menyedot udara dari depan, memadatkannya di ruang pembakaran, lalu menyemburkannya ke belakang dengan kekuatan ledakan yang sangat besar. Dorongan udara bertekanan tinggi ini meluncurkan pesawat lebih cepat dan lebih tinggi.',
+    description_id: 'Penerbangan lintas benua berlangsung sangat cepat karena pesawat komersial modern digerakkan oleh mesin jet. Dipatenkan oleh Frank Whittle di Inggris, mesin ini bekerja dengan cara menyedot udara dari depan, memadatkan udaranya, lalu menyemburkannya ke belakang dengan kekuatan dorong yang dahsyat banget sampai bisa meluncurkan pesawat secepat kilat.',
     description_en: 'Cross-continental flights are fast because modern airplanes are powered by jet engines. Patented by Frank Whittle in the UK, the engine sucks in air, compresses it, and blasts it backward. This high-pressure exhaust thrusts the airplane forward at extreme speeds.',
     icon_name: 'icon_europe_jet_plane.png'
   },

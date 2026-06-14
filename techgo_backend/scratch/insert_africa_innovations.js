@@ -9,7 +9,7 @@ const innovations = [
     country_id: 10,
     title_id: 'Kertas Papirus Kuno',
     title_en: 'Papyrus Writing Material',
-    description_id: 'Masyarakat Mesir Kuno sekitar tahun 2900 SM menemukan cara mencatat sejarah dengan membuat lembaran Papirus dari batang tanaman air. Sebelum lembaran ini diciptakan, orang kesulitan menuliskan informasi dalam jumlah banyak secara praktis. Penemuan media tulis berbahan serat tanaman ini memicu lahirnya kertas fisik, buku cetak, hingga dokumen digital yang digunakan hari ini.',
+    description_id: 'Masyarakat Mesir Kuno sekitar tahun 2900 SM menemukan cara mencatat sejarah dengan membuat lembaran Papirus dari batang tanaman air. Nah, dari anyaman serat tanaman air inilah sejarah mencatat awal mula lahirnya kertas buku sekolahmu hingga dokumen digital yang kamu baca di layar gadget saat ini.',
     description_en: 'Thousands of years ago, before notebooks and paper, ancient Egyptians solved writing limits by flattening water reeds into papyrus sheets. This historic creation developed into modern paper manufacturing and today\'s digital documents.',
     icon_name: 'icon_africa_papyrus_pi.png'
   },
@@ -18,7 +18,7 @@ const innovations = [
     country_id: 10,
     title_id: 'Gembok Pasak Kayu Tradisional',
     title_en: 'Egyptian Pin-Tumbler Lock',
-    description_id: 'Sistem penguncian pintu modern yang menggunakan anak kunci logam memiliki leluhur mekanisme pengaman berbahan kayu dari Mesir Kuno sekitar 4000 tahun lalu. Sistem pengunci tradisional ini memanfaatkan pasak kayu tersembunyi yang menahan posisi palang pintu. Pintu hanya dapat dibuka jika pasak tersebut didorong sejajar oleh anak kunci yang memiliki gerigi dengan ukuran tepat.',
+    description_id: 'Sistem penguncian pintu modern yang menggunakan anak kunci logam memiliki leluhur mekanisme pengaman berbahan kayu dari Mesir Kuno sekitar 4000 tahun lalu. Cara kerjanya unik: ada pasak kayu rahasia yang mengunci palang pintu, dan baru bisa longgar kalau didorong oleh gerigi anak kunci kayu yang ukurannya pas banget.',
     description_en: 'Metal keys and lock systems protect homes using mechanisms adapted from ancient Egyptian designs. These early mechanical locks used hidden wooden pins that aligned only when a custom wooden key was inserted, starting physical security design.',
     icon_name: 'icon_africa_lock_iot.png'
   },
